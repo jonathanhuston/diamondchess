@@ -26,7 +26,11 @@ extension ContentView: View {
                                     .resizable()
                                     .frame(width: 110, height: 110)
                             }
-                            if newBoard[rank][file] != "Empty" {
+                            if newBoard[rank][file].contains("Pawn") {
+                                Image(newBoard[rank][file])
+                                    .resizable()
+                                    .frame(width: 50, height: 80)
+                            } else if newBoard[rank][file] != "Empty" {
                                 Image(newBoard[rank][file])
                                     .resizable()
                                     .frame(width: 80, height: 105)
