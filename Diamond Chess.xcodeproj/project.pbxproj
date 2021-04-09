@@ -13,6 +13,10 @@
 		15087BB42620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
 		15A26D47261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */; };
 		15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */; };
+		15E563092620A7CF00DD5B05 /* PiecesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E563082620A7CF00DD5B05 /* PiecesView.swift */; };
+		15E5630A2620A7CF00DD5B05 /* PiecesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E563082620A7CF00DD5B05 /* PiecesView.swift */; };
+		15E563102620C22000DD5B05 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E5630F2620C22000DD5B05 /* Game.swift */; };
+		15E563112620C22000DD5B05 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E5630F2620C22000DD5B05 /* Game.swift */; };
 		15E7BCED261DC0B600AB495F /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E7BCEC261DC0B600AB495F /* PieceView.swift */; };
 		15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E7BCEC261DC0B600AB495F /* PieceView.swift */; };
 		15F35A26261C800E0098B143 /* Diamond_ChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */; };
@@ -27,6 +31,8 @@
 		15087BAB2620510900668781 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
 		15087BB22620526C00668781 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDefinitions.swift; sourceTree = "<group>"; };
+		15E563082620A7CF00DD5B05 /* PiecesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiecesView.swift; sourceTree = "<group>"; };
+		15E5630F2620C22000DD5B05 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		15E7BCEC261DC0B600AB495F /* PieceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceView.swift; sourceTree = "<group>"; };
 		15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond_ChessApp.swift; sourceTree = "<group>"; };
 		15F35A14261C800D0098B143 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -74,8 +80,10 @@
 				15F35A14261C800D0098B143 /* ContentView.swift */,
 				15087BB22620526C00668781 /* BoardView.swift */,
 				15087BAB2620510900668781 /* SquareView.swift */,
+				15E563082620A7CF00DD5B05 /* PiecesView.swift */,
 				15E7BCEC261DC0B600AB495F /* PieceView.swift */,
 				15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */,
+				15E5630F2620C22000DD5B05 /* Game.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -209,6 +217,8 @@
 				15E7BCED261DC0B600AB495F /* PieceView.swift in Sources */,
 				15A26D47261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A26261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
+				15E563092620A7CF00DD5B05 /* PiecesView.swift in Sources */,
+				15E563102620C22000DD5B05 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +232,8 @@
 				15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */,
 				15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A27261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
+				15E5630A2620A7CF00DD5B05 /* PiecesView.swift in Sources */,
+				15E563112620C22000DD5B05 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,3 +27,11 @@ func pieceWidth(_ piece: String) -> CGFloat {
 func pieceHeight(_ piece: String) -> CGFloat {
     piece.contains("Pawn") ? 80 : 105
 }
+
+func getX(_ file: Int) -> CGFloat {
+    squareSize * (CGFloat(file) + 0.5)
+}
+
+func getY(_ rank: Int) -> CGFloat {
+    squareSize * (CGFloat(rank) + 0.5)
+}

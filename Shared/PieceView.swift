@@ -10,7 +10,8 @@ import SwiftUI
 struct PieceView {
     @EnvironmentObject var game: Game
 
-    let piece: String
+    let rank: Int
+    let file: Int
     
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
@@ -28,24 +29,36 @@ struct PieceView {
 
 extension PieceView: View {
     var body: some View {
-        Image(piece)
-            .resizable()
-            .position(adjustedOffset(at: offset, for: piece))
-            .gesture(DragGesture()
-                        .onChanged({ value in
-                            offset = adjustedOffset(at: value.location, for: piece, negative: true)
-                        })
-                        .updating($isDragging) { (value, state, transaction) in
-                            state = true
-                        }
-                        .onEnded({ value in
-                            game.dragging = false
-                            offset = CGPoint(x: 0, y: 0)
-                        })
-            )
-            .onChange(of: isDragging) { newValue in
-                game.dragging = newValue
-            }
-            .frame(width: pieceWidth(piece), height: pieceHeight(piece))
+        let piece = game.board[rank][file]
+        
+        if piece != "Empty" {
+            Image(piece)
+                .resizable()
+                .position(adjustedOffset(at: offset, for: piece))
+                .gesture(DragGesture()
+                            .onChanged({ value in
+                                offset = adjustedOffset(at: value.location, for: piece, negative: true)
+                                game.touched = (rank, file)
+                            })
+                            .updating($isDragging) { (value, state, transaction) in
+                                state = true
+                            }
+                            .onEnded({ value in
+                                game.dragging = false
+                                let newRank = rank + Int((offset.y / squareSize).rounded())
+                                let newFile = file + Int((offset.x / squareSize).rounded())
+                                if 0...7 ~= newRank && 0...7 ~= newFile {
+                                    game.board[rank][file] = "Empty"
+                                    game.board[newRank][newFile] = piece
+                                }
+                                game.touched = nil
+                                offset = CGPoint(x: 0, y: 0)
+                            })
+                )
+                .onChange(of: isDragging) { newValue in
+                    game.dragging = newValue
+                }
+                .frame(width: pieceWidth(piece), height: pieceHeight(piece))
+        }
     }
 }

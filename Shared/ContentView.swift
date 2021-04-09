@@ -13,12 +13,10 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        BoardView()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        ZStack {
+            BoardView()
+            
+            PiecesView()
+        }
     }
 }
