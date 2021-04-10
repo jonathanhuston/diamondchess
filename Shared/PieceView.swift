@@ -10,8 +10,7 @@ import SwiftUI
 struct PieceView {
     @EnvironmentObject var game: Game
 
-    let rank: Int
-    let file: Int
+    let square: Square
     
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
@@ -29,7 +28,7 @@ struct PieceView {
 
 extension PieceView: View {
     var body: some View {
-        let piece = game.board[rank][file]
+        let piece = game.board[square.rank][square.file]
         
         if piece != "Empty" {
             Image(piece)
@@ -38,18 +37,17 @@ extension PieceView: View {
                 .gesture(DragGesture()
                             .onChanged({ value in
                                 offset = adjustedOffset(at: value.location, for: piece, negative: true)
-                                game.touched = (rank, file)
+                                game.touched = square
                             })
                             .updating($isDragging) { (value, state, transaction) in
                                 state = true
                             }
                             .onEnded({ value in
                                 game.dragging = false
-                                let newRank = rank + Int((offset.y / squareSize).rounded())
-                                let newFile = file + Int((offset.x / squareSize).rounded())
-                                if 0...7 ~= newRank && 0...7 ~= newFile {
-                                    game.board[rank][file] = "Empty"
-                                    game.board[newRank][newFile] = piece
+                                let toRank = square.rank + Int((offset.y / squareSize).rounded())
+                                let toFile = square.file + Int((offset.x / squareSize).rounded())
+                                if let newBoard = game.board.isValidMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
+                                    game.board = newBoard
                                 }
                                 game.touched = nil
                                 offset = CGPoint(x: 0, y: 0)

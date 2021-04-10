@@ -10,5 +10,8 @@ import SwiftUI
 class Game: ObservableObject {
     @Published var board: Board = newBoard
     @Published var dragging = false
-    @Published var touched: (rank: Int, file: Int)? = nil
+    @Published var touched: Square? = nil
+}
+
+extension Game {
 }

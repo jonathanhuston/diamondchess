@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct SquareView {
-    let rank, file: Int
+    let square: Square
 }
 
 extension SquareView: View {
     var body: some View {
-        Image(rank % 2 == file % 2 ? "White Empty" : "Black Empty")
+        Image(square.rank % 2 == square.file % 2 ? "White Empty" : "Black Empty")
             .resizable()
             .frame(width: squareSize, height: squareSize)
     }

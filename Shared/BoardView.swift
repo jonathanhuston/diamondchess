@@ -13,7 +13,7 @@ struct BoardView: View {
             ForEach(Int(0)...Int(7), id:\.self) { rank in
                 HStack(spacing: 0) {
                     ForEach(Int(0)...Int(7), id:\.self) { file in
-                        SquareView(rank: rank, file: file)
+                        SquareView(square: Square(rank: rank, file: file))
                     }
                 }
             }
