@@ -47,13 +47,14 @@ struct BoardState {
     
     private func knightMoves(from: Square) -> [Square] {
         var moves = [Square]()
+        let player = color(of: self.board[from.rank][from.file])
         
         for rankOffset in [-2, -1, 1, 2] {
             for fileOffset in [-2, -1, 1, 2] {
                 if abs(fileOffset) != abs(rankOffset) {
                     let toRank = from.rank + rankOffset
                     let toFile = from.file + fileOffset
-                    if 0...7 ~= toRank && 0...7 ~= toFile && color(of: self.board[from.rank][from.file]) != color(of: self.board[toRank][toFile]) {
+                    if 0...7 ~= toRank && 0...7 ~= toFile && player != color(of: self.board[toRank][toFile]) {
                         moves.append(Square(rank: toRank, file: toFile))
                     }
                 }
@@ -229,8 +230,22 @@ struct BoardState {
         return rookMoves(from: from) + bishopMoves(from: from)
     }
     
+    // TODO: castling
     private func kingMoves(from: Square) -> [Square] {
         var moves = [Square]()
+        let player = color(of: self.board[from.rank][from.file])
+        
+        for rankOffset in -1...1 {
+            for fileOffset in -1...1 {
+                if (rankOffset != 0 || fileOffset != 0) {
+                    let toRank = from.rank + rankOffset
+                    let toFile = from.file + fileOffset
+                    if 0...7 ~= toRank && 0...7 ~= toFile && player != color(of: self.board[toRank][toFile]) {
+                        moves.append(Square(rank: toRank, file: toFile))
+                    }
+                }
+            }
+        }
         
         return moves
     }
