@@ -28,7 +28,7 @@ struct PieceView {
 
 extension PieceView: View {
     var body: some View {
-        let piece = game.board[square.rank][square.file]
+        let piece = game.boardState.board[square.rank][square.file]
         
         if piece != "Empty" {
             Image(piece)
@@ -46,8 +46,8 @@ extension PieceView: View {
                                 game.dragging = false
                                 let toRank = square.rank + Int((offset.y / squareSize).rounded())
                                 let toFile = square.file + Int((offset.x / squareSize).rounded())
-                                if let newBoard = game.board.isValidMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
-                                    game.board = newBoard
+                                if let newBoardState = game.boardState.isValidMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
+                                    game.boardState = newBoardState
                                 }
                                 game.touched = nil
                                 offset = CGPoint(x: 0, y: 0)
