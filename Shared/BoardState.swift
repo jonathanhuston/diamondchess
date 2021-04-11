@@ -10,6 +10,8 @@ struct BoardState {
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
+    var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
+    var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
 
     private func pawnMoves(from: Square) -> [Square] {
         var moves = [Square]()
@@ -250,7 +252,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][7] == rook {
+        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! {
             var canCastle = true
             for file in 5...6 {
                 if board[kingRank][file] != "Empty" {
@@ -262,7 +264,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][0] == rook {
+        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! {
             var canCastle = true
             for file in 1...3 {
                 if board[kingRank][file] != "Empty" {
@@ -313,7 +315,7 @@ struct BoardState {
         return allMoves(from: from).contains(to)
     }
     
-    private func inCheck(player: Player) -> Bool {
+    private func inCheck(_ player: Player) -> Bool {
         let moves = allMoves(for: opponent[player]!)
         
         return moves.contains(kingPosition[player]!)
@@ -396,16 +398,28 @@ struct BoardState {
             .castleRook(for: piece, from: from, to: to)
         
         let piece = promote(piece, to: to)
-        
+        let player = color(of: piece)
+
         newBoardState.board[from.rank][from.file] = "Empty"
         newBoardState.board[to.rank][to.file] = piece
         
         if piece.contains("King") {
-            newBoardState.kingPosition[color(of: piece)] = to
+            newBoardState.kingPosition[player] = to
+            newBoardState.kingSideCastle[player] = false
+            newBoardState.queenSideCastle[player] = false
         }
 
-        if newBoardState.inCheck(player: color(of: piece)) {
+        if newBoardState.inCheck(player) {
             return nil
+        }
+        
+        if piece.contains("Rook") {
+            if from.file == 7 {
+                newBoardState.kingSideCastle[player] = false
+            }
+            if from.file == 0 {
+                newBoardState.queenSideCastle[player] = false
+            }
         }
         
         newBoardState.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
