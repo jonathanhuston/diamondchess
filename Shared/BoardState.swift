@@ -252,7 +252,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! {
+        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! && !inCheck(player) {
             var canCastle = true
             for file in 5...6 {
                 if board[kingRank][file] != "Empty" {
@@ -264,7 +264,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! {
+        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! && !inCheck(player) {
             var canCastle = true
             for file in 1...3 {
                 if board[kingRank][file] != "Empty" {
@@ -279,7 +279,7 @@ struct BoardState {
         return moves
     }
     
-    private func allMoves(from: Square) -> [Square] {
+    private func allMoves(from: Square, includeKing: Bool = true) -> [Square] {
         let piece = board[from.rank][from.file]
         
         if piece.contains("Pawn") {
@@ -294,16 +294,20 @@ struct BoardState {
             return queenMoves(from: from)
         }
         
-        return kingMoves(from: from)
+        if includeKing {
+            return kingMoves(from: from)
+        } else {
+            return []
+        }
     }
     
-    private func allMoves(for player: Player) -> [Square] {
+    private func allMoves(for player: Player, includeKing: Bool = true) -> [Square] {
         var moves = [Square]()
         
         for rank in 0...7 {
             for file in 0...7 {
                 if color(of: board[rank][file]) == player {
-                    moves += allMoves(from: Square(rank: rank, file: file))
+                    moves += allMoves(from: Square(rank: rank, file: file), includeKing: includeKing)
                 }
             }
         }
@@ -316,7 +320,7 @@ struct BoardState {
     }
     
     private func inCheck(_ player: Player) -> Bool {
-        let moves = allMoves(for: opponent[player]!)
+        let moves = allMoves(for: opponent[player]!, includeKing: false)
         
         return moves.contains(kingPosition[player]!)
     }
