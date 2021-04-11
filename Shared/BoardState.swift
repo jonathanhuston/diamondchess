@@ -53,7 +53,7 @@ struct BoardState {
                 if abs(fileOffset) != abs(rankOffset) {
                     let toRank = from.rank + rankOffset
                     let toFile = from.file + fileOffset
-                    if 0...7 ~= toRank && 0...7 ~= toFile {
+                    if 0...7 ~= toRank && 0...7 ~= toFile && color(of: self.board[from.rank][from.file]) != color(of: self.board[toRank][toFile]) {
                         moves.append(Square(rank: toRank, file: toFile))
                     }
                 }
@@ -65,42 +65,172 @@ struct BoardState {
     
     private func rookMoves(from: Square) -> [Square] {
         var moves = [Square]()
+        let player = color(of: self.board[from.rank][from.file])
         
-        for moveLeft in 1...7 {
-            let toFile = from.file - moveLeft
-            if 0...7 ~= toFile && self.board[from.rank][toFile] == "Empty" {
+        for offset in 1...7 {
+            let toFile = from.file - offset
+            if !(0...7 ~= toFile) {
+                break
+            }
+            
+            let toSquare = self.board[from.rank][toFile]
+            
+            if toSquare == "Empty" {
                 moves.append(Square(rank: from.rank, file: toFile))
-            } else {
-                break
-            }
-        }
-        
-        for moveRight in 1...7 {
-            let toFile = from.file + moveRight
-            if 0...7 ~= toFile && self.board[from.rank][toFile] == "Empty" {
+            } else if player != color(of: self.board[from.rank][toFile]) {
                 moves.append(Square(rank: from.rank, file: toFile))
+                break
             } else {
                 break
             }
         }
         
-        for moveUp in 1...7 {
-            let toRank = from.rank - moveUp
-            if 0...7 ~= toRank && self.board[toRank][from.file] == "Empty" {
-                moves.append(Square(rank: toRank, file: from.file))
+        for offset in 1...7 {
+            let toFile = from.file + offset
+            if !(0...7 ~= toFile) {
+                break
+            }
+            
+            let toSquare = self.board[from.rank][toFile]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: from.rank, file: toFile))
+            } else if player != color(of: self.board[from.rank][toFile]) {
+                moves.append(Square(rank: from.rank, file: toFile))
+                break
             } else {
                 break
             }
         }
         
-        for moveDown in 1...7 {
-            let toRank = from.rank + moveDown
-            if 0...7 ~= toRank && self.board[toRank][from.file] == "Empty" {
+        for offset in 1...7 {
+            let toRank = from.rank - offset
+            if !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][from.file]
+            
+            if toSquare == "Empty" {
                 moves.append(Square(rank: toRank, file: from.file))
+            } else if player != color(of: self.board[toRank][from.file]) {
+                moves.append(Square(rank: toRank, file: from.file))
+                break
             } else {
                 break
             }
         }
+        
+        for offset in 1...7 {
+            let toRank = from.rank + offset
+            if !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][from.file]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: toRank, file: from.file))
+            } else if player != color(of: self.board[toRank][from.file]) {
+                moves.append(Square(rank: toRank, file: from.file))
+                break
+            } else {
+                break
+            }
+        }
+        
+        return moves
+    }
+    
+    private func bishopMoves(from: Square) -> [Square] {
+        var moves = [Square]()
+        let player = color(of: self.board[from.rank][from.file])
+        
+        for offset in 1...7 {
+            let toRank = from.rank - offset
+            let toFile = from.file - offset
+            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][toFile]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: toRank, file: toFile))
+            } else if player != color(of: self.board[from.rank][toFile]) {
+                moves.append(Square(rank: toRank, file: toFile))
+                break
+            } else {
+                break
+            }
+        }
+        
+        for offset in 1...7 {
+            let toRank = from.rank - offset
+            let toFile = from.file + offset
+            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][toFile]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: toRank, file: toFile))
+            } else if player != color(of: self.board[from.rank][toFile]) {
+                moves.append(Square(rank: toRank, file: toFile))
+                break
+            } else {
+                break
+            }
+        }
+        
+        for offset in 1...7 {
+            let toRank = from.rank + offset
+            let toFile = from.file - offset
+            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][toFile]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: toRank, file: toFile))
+            } else if player != color(of: self.board[from.rank][toFile]) {
+                moves.append(Square(rank: toRank, file: toFile))
+                break
+            } else {
+                break
+            }
+        }
+        
+        for offset in 1...7 {
+            let toRank = from.rank + offset
+            let toFile = from.file + offset
+            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+                break
+            }
+            
+            let toSquare = self.board[toRank][toFile]
+            
+            if toSquare == "Empty" {
+                moves.append(Square(rank: toRank, file: toFile))
+            } else if player != color(of: self.board[from.rank][toFile]) {
+                moves.append(Square(rank: toRank, file: toFile))
+                break
+            } else {
+                break
+            }
+        }
+        
+        return moves
+    }
+    
+    private func queenMoves(from: Square) -> [Square] {
+        return rookMoves(from: from) + bishopMoves(from: from)
+    }
+    
+    private func kingMoves(from: Square) -> [Square] {
+        var moves = [Square]()
         
         return moves
     }
@@ -112,6 +242,12 @@ struct BoardState {
             return knightMoves(from: from).contains(to)
         } else if piece.contains("Rook") {
             return rookMoves(from: from).contains(to)
+        } else if piece.contains("Bishop") {
+            return bishopMoves(from: from).contains(to)
+        } else if piece.contains("Queen") {
+            return queenMoves(from: from).contains(to)
+        } else if piece.contains("King") {
+            return kingMoves(from: from).contains(to)
         }
         
         return true
@@ -153,14 +289,6 @@ struct BoardState {
     }
     
     func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
-        if !(0...7 ~= to.rank && 0...7 ~= to.file) {
-            return nil
-        }
-        
-        if color(of: self.board[from.rank][from.file]) == color(of: self.board[to.rank][to.file]) {
-            return nil
-        }
-        
         if !canMove(piece: piece, from: from, to: to) {
             return nil
         }
