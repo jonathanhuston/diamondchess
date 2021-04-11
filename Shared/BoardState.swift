@@ -45,9 +45,29 @@ struct BoardState {
         return moves
     }
     
+    private func knightMoves(from: Square) -> [Square] {
+        var moves = [Square]()
+        
+        for rankOffset in [-2, -1, 1, 2] {
+            for fileOffset in [-2, -1, 1, 2] {
+                if abs(fileOffset) != abs(rankOffset) {
+                    let toRank = from.rank + rankOffset
+                    let toFile = from.file + fileOffset
+                    if 0...7 ~= toRank && 0...7 ~= toFile {
+                        moves.append(Square(rank: toRank, file: toFile))
+                    }
+                }
+            }
+        }
+        
+        return moves
+    }
+    
     private func canMove(piece: String, from: Square, to: Square) -> Bool {
         if piece.contains("Pawn") {
             return pawnMoves(from: from).contains(to)
+        } else if piece.contains("Knight") {
+            return knightMoves(from: from).contains(to)
         }
         
         return true
