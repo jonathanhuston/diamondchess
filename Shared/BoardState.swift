@@ -9,6 +9,7 @@ struct BoardState {
     var board: Board = newBoard
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
+
     
     // TODO: promotion
     private func pawnMoves(from: Square) -> [Square] {
@@ -230,10 +231,13 @@ struct BoardState {
         return rookMoves(from: from) + bishopMoves(from: from)
     }
     
-    // TODO: castling
+    // TODO: check if castling allowed
     private func kingMoves(from: Square) -> [Square] {
         var moves = [Square]()
         let player = color(of: self.board[from.rank][from.file])
+        let kingRank = (player == .white) ? 7 : 0
+        let king = (player == .white) ? "White King" : "Black King"
+        let rook = (player == .white) ? "White Rook" : "Black Rook"
         
         for rankOffset in -1...1 {
             for fileOffset in -1...1 {
@@ -244,6 +248,30 @@ struct BoardState {
                         moves.append(Square(rank: toRank, file: toFile))
                     }
                 }
+            }
+        }
+        
+        if self.board[kingRank][4] == king && self.board[kingRank][7] == rook {
+            var canCastle = true
+            for file in 5...6 {
+                if self.board[kingRank][file] != "Empty" {
+                    canCastle = false
+                }
+            }
+            if canCastle {
+                moves.append(Square(rank: kingRank, file: 6))
+            }
+        }
+        
+        if self.board[kingRank][4] == king && self.board[kingRank][0] == rook {
+            var canCastle = true
+            for file in 1...3 {
+                if self.board[kingRank][file] != "Empty" {
+                    canCastle = false
+                }
+            }
+            if canCastle {
+                moves.append(Square(rank: kingRank, file: 2))
             }
         }
         
@@ -303,12 +331,31 @@ struct BoardState {
         return  newBoardState
     }
     
+    private func castleRook(for piece: String, from: Square, to: Square) -> BoardState {
+        if !piece.contains("King") {
+            return self
+        }
+        
+        var newBoardState = self
+        let rook = (color(of: self.board[from.rank][from.file]) == .white) ? "White Rook" : "Black Rook"
+        
+        if to.file == from.file + 2 {
+            newBoardState.board[from.rank][5] = rook
+            newBoardState.board[from.rank][7] = "Empty"
+        } else if to.file == from.file - 2 {
+            newBoardState.board[from.rank][3] = rook
+            newBoardState.board[from.rank][0] = "Empty"
+        }
+        
+        return newBoardState
+    }
+    
     func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
         if !canMove(piece: piece, from: from, to: to) {
             return nil
         }
                 
-        var newBoardState = self.removeEnPassantPawn(for: piece, from: from, to: to)
+        var newBoardState = self.removeEnPassantPawn(for: piece, from: from, to: to).castleRook(for: piece, from: from, to: to)
         
         newBoardState.board[from.rank][from.file] = "Empty"
         newBoardState.board[to.rank][to.file] = piece
