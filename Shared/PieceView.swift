@@ -36,8 +36,10 @@ extension PieceView: View {
                 .position(adjustedOffset(at: offset, for: piece))
                 .gesture(DragGesture()
                             .onChanged({ value in
-                                offset = adjustedOffset(at: value.location, for: piece, negative: true)
-                                game.touched = square
+                                if color(of: piece) == game.boardState.currentPlayer {
+                                    offset = adjustedOffset(at: value.location, for: piece, negative: true)
+                                    game.touched = square
+                                }
                             })
                             .updating($isDragging) { (value, state, transaction) in
                                 state = true
@@ -54,7 +56,9 @@ extension PieceView: View {
                             })
                 )
                 .onChange(of: isDragging) { newValue in
-                    game.dragging = newValue
+                    if color(of: piece) == game.boardState.currentPlayer {
+                        game.dragging = newValue
+                    }
                 }
                 .frame(width: pieceWidth(piece), height: pieceHeight(piece))
         }

@@ -71,6 +71,8 @@ struct BoardState {
         if newBoardState.inCheck(player: color(of: piece)) {
             return nil
         }
+        
+        newBoardState.currentPlayer = opponent[self.currentPlayer]!
                 
         return newBoardState
     }
