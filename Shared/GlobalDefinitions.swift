@@ -5,7 +5,7 @@
 //  Created by Jonathan Huston on 4/7/21.
 //
 
-import Foundation
+import SwiftUI
 
 enum Player: CaseIterable {
     case white

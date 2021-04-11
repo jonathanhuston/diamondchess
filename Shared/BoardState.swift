@@ -10,8 +10,6 @@ struct BoardState {
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
 
-    
-    // TODO: promotion
     private func pawnMoves(from: Square) -> [Square] {
         var moves = [Square]()
         let player = color(of: self.board[from.rank][from.file])
@@ -159,7 +157,7 @@ struct BoardState {
             
             if toSquare == "Empty" {
                 moves.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: self.board[from.rank][toFile]) {
+            } else if player != color(of: self.board[toRank][toFile]) {
                 moves.append(Square(rank: toRank, file: toFile))
                 break
             } else {
@@ -178,7 +176,7 @@ struct BoardState {
             
             if toSquare == "Empty" {
                 moves.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: self.board[from.rank][toFile]) {
+            } else if player != color(of: self.board[toRank][toFile]) {
                 moves.append(Square(rank: toRank, file: toFile))
                 break
             } else {
@@ -197,7 +195,7 @@ struct BoardState {
             
             if toSquare == "Empty" {
                 moves.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: self.board[from.rank][toFile]) {
+            } else if player != color(of: self.board[toRank][toFile]) {
                 moves.append(Square(rank: toRank, file: toFile))
                 break
             } else {
@@ -216,7 +214,7 @@ struct BoardState {
             
             if toSquare == "Empty" {
                 moves.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: self.board[from.rank][toFile]) {
+            } else if player != color(of: self.board[toRank][toFile]) {
                 moves.append(Square(rank: toRank, file: toFile))
                 break
             } else {
@@ -350,12 +348,33 @@ struct BoardState {
         return newBoardState
     }
     
+    // TODO: promote to other pieces
+    private func promote(_ piece: String, to: Square) -> String {
+        if !piece.contains("Pawn") {
+            return piece
+        }
+                
+        if to.rank == 0 {
+            return "White Queen"
+        }
+        
+        if to.rank == 7 {
+            return "Black Queen"
+        }
+        
+        return piece
+    }
+    
     func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
         if !canMove(piece: piece, from: from, to: to) {
             return nil
         }
                 
-        var newBoardState = self.removeEnPassantPawn(for: piece, from: from, to: to).castleRook(for: piece, from: from, to: to)
+        var newBoardState = self
+            .removeEnPassantPawn(for: piece, from: from, to: to)
+            .castleRook(for: piece, from: from, to: to)
+        
+        let piece = promote(piece, to: to)
         
         newBoardState.board[from.rank][from.file] = "Empty"
         newBoardState.board[to.rank][to.file] = piece
