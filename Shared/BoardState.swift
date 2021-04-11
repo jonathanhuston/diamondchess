@@ -232,7 +232,6 @@ struct BoardState {
         return rookMoves(from: from) + bishopMoves(from: from)
     }
     
-    // TODO: check if castling allowed
     private func kingMoves(from: Square) -> [Square] {
         var moves = [Square]()
         let player = color(of: board[from.rank][from.file])
@@ -252,7 +251,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! && !inCheck(player) {
+        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! && !inCheck(player) && !overCheck(player, file: 5) {
             var canCastle = true
             for file in 5...6 {
                 if board[kingRank][file] != "Empty" {
@@ -264,7 +263,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! && !inCheck(player) {
+        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! && !inCheck(player) && !overCheck(player, file: 3) {
             var canCastle = true
             for file in 1...3 {
                 if board[kingRank][file] != "Empty" {
@@ -323,6 +322,18 @@ struct BoardState {
         let moves = allMoves(for: opponent[player]!, includeKing: false)
         
         return moves.contains(kingPosition[player]!)
+    }
+    
+    private func overCheck(_ player: Player, file: Int) -> Bool {
+        var castlingBoardState = self
+        let rank = (player == .white) ? 7 : 0
+        
+        castlingBoardState.board[rank][file] = board[rank][4]
+        castlingBoardState.board[rank][4] = "Empty"
+
+        let moves = castlingBoardState.allMoves(for: opponent[player]!, includeKing: false)
+        
+        return moves.contains(Square(rank: rank, file: file))
     }
     
     private func enPassantSquare(for piece: String, from: Square, to: Square) -> Square? {
