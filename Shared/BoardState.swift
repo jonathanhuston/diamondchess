@@ -232,7 +232,7 @@ struct BoardState {
         return rookMoves(from: from) + bishopMoves(from: from)
     }
     
-    private func kingMoves(from: Square) -> [Square] {
+    private func kingMoves(from: Square, castling: Bool) -> [Square] {
         var moves = [Square]()
         let player = color(of: board[from.rank][from.file])
         let kingRank = (player == .white) ? 7 : 0
@@ -251,7 +251,11 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][7] == rook && kingSideCastle[player]! && !inCheck(player) && !overCheck(player, file: 5) {
+        if !castling || board[kingRank][4] != king || inCheck(player) {
+            return moves
+        }
+        
+        if board[kingRank][7] == rook && kingSideCastle[player]! && !overCheck(player, file: 5) {
             var canCastle = true
             for file in 5...6 {
                 if board[kingRank][file] != "Empty" {
@@ -263,7 +267,7 @@ struct BoardState {
             }
         }
         
-        if board[kingRank][4] == king && board[kingRank][0] == rook && queenSideCastle[player]! && !inCheck(player) && !overCheck(player, file: 3) {
+        if board[kingRank][0] == rook && queenSideCastle[player]! && !overCheck(player, file: 3) {
             var canCastle = true
             for file in 1...3 {
                 if board[kingRank][file] != "Empty" {
@@ -278,7 +282,7 @@ struct BoardState {
         return moves
     }
     
-    private func allMoves(from: Square, includeKing: Bool = true) -> [Square] {
+    private func allAttacks(from: Square, castling: Bool = true) -> [Square] {
         let piece = board[from.rank][from.file]
         
         if piece.contains("Pawn") {
@@ -291,22 +295,18 @@ struct BoardState {
             return bishopMoves(from: from)
         } else if piece.contains("Queen") {
             return queenMoves(from: from)
-        }
-        
-        if includeKing {
-            return kingMoves(from: from)
         } else {
-            return []
+            return kingMoves(from: from, castling: castling)
         }
     }
     
-    private func allMoves(for player: Player, includeKing: Bool = true) -> [Square] {
+    private func allAttacks(for player: Player, castling: Bool = true) -> [Square] {
         var moves = [Square]()
         
         for rank in 0...7 {
             for file in 0...7 {
                 if color(of: board[rank][file]) == player {
-                    moves += allMoves(from: Square(rank: rank, file: file), includeKing: includeKing)
+                    moves += allAttacks(from: Square(rank: rank, file: file), castling: castling)
                 }
             }
         }
@@ -314,12 +314,8 @@ struct BoardState {
         return moves
     }
     
-    private func canMove(from: Square, to: Square) -> Bool {
-        return allMoves(from: from).contains(to)
-    }
-    
     private func inCheck(_ player: Player) -> Bool {
-        let moves = allMoves(for: opponent[player]!, includeKing: false)
+        let moves = allAttacks(for: opponent[player]!, castling: false)
         
         return moves.contains(kingPosition[player]!)
     }
@@ -331,7 +327,7 @@ struct BoardState {
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
 
-        let moves = castlingBoardState.allMoves(for: opponent[player]!, includeKing: false)
+        let moves = castlingBoardState.allAttacks(for: opponent[player]!, castling: false)
         
         return moves.contains(Square(rank: rank, file: file))
     }
@@ -404,7 +400,7 @@ struct BoardState {
     }
     
     func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
-        if !canMove(from: from, to: to) {
+        if !allAttacks(from: from).contains(to) {
             return nil
         }
                 
