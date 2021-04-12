@@ -9,6 +9,7 @@ struct BoardState {
     var board: Board = newBoard
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
+    var promoting: Square? = nil
     var checkmate = false
     var stalemate = false
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
@@ -406,11 +407,10 @@ struct BoardState {
             .removeEnPassantPawn(for: piece, from: from, to: to)
             .castleRook(for: piece, from: from, to: to)
         
-        let piece = promote(piece, to: to)
-        let player = color(of: piece)
-
         newBoardState.board[from.rank][from.file] = "Empty"
-        newBoardState.board[to.rank][to.file] = piece
+        newBoardState.board[to.rank][to.file] = promote(piece, to: to)
+        
+        let player = color(of: piece)
         
         if piece.contains("King") {
             newBoardState.kingPosition[player] = to
@@ -418,6 +418,12 @@ struct BoardState {
 
         if newBoardState.inCheck(player) {
             return nil
+        }
+        
+        if piece != promote(piece, to: to) {
+            newBoardState.promoting = to
+        } else {
+            newBoardState.promoting = nil
         }
         
         return newBoardState
@@ -442,7 +448,7 @@ struct BoardState {
         return moves
     }
     
-    // TODO: check draws other than stalemate
+    // TODO: check for draws other than stalemate
     func makeMove(for piece: String, from: Square, to: Square) -> BoardState? {
         if !allAttacks(from: from).contains(to) {
             return nil
