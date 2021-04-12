@@ -15,7 +15,7 @@ enum Player: CaseIterable {
 
 let opponent: [Player: Player] = [.white: .black, .black: .white]
 
-struct Square: Equatable {
+struct Square: Equatable, Hashable {
     var rank: Int
     var file: Int
     

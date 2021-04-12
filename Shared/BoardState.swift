@@ -9,6 +9,8 @@ struct BoardState {
     var board: Board = newBoard
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
+    var checkmate = false
+    var stalemate = false
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
     var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
@@ -301,23 +303,23 @@ struct BoardState {
     }
     
     private func allAttacks(for player: Player, castling: Bool = true) -> [Square] {
-        var moves = [Square]()
+        var attacks = [Square]()
         
         for rank in 0...7 {
             for file in 0...7 {
                 if color(of: board[rank][file]) == player {
-                    moves += allAttacks(from: Square(rank: rank, file: file), castling: castling)
+                    attacks += allAttacks(from: Square(rank: rank, file: file), castling: castling)
                 }
             }
         }
         
-        return moves
+        return attacks
     }
     
     private func inCheck(_ player: Player) -> Bool {
-        let moves = allAttacks(for: opponent[player]!, castling: false)
+        let attacks = allAttacks(for: opponent[player]!, castling: false)
         
-        return moves.contains(kingPosition[player]!)
+        return attacks.contains(kingPosition[player]!)
     }
     
     private func overCheck(_ player: Player, file: Int) -> Bool {
@@ -327,9 +329,9 @@ struct BoardState {
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
 
-        let moves = castlingBoardState.allAttacks(for: opponent[player]!, castling: false)
+        let attacks = castlingBoardState.allAttacks(for: opponent[player]!, castling: false)
         
-        return moves.contains(Square(rank: rank, file: file))
+        return attacks.contains(Square(rank: rank, file: file))
     }
     
     private func enPassantSquare(for piece: String, from: Square, to: Square) -> Square? {
@@ -399,11 +401,7 @@ struct BoardState {
         return piece
     }
     
-    func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
-        if !allAttacks(from: from).contains(to) {
-            return nil
-        }
-                
+    private func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
         var newBoardState = self
             .removeEnPassantPawn(for: piece, from: from, to: to)
             .castleRook(for: piece, from: from, to: to)
@@ -416,26 +414,70 @@ struct BoardState {
         
         if piece.contains("King") {
             newBoardState.kingPosition[player] = to
-            newBoardState.kingSideCastle[player] = false
-            newBoardState.queenSideCastle[player] = false
         }
 
         if newBoardState.inCheck(player) {
             return nil
         }
         
-        if piece.contains("Rook") {
-            if from.file == 7 {
-                newBoardState.kingSideCastle[player] = false
-            }
-            if from.file == 0 {
-                newBoardState.queenSideCastle[player] = false
+        return newBoardState
+    }
+    
+    func allValidMoves(for player: Player) -> [Square: [Square]] {
+        var moves = [Square: [Square]]()
+        
+        for rank in 0...7 {
+            for file in 0...7 {
+                let piece = board[rank][file]
+                if color(of: piece) == player {
+                    let from = Square(rank: rank, file: file)
+                    let attacks = allAttacks(from: from).filter { isValidMove(for: piece, from: from, to: $0) != nil }
+                    if !attacks.isEmpty {
+                        moves[from] = attacks
+                    }
+                }
             }
         }
         
-        newBoardState.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
-        newBoardState.currentPlayer = opponent[currentPlayer]!
+        return moves
+    }
+    
+    // TODO: check draws other than stalemate
+    func makeMove(for piece: String, from: Square, to: Square) -> BoardState? {
+        if !allAttacks(from: from).contains(to) {
+            return nil
+        }
+        
+        var newBoardState = isValidMove(for: piece, from: from, to: to)
+        
+        if newBoardState == nil {
+            return nil
+        }
                 
-        return newBoardState
+        if piece.contains("King") {
+            newBoardState!.kingSideCastle[currentPlayer] = false
+            newBoardState!.queenSideCastle[currentPlayer] = false
+        }
+        
+        if piece.contains("Rook") {
+            if from.file == 7 {
+                newBoardState!.kingSideCastle[currentPlayer] = false
+            } else if from.file == 0 {
+                newBoardState!.queenSideCastle[currentPlayer] = false
+            }
+        }
+        
+        newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
+        newBoardState!.currentPlayer = opponent[currentPlayer]!
+        
+        if newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
+            if newBoardState!.inCheck(newBoardState!.currentPlayer) {
+                newBoardState!.checkmate = true
+            } else {
+                newBoardState!.stalemate = true
+            }
+        }
+                
+        return newBoardState!
     }
 }

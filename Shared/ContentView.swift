@@ -18,5 +18,8 @@ extension ContentView: View {
             
             PiecesView()
         }
+        .alert(isPresented: $game.gameOver) {
+            Alert(title: game.boardState.checkmate ? Text("Checkmate!") : Text("Stalemate!"))
+        }
     }
 }

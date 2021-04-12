@@ -9,6 +9,7 @@ import SwiftUI
 
 class Game: ObservableObject {
     @Published var boardState = BoardState()
+    @Published var gameOver = false
     @Published var dragging = false
     @Published var touched: Square? = nil
 }
