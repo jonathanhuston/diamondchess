@@ -12,7 +12,6 @@ class Game: ObservableObject {
     @Published var gameOver = false
     @Published var touched: Square? = nil
     @Published var dragging = false
-    @Published var promoting = false
 }
 
 extension Game {
