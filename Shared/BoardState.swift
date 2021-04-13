@@ -447,6 +447,15 @@ struct BoardState {
         return moves
     }
     
+    private func killKing(_ player: Player) -> BoardState {
+        var newBoardPosition = self
+        let square = kingPosition[player]!
+        
+        newBoardPosition.board[square.rank][square.file] = "Dead " + newBoardPosition.board[square.rank][square.file]
+        
+        return newBoardPosition
+    }
+    
     // TODO: check for draws other than stalemate
     func makeMove(for piece: String, from: Square, to: Square) -> BoardState? {
         if !allAttacks(from: from).contains(to) {
@@ -475,14 +484,18 @@ struct BoardState {
         newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
         newBoardState!.currentPlayer = opponent[currentPlayer]!
         
-        if newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
-            if newBoardState!.inCheck(newBoardState!.currentPlayer) {
-                newBoardState!.winner = currentPlayer
-            } else {
-                newBoardState!.winner = Player.none
-            }
+        if !newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
+            return newBoardState
         }
+        
+        newBoardState = newBoardState!.killKing(newBoardState!.currentPlayer)
                 
+        if !newBoardState!.inCheck(newBoardState!.currentPlayer) {
+            newBoardState!.winner = Player.none
+            return newBoardState!.killKing(currentPlayer)
+        }
+            
+        newBoardState!.winner = currentPlayer
         return newBoardState!
     }
 }

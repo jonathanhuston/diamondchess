@@ -15,7 +15,7 @@ struct PieceView {
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
     
-    func adjustedOffset(at position: CGPoint, for piece: String, negative: Bool = false) -> CGPoint {
+    private func adjustedOffset(at position: CGPoint, for piece: String, negative: Bool = false) -> CGPoint {
         let sign: CGFloat = negative ? -1 : 1
         var adjusted = position
     

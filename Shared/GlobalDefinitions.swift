@@ -38,11 +38,19 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
 let squareSize: CGFloat = 110
 
 func pieceWidth(_ piece: String) -> CGFloat {
-    piece.contains("Pawn") ? 50 : 80
+    if piece.contains("Dead") {
+        return 105
+    }
+    
+    return piece.contains("Pawn") ? 50 : 80
 }
 
 func pieceHeight(_ piece: String) -> CGFloat {
-    piece.contains("Pawn") ? 80 : 105
+    if piece.contains("Dead") {
+        return 80
+    }
+    
+    return piece.contains("Pawn") ? 80 : 105
 }
 
 func color(of piece: String) -> Player {
