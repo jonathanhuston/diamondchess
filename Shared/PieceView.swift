@@ -15,6 +15,29 @@ struct PieceView {
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
     
+    private func nextPiece(_ piece: String) -> String {
+        switch piece {
+        case "White Queen":
+            return "White Knight"
+        case "White Knight":
+            return "White Rook"
+        case "White Rook":
+            return "White Bishop"
+        case "White Bishop":
+            return "White Queen"
+        case "Black Queen":
+            return "Black Knight"
+        case "Black Knight":
+            return "Black Rook"
+        case "Black Rook":
+            return "Black Bishop"
+        case "Black Bishop":
+            return "Black Queen"
+        default:
+            return piece
+        }
+    }
+        
     private func adjustedOffset(at position: CGPoint, for piece: String, negative: Bool = false) -> CGPoint {
         let sign: CGFloat = negative ? -1 : 1
         var adjusted = position
@@ -30,7 +53,17 @@ extension PieceView: View {
     var body: some View {
         let piece = game.boardState.board[square.rank][square.file]
         
-        if piece != "Empty" {
+        if game.boardState.promoting == square {
+            Button(action: {
+                game.boardState.board[square.rank][square.file] = nextPiece(piece)
+            }) {
+                Image(piece)
+                    .resizable()
+                    .position(adjustedOffset(at: offset, for: piece))
+                    .frame(width: pieceWidth(piece), height: pieceHeight(piece))
+            }
+            .buttonStyle(PlainButtonStyle())
+        } else if piece != "Empty" {
             Image(piece)
                 .resizable()
                 .position(adjustedOffset(at: offset, for: piece))

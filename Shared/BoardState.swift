@@ -384,7 +384,6 @@ struct BoardState {
         return newBoardState
     }
     
-    // TODO: promote to other pieces
     private func promote(_ piece: String, to: Square) -> String {
         if !piece.contains("Pawn") {
             return piece
@@ -428,6 +427,7 @@ struct BoardState {
         return newBoardState
     }
     
+    // TODO: generate all promotions
     func allValidMoves(for player: Player) -> [Square: [Square]] {
         var moves = [Square: [Square]]()
         
