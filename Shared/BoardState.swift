@@ -447,6 +447,32 @@ struct BoardState {
         return moves
     }
     
+    private func insuffientMaterial() -> Bool {
+        let pieces = self.board.flatMap { $0 }.filter { $0 != "Empty" }
+        
+        if pieces.count == 4 && pieces.contains("White Bishop") && pieces.contains("Black Bishop") {
+            var wbColor = true
+            var bbColor = false
+            for rank in 0...7 {
+                for file in 0...7 {
+                    if self.board[rank][file] == "White Bishop" {
+                        wbColor = rank % 2 == file % 2
+                    }
+                    if self.board[rank][file] == "Black Bishop" {
+                        bbColor = rank % 2 == file % 2
+                    }
+                }
+            }
+            if wbColor == bbColor {
+                return true
+            }
+        }
+        
+        return !(pieces.count > 3
+            || pieces.contains("White Queen") || pieces.contains("White Rook") || pieces.contains("White Pawn")
+            || pieces.contains("Black Queen") || pieces.contains("Black Rook") || pieces.contains("Black Pawn"))
+    }
+    
     private func killKing(_ player: Player) -> BoardState {
         var newBoardPosition = self
         let square = kingPosition[player]!
@@ -456,7 +482,6 @@ struct BoardState {
         return newBoardPosition
     }
     
-    // TODO: check for draws other than stalemate
     func makeMove(for piece: String, from: Square, to: Square) -> BoardState? {
         if !allAttacks(from: from).contains(to) {
             return nil
@@ -483,6 +508,11 @@ struct BoardState {
         
         newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
         newBoardState!.currentPlayer = opponent[currentPlayer]!
+        
+        if newBoardState!.insuffientMaterial() {
+            newBoardState!.winner = Player.none
+            return newBoardState!.killKing(currentPlayer).killKing(newBoardState!.currentPlayer)
+        }
         
         if !newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
             return newBoardState
