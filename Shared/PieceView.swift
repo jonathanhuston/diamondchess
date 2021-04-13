@@ -50,7 +50,7 @@ extension PieceView: View {
                                 let toFile = square.file + Int((offset.x / squareSize).rounded())
                                 if let newBoardState = game.boardState.makeMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
                                     game.boardState = newBoardState
-                                    game.gameOver = newBoardState.checkmate || newBoardState.stalemate
+                                    game.over = newBoardState.winner != nil
                                 }
                                 game.touched = nil
                                 offset = CGPoint(x: 0, y: 0)

@@ -10,7 +10,7 @@ import SwiftUI
 enum Player: CaseIterable {
     case white
     case black
-    case empty
+    case none
 }
 
 let opponent: [Player: Player] = [.white: .black, .black: .white]
@@ -51,7 +51,7 @@ func color(of piece: String) -> Player {
     } else if piece.contains("Black") {
         return .black
     } else {
-        return .empty
+        return .none
     }
 }
 

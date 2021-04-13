@@ -10,8 +10,7 @@ struct BoardState {
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
     var promoting: Square? = nil
-    var checkmate = false
-    var stalemate = false
+    var winner: Player? = nil
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
     var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
@@ -478,9 +477,9 @@ struct BoardState {
         
         if newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
             if newBoardState!.inCheck(newBoardState!.currentPlayer) {
-                newBoardState!.checkmate = true
+                newBoardState!.winner = currentPlayer
             } else {
-                newBoardState!.stalemate = true
+                newBoardState!.winner = Player.none
             }
         }
                 
