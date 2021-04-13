@@ -18,8 +18,5 @@ extension ContentView: View {
             
             PiecesView()
         }
-        .alert(isPresented: $game.over) {
-            Alert(title: game.boardState.winner! != .none ? Text("Checkmate!") : Text("Stalemate!"))
-        }
     }
 }
