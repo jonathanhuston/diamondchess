@@ -14,6 +14,7 @@ struct BoardState {
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
     var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
+    var captured: [Player: [String]] = [.white: [], .black: []]
 
     private func pawnMoves(from: Square) -> [Square] {
         var moves = [Square]()
@@ -360,6 +361,7 @@ struct BoardState {
         }
         
         var newBoardState = self
+        newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[from.rank][to.file])
         newBoardState.board[from.rank][to.file] = "Empty"
         
         return  newBoardState
@@ -404,6 +406,10 @@ struct BoardState {
         var newBoardState = self
             .removeEnPassantPawn(for: piece, from: from, to: to)
             .castleRook(for: piece, from: from, to: to)
+        
+        if newBoardState.board[to.rank][to.file] != "Empty" {
+            newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[to.rank][to.file])
+        }
         
         newBoardState.board[from.rank][from.file] = "Empty"
         newBoardState.board[to.rank][to.file] = promote(piece, to: to)

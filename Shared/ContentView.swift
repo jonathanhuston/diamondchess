@@ -13,10 +13,22 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        ZStack {
-            BoardView()
+        HStack(spacing: 0) {
+            ZStack {
+                BoardView()
+                
+                PiecesView()
+            }
+            .frame(width: 8 * squareSize, height: 8 * squareSize)
             
-            PiecesView()
+            VStack(spacing: 0) {
+                CapturedView(player: .white)
+                    .frame(width: 2 * squareSize, height: 4 * squareSize)
+
+                CapturedView(player: .black)
+                    .frame(width: 2 * squareSize, height: 4 * squareSize)
+
+            }
         }
     }
 }

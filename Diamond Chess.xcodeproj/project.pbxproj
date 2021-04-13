@@ -27,6 +27,8 @@
 		15F35A29261C800E0098B143 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A14261C800D0098B143 /* ContentView.swift */; };
 		15F35A2A261C800E0098B143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15F35A15261C800E0098B143 /* Assets.xcassets */; };
 		15F35A2B261C800E0098B143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15F35A15261C800E0098B143 /* Assets.xcassets */; };
+		333B780D262656AB0009E230 /* CapturedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333B780C262656AB0009E230 /* CapturedView.swift */; };
+		333B780E262656AB0009E230 /* CapturedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333B780C262656AB0009E230 /* CapturedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,7 @@
 		15F35A22261C800E0098B143 /* Diamond Chess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Diamond Chess.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15F35A24261C800E0098B143 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15F35A25261C800E0098B143 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		333B780C262656AB0009E230 /* CapturedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,7 @@
 				15087BAB2620510900668781 /* SquareView.swift */,
 				15E563082620A7CF00DD5B05 /* PiecesView.swift */,
 				15E7BCEC261DC0B600AB495F /* PieceView.swift */,
+				333B780C262656AB0009E230 /* CapturedView.swift */,
 				15E5630F2620C22000DD5B05 /* Game.swift */,
 				1565C9CE2621963F001A1D9A /* BoardState.swift */,
 				15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */,
@@ -219,6 +223,7 @@
 				15087BAC2620510900668781 /* SquareView.swift in Sources */,
 				15087BB32620526C00668781 /* BoardView.swift in Sources */,
 				15E7BCED261DC0B600AB495F /* PieceView.swift in Sources */,
+				333B780D262656AB0009E230 /* CapturedView.swift in Sources */,
 				15A26D47261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A26261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
 				15E563092620A7CF00DD5B05 /* PiecesView.swift in Sources */,
@@ -235,6 +240,7 @@
 				15087BAD2620510900668781 /* SquareView.swift in Sources */,
 				15087BB42620526C00668781 /* BoardView.swift in Sources */,
 				15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */,
+				333B780E262656AB0009E230 /* CapturedView.swift in Sources */,
 				15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A27261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
 				15E5630A2620A7CF00DD5B05 /* PiecesView.swift in Sources */,
