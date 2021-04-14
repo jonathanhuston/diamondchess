@@ -14,8 +14,8 @@ struct PiecesView {
 extension PiecesView: View {
     var body: some View {
         if game.dragging {
-            ForEach(Int(0)...Int(7), id:\.self) { rank in
-                ForEach(Int(0)...Int(7), id:\.self) { file in
+            ForEach(0...7, id:\.self) { rank in
+                ForEach(0...7, id:\.self) { file in
                     if game.touched! != Square(rank: rank, file: file) {
                         PieceView(square: Square(rank: rank, file: file))
                             .position(x: getX(file), y: getY(rank))
@@ -24,9 +24,9 @@ extension PiecesView: View {
             }
         }
         
-        ForEach(Int(0)...Int(7), id:\.self) { rank in
-            ForEach(Int(0)...Int(7), id:\.self) { file in
-                if game.touched == nil || game.touched! == Square(rank: rank, file: file) || !game.dragging  {
+        ForEach(0...7, id:\.self) { rank in
+            ForEach(0...7, id:\.self) { file in
+                if !game.dragging || game.touched == nil || game.touched! == Square(rank: rank, file: file) {
                     PieceView(square: Square(rank: rank, file: file))
                         .position(x: getX(file), y: getY(rank))
                 }

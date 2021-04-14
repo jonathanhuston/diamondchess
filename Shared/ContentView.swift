@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView {
     @EnvironmentObject var game: Game
+    
+    @Binding var computerPlayer: Player?
 }
 
 extension ContentView: View {
@@ -29,6 +31,12 @@ extension ContentView: View {
                     .frame(width: 2 * squareSize, height: 4 * squareSize)
 
             }
+        }
+        .onChange(of: computerPlayer) { newValue in
+            if newValue != nil {
+                game.newGame(computerPlayer: newValue)
+            }
+            computerPlayer = nil
         }
     }
 }

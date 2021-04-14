@@ -9,10 +9,15 @@ import SwiftUI
 
 @main
 struct Diamond_ChessApp: App {
+    @State var computerPlayer: Player? = nil
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(computerPlayer: $computerPlayer)
                 .environmentObject(Game())
+        }
+        .commands {
+            AppCommands(computerPlayer: $computerPlayer)
         }
     }
 }

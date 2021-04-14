@@ -13,6 +13,7 @@
 		15087BB42620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
 		1565C9CF2621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
 		1565C9D02621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
+		15A17EB42627586300FBBD15 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A17EB32627586300FBBD15 /* AppCommands.swift */; };
 		15A26D47261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */; };
 		15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */; };
 		15E563092620A7CF00DD5B05 /* PiecesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E563082620A7CF00DD5B05 /* PiecesView.swift */; };
@@ -35,6 +36,7 @@
 		15087BAB2620510900668781 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
 		15087BB22620526C00668781 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		1565C9CE2621963F001A1D9A /* BoardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardState.swift; sourceTree = "<group>"; };
+		15A17EB32627586300FBBD15 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDefinitions.swift; sourceTree = "<group>"; };
 		15E563082620A7CF00DD5B05 /* PiecesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiecesView.swift; sourceTree = "<group>"; };
 		15E5630F2620C22000DD5B05 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		15F35A23261C800E0098B143 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				15A17EB32627586300FBBD15 /* AppCommands.swift */,
 				15F35A24261C800E0098B143 /* Info.plist */,
 				15F35A25261C800E0098B143 /* macOS.entitlements */,
 			);
@@ -240,6 +243,7 @@
 				15087BAD2620510900668781 /* SquareView.swift in Sources */,
 				15087BB42620526C00668781 /* BoardView.swift in Sources */,
 				15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */,
+				15A17EB42627586300FBBD15 /* AppCommands.swift in Sources */,
 				333B780E262656AB0009E230 /* CapturedView.swift in Sources */,
 				15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A27261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
