@@ -79,8 +79,10 @@ extension PieceView: View {
                             }
                             .onEnded({ value in
                                 game.dragging = false
-                                let toRank = square.rank + Int((offset.y / squareSize).rounded())
-                                let toFile = square.file + Int((offset.x / squareSize).rounded())
+                                let rankOffset = Int((offset.y / squareSize).rounded())
+                                let fileOffset = Int((offset.x / squareSize).rounded())
+                                let toRank = square.rank + (game.computerPlayer == .white ? -rankOffset : rankOffset)
+                                let toFile = square.file + (game.computerPlayer == .white ? -fileOffset : fileOffset)
                                 if let newBoardState = game.boardState.makeMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil

@@ -18,7 +18,7 @@ extension PiecesView: View {
                 ForEach(0...7, id:\.self) { file in
                     if game.touched! != Square(rank: rank, file: file) {
                         PieceView(square: Square(rank: rank, file: file))
-                            .position(x: getX(file), y: getY(rank))
+                            .position(x: getX(game.computerPlayer == .white ? (7 - file) : file), y: getY(game.computerPlayer == .white ? (7 - rank) : rank))
                     }
                 }
             }
@@ -28,7 +28,7 @@ extension PiecesView: View {
             ForEach(0...7, id:\.self) { file in
                 if !game.dragging || game.touched == nil || game.touched! == Square(rank: rank, file: file) {
                     PieceView(square: Square(rank: rank, file: file))
-                        .position(x: getX(file), y: getY(rank))
+                        .position(x: getX(game.computerPlayer == .white ? (7 - file) : file), y: getY(game.computerPlayer == .white ? (7 - rank) : rank))
                 }
             }
         }
