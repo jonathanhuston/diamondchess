@@ -35,6 +35,10 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
                        ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
                        ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
+let pieceValues = ["White King": 1000, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5,
+                   "Black King": -1000, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5,
+                   "Empty": 0]
+
 let squareSize: CGFloat = 110
 
 func pieceWidth(_ piece: String) -> CGFloat {
