@@ -9,8 +9,6 @@ import SwiftUI
 
 struct ContentView {
     @EnvironmentObject var game: Game
-    
-    @Binding var computerPlayer: Player?
 }
 
 extension ContentView: View {
@@ -32,11 +30,11 @@ extension ContentView: View {
 
             }
         }
-        .onChange(of: computerPlayer) { newValue in
-            if newValue != nil {
-                game.newGame(computerPlayer: newValue)
+        .onChange(of: game.launch) { launch in
+            if launch == true {
+                game.newGame()
             }
-            computerPlayer = nil
+            game.launch = false
         }
     }
 }

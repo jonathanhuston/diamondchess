@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppCommands {
-    @Binding var computerPlayer: Player?
+    @ObservedObject var game: Game
 }
 
 extension AppCommands: Commands {
@@ -16,15 +16,18 @@ extension AppCommands: Commands {
     @CommandsBuilder var body: some Commands {
         CommandMenu("Game") {
             Button("White vs. Computer") {
-                computerPlayer = .black
+                game.computerPlayer = .black
+                game.launch = true
             }
             .keyboardShortcut("W", modifiers: [.shift, .command])
             Button("Computer vs. Black") {
-                computerPlayer = .white
+                game.computerPlayer = .white
+                game.launch = true
             }
             .keyboardShortcut("B", modifiers: [.shift, .command])
             Button("Human vs. Human") {
-                computerPlayer = Player.none
+                game.computerPlayer = Player.none
+                game.launch = true
             }
             .keyboardShortcut("H", modifiers: [.shift, .command])
         }

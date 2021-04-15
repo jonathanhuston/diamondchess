@@ -12,12 +12,14 @@ struct Diamond_ChessApp: App {
     @State var computerPlayer: Player? = nil
     
     var body: some Scene {
+        let game = Game()
+        
         WindowGroup {
-            ContentView(computerPlayer: $computerPlayer)
-                .environmentObject(Game())
+            ContentView()
+                .environmentObject(game)
         }
         .commands {
-            AppCommands(computerPlayer: $computerPlayer)
+            AppCommands(game: game)
         }
     }
 }
