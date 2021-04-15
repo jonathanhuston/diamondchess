@@ -34,7 +34,17 @@ extension Game {
         }
     }
     
-    private func computerMove() {
+    func computerMove() {
+        let moves = boardState.allValidMoves(for: boardState.currentPlayer)
         
+        if moves.isEmpty {
+            return
+        }
+        
+        let move = moves.randomElement()
+        let from = move!.key
+        let to = move!.value.randomElement()!
+        
+        boardState = boardState.makeMove(from: from, to: to)!
     }
 }

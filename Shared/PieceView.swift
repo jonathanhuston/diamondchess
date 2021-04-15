@@ -86,6 +86,11 @@ extension PieceView: View {
                                 if let newBoardState = game.boardState.makeMove(from: square, to: Square(rank: toRank, file: toFile)) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        if !game.over && game.boardState.currentPlayer == game.computerPlayer {
+                                            game.computerMove()
+                                        }
+                                    }
                                 }
                                 game.touched = nil
                                 offset = CGPoint(x: 0, y: 0)

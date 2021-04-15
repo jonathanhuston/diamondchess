@@ -15,12 +15,12 @@ extension AppCommands: Commands {
     
     @CommandsBuilder var body: some Commands {
         CommandMenu("Game") {
-            Button("Play white against computer") {
+            Button("White vs. Computer") {
                 game.computerPlayer = .black
                 game.launch = true
             }
             .keyboardShortcut("W", modifiers: [.shift, .command])
-            Button("Play black against computer") {
+            Button("Computer vs. Black") {
                 game.computerPlayer = .white
                 game.launch = true
             }
