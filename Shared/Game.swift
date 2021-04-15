@@ -12,6 +12,8 @@ class Game: ObservableObject {
     @Published var computerPlayer: Player? = nil
     @Published var launch = false
     @Published var over = false
+    @Published var flip = false
+    @Published var flipped = false
     @Published var touched: Square? = nil
     @Published var dragging = false
 }
@@ -21,6 +23,7 @@ extension Game {
         boardState = BoardState()
         launch = false
         over = false
+        flipped = computerPlayer == .white
         touched = nil
         dragging = false
     }

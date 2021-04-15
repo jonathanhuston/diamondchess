@@ -36,5 +36,8 @@ extension ContentView: View {
             }
             game.launch = false
         }
+        .onChange(of: game.flip) { _ in
+            game.flipped = !game.flipped
+        }
     }
 }

@@ -81,8 +81,8 @@ extension PieceView: View {
                                 game.dragging = false
                                 let rankOffset = Int((offset.y / squareSize).rounded())
                                 let fileOffset = Int((offset.x / squareSize).rounded())
-                                let toRank = square.rank + (game.computerPlayer == .white ? -rankOffset : rankOffset)
-                                let toFile = square.file + (game.computerPlayer == .white ? -fileOffset : fileOffset)
+                                let toRank = square.rank + (game.flipped ? -rankOffset : rankOffset)
+                                let toFile = square.file + (game.flipped ? -fileOffset : fileOffset)
                                 if let newBoardState = game.boardState.makeMove(for: piece, from: square, to: Square(rank: toRank, file: toFile)) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil

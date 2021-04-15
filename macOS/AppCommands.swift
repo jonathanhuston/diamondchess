@@ -26,10 +26,18 @@ extension AppCommands: Commands {
             }
             .keyboardShortcut("B", modifiers: [.shift, .command])
             Button("Human vs. Human") {
-                game.computerPlayer = Player.none
+                game.computerPlayer = nil
                 game.launch = true
             }
             .keyboardShortcut("H", modifiers: [.shift, .command])
+            
+            Divider()
+            
+            Button("Flip board") {
+                game.flip = !game.flip
+            }
+            .keyboardShortcut("F", modifiers: [.shift, .command])
+            
         }
     }
 }
