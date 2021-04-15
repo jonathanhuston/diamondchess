@@ -433,7 +433,6 @@ struct BoardState {
         return newBoardState
     }
     
-    // TODO: generate all promotions
     func allValidMoves(for player: Player) -> [Square: [Square]] {
         var moves = [Square: [Square]]()
         

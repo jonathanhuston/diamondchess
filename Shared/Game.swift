@@ -34,6 +34,14 @@ extension Game {
         }
     }
     
+    private func bestMove(of moves: [Square: [Square]]) -> (Square, Square) {
+        let move = moves.randomElement()
+        let from = move!.key
+        let to = move!.value.randomElement()!
+        
+        return (from, to)
+    }
+    
     func computerMove() {
         let moves = boardState.allValidMoves(for: boardState.currentPlayer)
         
@@ -41,10 +49,9 @@ extension Game {
             return
         }
         
-        let move = moves.randomElement()
-        let from = move!.key
-        let to = move!.value.randomElement()!
+        let (from, to) = bestMove(of: moves)
         
         boardState = boardState.makeMove(from: from, to: to)!
+        boardState.promoting = nil
     }
 }

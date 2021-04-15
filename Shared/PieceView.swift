@@ -15,27 +15,13 @@ struct PieceView {
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
     
+    private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
+                                   "Black Queen", "Black Knight", "Black Rook", "Black Bishop", "Black Queen"]
+    
     private func nextPiece(_ piece: String) -> String {
-        switch piece {
-        case "White Queen":
-            return "White Knight"
-        case "White Knight":
-            return "White Rook"
-        case "White Rook":
-            return "White Bishop"
-        case "White Bishop":
-            return "White Queen"
-        case "Black Queen":
-            return "Black Knight"
-        case "Black Knight":
-            return "Black Rook"
-        case "Black Rook":
-            return "Black Bishop"
-        case "Black Bishop":
-            return "Black Queen"
-        default:
-            return piece
-        }
+        let index = promotionPieces.firstIndex(of: piece)!
+        
+        return promotionPieces[index + 1]
     }
         
     private func adjustedOffset(at position: CGPoint, for piece: String, negative: Bool = false) -> CGPoint {
