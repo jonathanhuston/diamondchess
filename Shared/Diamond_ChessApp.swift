@@ -9,8 +9,6 @@ import SwiftUI
 
 @main
 struct Diamond_ChessApp: App {
-    @State var computerPlayer: Player? = nil
-    
     var body: some Scene {
         let game = Game()
         

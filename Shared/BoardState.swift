@@ -16,24 +16,24 @@ struct BoardState {
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
     var captured: [Player: [String]] = [.white: [], .black: []]
 
-    private func pawnMoves(from: Square) -> [Square] {
-        var moves = [Square]()
+    private func pawnAttacks(from: Square) -> [Square] {
+        var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         let direction = player == .white ? -1 : 1
         
         let toRank = from.rank + direction
         
         if 0...7 ~= toRank && board[toRank][from.file] == "Empty" {
-            moves.append(Square(rank: toRank, file: from.file))
+            attacks.append(Square(rank: toRank, file: from.file))
         }
         
         for toFile in [from.file - 1, from.file + 1] {
             if 0...7 ~= toFile {
                 if color(of: board[toRank][toFile]) == opponent[player] {
-                    moves.append(Square(rank: toRank, file: toFile))
+                    attacks.append(Square(rank: toRank, file: toFile))
                 } else if let enPassant = enPassantSquare {
                     if enPassant == Square(rank: toRank, file: toFile) {
-                        moves.append(enPassant)
+                        attacks.append(enPassant)
                     }
                 }
             }
@@ -43,15 +43,15 @@ struct BoardState {
             let twoRank = toRank + direction
             
             if 0...7 ~= twoRank && board[twoRank][from.file] == "Empty" && board[toRank][from.file] == "Empty" {
-                moves.append(Square(rank: twoRank, file: from.file))
+                attacks.append(Square(rank: twoRank, file: from.file))
             }
         }
         
-        return moves
+        return attacks
     }
     
-    private func knightMoves(from: Square) -> [Square] {
-        var moves = [Square]()
+    private func knightAttacks(from: Square) -> [Square] {
+        var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
         for rankOffset in [-2, -1, 1, 2] {
@@ -60,17 +60,17 @@ struct BoardState {
                     let toRank = from.rank + rankOffset
                     let toFile = from.file + fileOffset
                     if 0...7 ~= toRank && 0...7 ~= toFile && player != color(of: board[toRank][toFile]) {
-                        moves.append(Square(rank: toRank, file: toFile))
+                        attacks.append(Square(rank: toRank, file: toFile))
                     }
                 }
             }
         }
         
-        return moves
+        return attacks
     }
     
-    private func rookMoves(from: Square) -> [Square] {
-        var moves = [Square]()
+    private func rookAttacks(from: Square) -> [Square] {
+        var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
         for offset in 1...7 {
@@ -82,9 +82,9 @@ struct BoardState {
             let toSquare = board[from.rank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: from.rank, file: toFile))
+                attacks.append(Square(rank: from.rank, file: toFile))
             } else if player != color(of: board[from.rank][toFile]) {
-                moves.append(Square(rank: from.rank, file: toFile))
+                attacks.append(Square(rank: from.rank, file: toFile))
                 break
             } else {
                 break
@@ -100,9 +100,9 @@ struct BoardState {
             let toSquare = board[from.rank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: from.rank, file: toFile))
+                attacks.append(Square(rank: from.rank, file: toFile))
             } else if player != color(of: board[from.rank][toFile]) {
-                moves.append(Square(rank: from.rank, file: toFile))
+                attacks.append(Square(rank: from.rank, file: toFile))
                 break
             } else {
                 break
@@ -118,9 +118,9 @@ struct BoardState {
             let toSquare = board[toRank][from.file]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: from.file))
+                attacks.append(Square(rank: toRank, file: from.file))
             } else if player != color(of: board[toRank][from.file]) {
-                moves.append(Square(rank: toRank, file: from.file))
+                attacks.append(Square(rank: toRank, file: from.file))
                 break
             } else {
                 break
@@ -136,20 +136,20 @@ struct BoardState {
             let toSquare = board[toRank][from.file]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: from.file))
+                attacks.append(Square(rank: toRank, file: from.file))
             } else if player != color(of: board[toRank][from.file]) {
-                moves.append(Square(rank: toRank, file: from.file))
+                attacks.append(Square(rank: toRank, file: from.file))
                 break
             } else {
                 break
             }
         }
         
-        return moves
+        return attacks
     }
     
-    private func bishopMoves(from: Square) -> [Square] {
-        var moves = [Square]()
+    private func bishopAttacks(from: Square) -> [Square] {
+        var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
         for offset in 1...7 {
@@ -162,9 +162,9 @@ struct BoardState {
             let toSquare = board[toRank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
             } else if player != color(of: board[toRank][toFile]) {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
                 break
             } else {
                 break
@@ -181,9 +181,9 @@ struct BoardState {
             let toSquare = board[toRank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
             } else if player != color(of: board[toRank][toFile]) {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
                 break
             } else {
                 break
@@ -200,9 +200,9 @@ struct BoardState {
             let toSquare = board[toRank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
             } else if player != color(of: board[toRank][toFile]) {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
                 break
             } else {
                 break
@@ -219,24 +219,24 @@ struct BoardState {
             let toSquare = board[toRank][toFile]
             
             if toSquare == "Empty" {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
             } else if player != color(of: board[toRank][toFile]) {
-                moves.append(Square(rank: toRank, file: toFile))
+                attacks.append(Square(rank: toRank, file: toFile))
                 break
             } else {
                 break
             }
         }
         
-        return moves
+        return attacks
     }
     
-    private func queenMoves(from: Square) -> [Square] {
-        return rookMoves(from: from) + bishopMoves(from: from)
+    private func queenAttacks(from: Square) -> [Square] {
+        return rookAttacks(from: from) + bishopAttacks(from: from)
     }
     
-    private func kingMoves(from: Square, castling: Bool) -> [Square] {
-        var moves = [Square]()
+    private func kingAttacks(from: Square, castling: Bool) -> [Square] {
+        var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         let kingRank = (player == .white) ? 7 : 0
         let king = (player == .white) ? "White King" : "Black King"
@@ -248,14 +248,14 @@ struct BoardState {
                     let toRank = from.rank + rankOffset
                     let toFile = from.file + fileOffset
                     if 0...7 ~= toRank && 0...7 ~= toFile && player != color(of: board[toRank][toFile]) {
-                        moves.append(Square(rank: toRank, file: toFile))
+                        attacks.append(Square(rank: toRank, file: toFile))
                     }
                 }
             }
         }
         
         if !castling || board[kingRank][4] != king || inCheck(player) {
-            return moves
+            return attacks
         }
         
         if board[kingRank][7] == rook && kingSideCastle[player]! && !overCheck(player, file: 5) {
@@ -266,7 +266,7 @@ struct BoardState {
                 }
             }
             if canCastle {
-                moves.append(Square(rank: kingRank, file: 6))
+                attacks.append(Square(rank: kingRank, file: 6))
             }
         }
         
@@ -278,28 +278,28 @@ struct BoardState {
                 }
             }
             if canCastle {
-                moves.append(Square(rank: kingRank, file: 2))
+                attacks.append(Square(rank: kingRank, file: 2))
             }
         }
         
-        return moves
+        return attacks
     }
     
     private func allAttacks(from: Square, castling: Bool = true) -> [Square] {
         let piece = board[from.rank][from.file]
         
         if piece.contains("Pawn") {
-            return pawnMoves(from: from)
+            return pawnAttacks(from: from)
         } else if piece.contains("Knight") {
-            return knightMoves(from: from)
+            return knightAttacks(from: from)
         } else if piece.contains("Rook") {
-            return rookMoves(from: from)
+            return rookAttacks(from: from)
         } else if piece.contains("Bishop") {
-            return bishopMoves(from: from)
+            return bishopAttacks(from: from)
         } else if piece.contains("Queen") {
-            return queenMoves(from: from)
+            return queenAttacks(from: from)
         } else {
-            return kingMoves(from: from, castling: castling)
+            return kingAttacks(from: from, castling: castling)
         }
     }
     
@@ -488,7 +488,9 @@ struct BoardState {
         return newBoardPosition
     }
     
-    func makeMove(for piece: String, from: Square, to: Square) -> BoardState? {
+    func makeMove(from: Square, to: Square) -> BoardState? {
+        let piece = board[from.rank][from.file]
+        
         if !allAttacks(from: from).contains(to) {
             return nil
         }

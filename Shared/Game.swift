@@ -26,5 +26,15 @@ extension Game {
         flipped = computerPlayer == .white
         touched = nil
         dragging = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if self.boardState.currentPlayer == self.computerPlayer {
+                self.computerMove()
+            }
+        }
+    }
+    
+    private func computerMove() {
+        
     }
 }
