@@ -9,7 +9,7 @@ import SwiftUI
 
 class Game: ObservableObject {
     @Published var boardState = BoardState()
-    @Published var computerPlayer: Player? = nil
+    @Published var computerPlayer: Player? = .black
     @Published var launch = false
     @Published var over = false
     @Published var flip = false
