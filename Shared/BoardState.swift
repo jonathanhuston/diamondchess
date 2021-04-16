@@ -390,46 +390,46 @@ struct BoardState {
         return newBoardState
     }
     
-    private func promote(_ piece: String, to: Square) -> String {
+    private func promote(_ piece: String, given move: Move) -> String {
         if !piece.contains("Pawn") {
             return piece
         }
                 
-        if to.rank == 0 {
-            return "White Queen"
+        if move.to.rank == 0 {
+            return move.specialPromote ?? "White Queen"
         }
         
-        if to.rank == 7 {
-            return "Black Queen"
+        if move.to.rank == 7 {
+            return move.specialPromote ?? "Black Queen"
         }
         
         return piece
     }
     
-    private func isValidMove(for piece: String, from: Square, to: Square) -> BoardState? {
+    private func isValidMove(_ move: Move, for piece: String) -> BoardState? {
         var newBoardState = self
-            .removeEnPassantPawn(for: piece, from: from, to: to)
-            .castleRook(for: piece, from: from, to: to)
+            .removeEnPassantPawn(for: piece, from: move.from, to: move.to)
+            .castleRook(for: piece, from: move.from, to: move.to)
         
-        if newBoardState.board[to.rank][to.file] != "Empty" {
-            newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[to.rank][to.file])
+        if newBoardState.board[move.to.rank][move.to.file] != "Empty" {
+            newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[move.to.rank][move.to.file])
         }
         
-        newBoardState.board[from.rank][from.file] = "Empty"
-        newBoardState.board[to.rank][to.file] = promote(piece, to: to)
+        newBoardState.board[move.from.rank][move.from.file] = "Empty"
+        newBoardState.board[move.to.rank][move.to.file] = promote(piece, given: move)
         
         let player = color(of: piece)
         
         if piece.contains("King") {
-            newBoardState.kingPosition[player] = to
+            newBoardState.kingPosition[player] = move.to
         }
 
         if newBoardState.inCheck(player) {
             return nil
         }
         
-        if piece != promote(piece, to: to) {
-            newBoardState.promoting = to
+        if piece != promote(piece, given: move) {
+            newBoardState.promoting = move.to
         } else {
             newBoardState.promoting = nil
         }
@@ -445,7 +445,7 @@ struct BoardState {
                 let piece = board[rank][file]
                 if color(of: piece) == player {
                     let from = Square(rank: rank, file: file)
-                    let attacks = allAttacks(from: from).filter { isValidMove(for: piece, from: from, to: $0) != nil }
+                    let attacks = allAttacks(from: from).filter { isValidMove(Move(from: from, to: $0, specialPromote: nil), for: piece) != nil }
                     if !attacks.isEmpty {
                         moves[from] = attacks
                     }
@@ -491,14 +491,14 @@ struct BoardState {
         return newBoardPosition
     }
     
-    func makeMove(from: Square, to: Square) -> BoardState? {
-        let piece = board[from.rank][from.file]
+    func makeMove(_ move: Move) -> BoardState? {
+        let piece = board[move.from.rank][move.from.file]
         
-        if !allAttacks(from: from).contains(to) {
+        if !allAttacks(from: move.from).contains(move.to) {
             return nil
         }
         
-        var newBoardState = isValidMove(for: piece, from: from, to: to)
+        var newBoardState = isValidMove(move, for: piece)
         
         if newBoardState == nil {
             return nil
@@ -510,14 +510,14 @@ struct BoardState {
         }
         
         if piece.contains("Rook") {
-            if from.file == 7 {
+            if move.from.file == 7 {
                 newBoardState!.kingSideCastle[currentPlayer] = false
-            } else if from.file == 0 {
+            } else if move.from.file == 0 {
                 newBoardState!.queenSideCastle[currentPlayer] = false
             }
         }
         
-        newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: from, to: to)
+        newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
         newBoardState!.currentPlayer = opponent[currentPlayer]!
         
         if newBoardState!.insuffientMaterial() {

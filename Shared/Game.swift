@@ -34,7 +34,6 @@ extension Game {
         }
     }
     
-    // TODO: let computer promote to non-queen
     private func bestMove(of moves: [Square: [Square]], for player: Player) -> Move {
         let comparator: (Float, Float) -> Bool = player == .white ? (<) : (>)
         var scores = [Move: Float]()
@@ -42,12 +41,13 @@ extension Game {
         for movesFrom in moves {
             let from = movesFrom.key
             for to in movesFrom.value {
-                var newBoardState = boardState.makeMove(from: from, to: to)!
-                scores[Move(from: from, to: to)] = newBoardState.evaluateBoardState()
+                var newBoardState = boardState.makeMove(Move(from: from, to: to, specialPromote: nil))!
+                scores[Move(from: from, to: to, specialPromote: nil)] = newBoardState.evaluateBoardState()
                 if let square = newBoardState.promoting {
                     for _ in 1...3 {
-                        newBoardState.board[square.rank][square.file] = nextPromotionPiece(newBoardState.board[square.rank][square.file])
-                        scores[Move(from: from, to: to)] = newBoardState.evaluateBoardState()
+                        let promotionPiece = nextPromotionPiece(newBoardState.board[square.rank][square.file])
+                        newBoardState.board[square.rank][square.file] = promotionPiece
+                        scores[Move(from: from, to: to, specialPromote: promotionPiece)] = newBoardState.evaluateBoardState()
                     }
                 }
             }
@@ -68,7 +68,7 @@ extension Game {
         
         let move = bestMove(of: moves, for: boardState.currentPlayer)
         
-        boardState = boardState.makeMove(from: move.from, to: move.to)!
+        boardState = boardState.makeMove(move)!
         boardState.promoting = nil
     }
 }

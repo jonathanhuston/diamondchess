@@ -30,7 +30,7 @@ extension PieceView: View {
     var body: some View {
         let piece = game.boardState.board[square.rank][square.file]
         
-        if game.boardState.promoting == square {
+        if game.boardState.promoting == square && !game.over {
             Button(action: {
                 game.boardState.board[square.rank][square.file] = nextPromotionPiece(piece)
             }) {
@@ -60,7 +60,8 @@ extension PieceView: View {
                                 let fileOffset = Int((offset.x / squareSize).rounded())
                                 let toRank = square.rank + (game.flipped ? -rankOffset : rankOffset)
                                 let toFile = square.file + (game.flipped ? -fileOffset : fileOffset)
-                                if let newBoardState = game.boardState.makeMove(from: square, to: Square(rank: toRank, file: toFile)) {
+                                let move = Move(from: square, to: Square(rank: toRank, file: toFile), specialPromote: nil)
+                                if let newBoardState = game.boardState.makeMove(move) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil
                                     DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.5 : 5.0)) {
