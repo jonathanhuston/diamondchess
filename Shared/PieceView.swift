@@ -14,15 +14,6 @@ struct PieceView {
     
     @State private var offset = CGPoint(x: 0, y: 0)
     @GestureState private var isDragging = false
-    
-    private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
-                                   "Black Queen", "Black Knight", "Black Rook", "Black Bishop", "Black Queen"]
-    
-    private func nextPiece(_ piece: String) -> String {
-        let index = promotionPieces.firstIndex(of: piece)!
-        
-        return promotionPieces[index + 1]
-    }
         
     private func adjustedOffset(at position: CGPoint, for piece: String, negative: Bool = false) -> CGPoint {
         let sign: CGFloat = negative ? -1 : 1
@@ -41,7 +32,7 @@ extension PieceView: View {
         
         if game.boardState.promoting == square {
             Button(action: {
-                game.boardState.board[square.rank][square.file] = nextPiece(piece)
+                game.boardState.board[square.rank][square.file] = nextPromotionPiece(piece)
             }) {
                 Image(piece)
                     .resizable()
@@ -72,7 +63,7 @@ extension PieceView: View {
                                 if let newBoardState = game.boardState.makeMove(from: square, to: Square(rank: toRank, file: toFile)) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.5 : 5.0)) {
                                         if !game.over && game.boardState.currentPlayer == game.computerPlayer {
                                             game.computerMove()
                                         }

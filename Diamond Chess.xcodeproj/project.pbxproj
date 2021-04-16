@@ -91,8 +91,8 @@
 				15E563082620A7CF00DD5B05 /* PiecesView.swift */,
 				15E7BCEC261DC0B600AB495F /* PieceView.swift */,
 				333B780C262656AB0009E230 /* CapturedView.swift */,
-				15E5630F2620C22000DD5B05 /* Game.swift */,
 				1565C9CE2621963F001A1D9A /* BoardState.swift */,
+				15E5630F2620C22000DD5B05 /* Game.swift */,
 				15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */,
 			);
 			path = Shared;

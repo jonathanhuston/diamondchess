@@ -288,19 +288,23 @@ struct BoardState {
     private func allAttacks(from: Square, castling: Bool = true) -> [Square] {
         let piece = board[from.rank][from.file]
         
-        if piece.contains("Pawn") {
+        switch piece.split(separator: " ")[1] {
+        case "Pawn":
             return pawnAttacks(from: from)
-        } else if piece.contains("Knight") {
+        case "Knight":
             return knightAttacks(from: from)
-        } else if piece.contains("Rook") {
+        case "Rook":
             return rookAttacks(from: from)
-        } else if piece.contains("Bishop") {
+        case "Bishop":
             return bishopAttacks(from: from)
-        } else if piece.contains("Queen") {
+        case "Queen":
             return queenAttacks(from: from)
-        } else {
+        case "King":
             return kingAttacks(from: from, castling: castling)
+        default:
+            return []
         }
+        
     }
     
     private func allAttacks(for player: Player, castling: Bool = true) -> [Square] {
