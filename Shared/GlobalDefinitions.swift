@@ -10,7 +10,7 @@ import SwiftUI
 enum Player: CaseIterable {
     case white
     case black
-    case none
+    case draw
 }
 
 let opponent: [Player: Player] = [.white: .black, .black: .white]
@@ -24,6 +24,11 @@ struct Square: Equatable, Hashable {
     }
 }
 
+struct Move: Hashable {
+    var from: Square
+    var to: Square
+}
+
 typealias Board = [[String]]
 
 let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
@@ -35,8 +40,8 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
                        ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
                        ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
-let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5,
-                   "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5,
+let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
+                   "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
                    "Empty": 0]
 
 private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
@@ -73,7 +78,7 @@ func color(of piece: String) -> Player {
     case "Black":
         return .black
     default:
-        return .none
+        return .draw
     }
 }
 

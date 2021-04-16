@@ -521,7 +521,7 @@ struct BoardState {
         newBoardState!.currentPlayer = opponent[currentPlayer]!
         
         if newBoardState!.insuffientMaterial() {
-            newBoardState!.winner = Player.none
+            newBoardState!.winner = .draw
             return newBoardState!.killKing(currentPlayer).killKing(newBoardState!.currentPlayer)
         }
         
@@ -532,11 +532,86 @@ struct BoardState {
         newBoardState = newBoardState!.killKing(newBoardState!.currentPlayer)
                 
         if !newBoardState!.inCheck(newBoardState!.currentPlayer) {
-            newBoardState!.winner = Player.none
+            newBoardState!.winner = .draw
             return newBoardState!.killKing(currentPlayer)
         }
             
         newBoardState!.winner = currentPlayer
         return newBoardState!
     }
+    
+    private func doubledPawns(_ player: Player) -> Int {
+        let pawn = player == .white ? "White Pawn" : "Black Pawn"
+        var counter = 0
+        
+        for file in 0...7 {
+            var pawnFound = false
+            for rank in 0...7 {
+                if board[rank][file] == pawn {
+                    if pawnFound {
+                        counter += 1
+                        break
+                    } else {
+                        pawnFound = true
+                    }
+                }
+            }
+        }
+        
+        return counter
+    }
+    
+    private func positionalScore() -> Float {
+        var score: Float = 0.0
+        
+        if inCheck(.white) {
+            score -= 0.2
+        }
+        
+        if inCheck(.black) {
+            score += 0.2
+        }
+        
+        score -= Float(doubledPawns(.white)) * 0.5
+        score += Float(doubledPawns(.black)) * 0.5
+        
+        let whiteCounts = Dictionary(allAttacks(for: .white).map { ($0, 1) }, uniquingKeysWith: +)
+        let blackCounts = Dictionary(allAttacks(for: .black).map { ($0, 1) }, uniquingKeysWith: +)
+        
+        for rank in [3, 4] {
+            for file in [3, 4] {
+                let square = Square(rank: rank, file: file)
+                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * 0.125
+            }
+        }
+              
+        return score
+    }
+
+    func evaluateBoardState() -> Float {
+        var score: Float
+        
+        switch self.winner {
+        case .white:
+            return (Float(Int.max))
+        case .black:
+            return (Float(Int.min))
+        case .draw:
+            return 0.0
+        default:
+            score = 0.0
+        }
+        
+        for rank in 0...7 {
+            for file in 0...7 {
+                score += Float(pieceValues[board[rank][file]]!)
+            }
+        }
+        
+        score += positionalScore()
+        
+        return score
+    }
 }
+
+

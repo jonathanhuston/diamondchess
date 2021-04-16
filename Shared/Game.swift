@@ -34,12 +34,23 @@ extension Game {
         }
     }
     
-    private func bestMove(of moves: [Square: [Square]]) -> (Square, Square) {
-        let move = moves.randomElement()
-        let from = move!.key
-        let to = move!.value.randomElement()!
+    // TODO: non-queen promotion
+    private func bestMove(of moves: [Square: [Square]], for player: Player) -> Move {
+        let comparator: (Float, Float) -> Bool = player == .white ? (<) : (>)
+        var scores = [Move: Float]()
         
-        return (from, to)
+        for movesFrom in moves {
+            let from = movesFrom.key
+            for to in movesFrom.value {
+                let newBoardState = boardState.makeMove(from: from, to: to)!
+                scores[Move(from: from, to: to)] = newBoardState.evaluateBoardState()
+            }
+        }
+        
+        let bestScore = scores.max { a, b in comparator(a.value, b.value) }!.value
+        let bestMoves = scores.filter { $0.value == bestScore }
+        
+        return bestMoves.randomElement()!.key
     }
     
     func computerMove() {
@@ -49,9 +60,9 @@ extension Game {
             return
         }
         
-        let (from, to) = bestMove(of: moves)
+        let move = bestMove(of: moves, for: boardState.currentPlayer)
         
-        boardState = boardState.makeMove(from: from, to: to)!
+        boardState = boardState.makeMove(from: move.from, to: move.to)!
         boardState.promoting = nil
     }
 }
