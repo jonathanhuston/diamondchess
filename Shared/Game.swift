@@ -68,13 +68,13 @@ extension Game {
 
             moves.append((score, move))
             
-//                if let square = outcome.promoting {
-//                    for _ in 1...3 {
-//                        let promotionPiece = nextPromotionPiece(outcome.board[square.rank][square.file])
-//                        outcome.board[square.rank][square.file] = promotionPiece
-//                        scores[Move(from: from, to: to, specialPromote: promotionPiece)] = outcome.evaluateBoardState()
-//                    }
+//            if let square = outcome.promoting {
+//                for _ in 1...3 {
+//                    let promotionPiece = nextPromotionPiece(outcome.board[square.rank][square.file])
+//                    outcome.board[square.rank][square.file] = promotionPiece
+//                    scores[Move(from: from, to: to, specialPromote: promotionPiece)] = outcome.evaluateBoardState()
 //                }
+//            }
         }
         
         let bestScore = moves.max { a, b in comparator(a.score, b.score) }!.score
