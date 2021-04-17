@@ -49,11 +49,6 @@ extension Game {
         
         let validMoves = boardState.validMoves(for: player)
         
-//        if validMoves.isEmpty {
-//            print(winningScore[boardState.winner!]!)
-//            return (winningScore[boardState.winner!]!, nil)
-//        }
-        
         for move in validMoves {
             let outcome = boardState.isValidMove(move)!.updateBoardState(given: move)
             
