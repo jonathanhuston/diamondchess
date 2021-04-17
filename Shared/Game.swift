@@ -53,7 +53,7 @@ extension Game {
 //            return (winningScore[boardState.winner!]!, nil)
 //        }
         
-        for validMove in validMoves {
+        outerloop: for validMove in validMoves {
             let from = validMove.key
             for to in validMove.value {
                 let move = Move(from: from, to: to, specialPromote: nil)
@@ -62,17 +62,18 @@ extension Game {
                 if outcome.winner != nil || depth == 0 {
                     score = scores[outcome] ?? outcome.evaluateBoardState()
                     scores[outcome] = score
-                } else {
-                    score = bestMove(in: outcome, depth: depth - 1, alpha, beta).score
+                    moves.append((score, move))
+                    continue
                 }
                 
-                if score > alpha { alpha = score }
-                if score < beta { beta = score }
+                score = bestMove(in: outcome, depth: depth - 1, alpha, beta).score
+                
+                if player == .white && score > alpha { alpha = score }
+                if player == .black && score < beta { beta = score }
+                
+                if alpha > beta { break outerloop }
 
                 moves.append((score, move))
-                
-                if player == .white && score > beta { break }
-                if player == .black && score < alpha { break }
                 
 //                if let square = outcome.promoting {
 //                    for _ in 1...3 {
