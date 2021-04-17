@@ -34,7 +34,7 @@ extension AppCommands: Commands {
             Divider()
             
             Button("Flip board") {
-                game.flip = !game.flip
+                game.flipNow = !game.flipNow
             }
             .keyboardShortcut("F", modifiers: [.shift, .command])
             

@@ -12,10 +12,12 @@ class Game: ObservableObject {
     @Published var computerPlayer: Player? = .black
     @Published var launch = false
     @Published var over = false
-    @Published var flip = false
+    @Published var flipNow = false
     @Published var flipped = false
     @Published var touched: Square? = nil
     @Published var dragging = false
+    
+    var scores = [BoardState: Float]()
 }
 
 extension Game {
@@ -34,39 +36,68 @@ extension Game {
         }
     }
     
-    private func bestMove(of moves: [Square: [Square]], for player: Player) -> Move {
-        let comparator: (Float, Float) -> Bool = player == .white ? (<) : (>)
-        var scores = [Move: Float]()
+    private func bestMove(in boardState: BoardState,
+                          depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
         
-        for movesFrom in moves {
-            let from = movesFrom.key
-            for to in movesFrom.value {
-                var newBoardState = boardState.makeMove(Move(from: from, to: to, specialPromote: nil))!
-                scores[Move(from: from, to: to, specialPromote: nil)] = newBoardState.evaluateBoardState()
-                if let square = newBoardState.promoting {
-                    for _ in 1...3 {
-                        let promotionPiece = nextPromotionPiece(newBoardState.board[square.rank][square.file])
-                        newBoardState.board[square.rank][square.file] = promotionPiece
-                        scores[Move(from: from, to: to, specialPromote: promotionPiece)] = newBoardState.evaluateBoardState()
-                    }
+        var alpha = alpha
+        var beta = beta
+        let player = boardState.currentPlayer
+        let comparator: (Float, Float) -> Bool = player == .white ? (<) : (>)
+        var score: Float
+        var moves = [(score: Float, move: Move)]()
+        
+        let validMoves = boardState.validMoves(for: player)
+        
+        if validMoves.isEmpty {
+            print(winningScore[boardState.winner!]!)
+            return (winningScore[boardState.winner!]!, nil)
+        }
+        
+        for validMove in validMoves {
+            let from = validMove.key
+            for to in validMove.value {
+                let move = Move(from: from, to: to, specialPromote: nil)
+                moveCounter += 1
+                let outcome = boardState.makeMove(move)!
+                
+                if outcome.winner != nil || depth == 0 {
+                    score = scores[outcome] ?? outcome.evaluateBoardState()
+                    scores[outcome] = score
+                } else {
+                    score = bestMove(in: outcome, depth: depth - 1, alpha, beta).score
                 }
+                
+                if score > alpha { alpha = score }
+                if score < beta { beta = score }
+
+                moves.append((score, move))
+                
+                if player == .white && score > beta { break }
+                if player == .black && score < alpha { break }
+                
+//                if let square = outcome.promoting {
+//                    for _ in 1...3 {
+//                        let promotionPiece = nextPromotionPiece(outcome.board[square.rank][square.file])
+//                        outcome.board[square.rank][square.file] = promotionPiece
+//                        scores[Move(from: from, to: to, specialPromote: promotionPiece)] = outcome.evaluateBoardState()
+//                    }
+//                }
             }
         }
         
-        let bestScore = scores.max { a, b in comparator(a.value, b.value) }!.value
-        let bestMoves = scores.filter { $0.value == bestScore }
+        let bestScore = moves.max { a, b in comparator(a.score, b.score) }!.score
         
-        return bestMoves.randomElement()!.key
+        return moves.filter { $0.score == bestScore }.randomElement()!
     }
     
     func computerMove() {
-        let moves = boardState.allValidMoves(for: boardState.currentPlayer)
+        moveCounter = 0
         
-        if moves.isEmpty {
+        guard let move = bestMove(in: boardState).move else {
             return
         }
         
-        let move = bestMove(of: moves, for: boardState.currentPlayer)
+        print(moveCounter)
         
         boardState = boardState.makeMove(move)!
         boardState.promoting = nil

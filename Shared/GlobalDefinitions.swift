@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+var moveCounter = 0
+
 enum Player: CaseIterable {
     case white
     case black
@@ -54,6 +56,25 @@ func nextPromotionPiece(_ piece: String) -> String {
     return promotionPieces[index + 1]
 }
 
+func color(of piece: String) -> Player {
+    switch piece.split(separator: " ")[0] {
+    case "White":
+        return .white
+    case "Black":
+        return .black
+    default:
+        return .draw
+    }
+}
+
+let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .draw: 0]
+
+let maxDepth = 1
+
+let inCheckValue: Float = 0.2
+let doublePawnValue: Float = 0.5
+let centerControlValue: Float = 0.5
+
 let squareSize: CGFloat = 110
 
 func pieceWidth(_ piece: String) -> CGFloat {
@@ -70,17 +91,6 @@ func pieceHeight(_ piece: String) -> CGFloat {
     }
     
     return piece.contains("Pawn") ? 80 : 105
-}
-
-func color(of piece: String) -> Player {
-    switch piece.split(separator: " ")[0] {
-    case "White":
-        return .white
-    case "Black":
-        return .black
-    default:
-        return .draw
-    }
 }
 
 func getX(_ file: Int) -> CGFloat {

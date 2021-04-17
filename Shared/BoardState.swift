@@ -5,7 +5,7 @@
 //  Created by Jonathan Huston on 4/10/21.
 //
 
-struct BoardState {
+struct BoardState: Hashable {
     var board: Board = newBoard
     var currentPlayer: Player = .white
     var enPassantSquare: Square? = nil
@@ -437,7 +437,7 @@ struct BoardState {
         return newBoardState
     }
     
-    func allValidMoves(for player: Player) -> [Square: [Square]] {
+    func validMoves(for player: Player) -> [Square: [Square]] {
         var moves = [Square: [Square]]()
         
         for rank in 0...7 {
@@ -525,7 +525,7 @@ struct BoardState {
             return newBoardState!.killKing(currentPlayer).killKing(newBoardState!.currentPlayer)
         }
         
-        if !newBoardState!.allValidMoves(for: newBoardState!.currentPlayer).isEmpty {
+        if !newBoardState!.validMoves(for: newBoardState!.currentPlayer).isEmpty {
             return newBoardState
         }
         
@@ -565,15 +565,15 @@ struct BoardState {
         var score: Float = 0.0
         
         if inCheck(.white) {
-            score -= 0.2
+            score -= inCheckValue
         }
         
         if inCheck(.black) {
-            score += 0.2
+            score += inCheckValue
         }
         
-        score -= Float(doubledPawns(.white)) * 0.5
-        score += Float(doubledPawns(.black)) * 0.5
+        score -= Float(doubledPawns(.white)) * doublePawnValue
+        score += Float(doubledPawns(.black)) * doublePawnValue
         
         let whiteCounts = Dictionary(allAttacks(for: .white).map { ($0, 1) }, uniquingKeysWith: +)
         let blackCounts = Dictionary(allAttacks(for: .black).map { ($0, 1) }, uniquingKeysWith: +)
@@ -581,7 +581,7 @@ struct BoardState {
         for rank in [3, 4] {
             for file in [3, 4] {
                 let square = Square(rank: rank, file: file)
-                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * 0.125
+                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * centerControlValue / 4
             }
         }
               
@@ -589,17 +589,10 @@ struct BoardState {
     }
 
     func evaluateBoardState() -> Float {
-        var score: Float
+        var score: Float = 0
         
-        switch self.winner {
-        case .white:
-            return (Float(Int.max))
-        case .black:
-            return (Float(Int.min))
-        case .draw:
-            return 0.0
-        default:
-            score = 0.0
+        if winner != nil {
+            return winningScore[winner!]!
         }
         
         for rank in 0...7 {
@@ -608,7 +601,7 @@ struct BoardState {
             }
         }
         
-        score += positionalScore()
+//        score += positionalScore()
         
         return score
     }

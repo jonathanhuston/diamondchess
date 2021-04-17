@@ -10,9 +10,9 @@ import SwiftUI
 struct BoardView: View {
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(Int(0)...Int(7), id:\.self) { rank in
+            ForEach(0...7, id:\.self) { rank in
                 HStack(spacing: 0) {
-                    ForEach(Int(0)...Int(7), id:\.self) { file in
+                    ForEach(0...7, id:\.self) { file in
                         SquareView(square: Square(rank: rank, file: file))
                     }
                 }
