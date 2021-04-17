@@ -48,16 +48,15 @@ extension Game {
         
         let validMoves = boardState.validMoves(for: player)
         
-        if validMoves.isEmpty {
-            print(winningScore[boardState.winner!]!)
-            return (winningScore[boardState.winner!]!, nil)
-        }
+//        if validMoves.isEmpty {
+//            print(winningScore[boardState.winner!]!)
+//            return (winningScore[boardState.winner!]!, nil)
+//        }
         
         for validMove in validMoves {
             let from = validMove.key
             for to in validMove.value {
                 let move = Move(from: from, to: to, specialPromote: nil)
-                moveCounter += 1
                 let outcome = boardState.makeMove(move)!
                 
                 if outcome.winner != nil || depth == 0 {
@@ -86,19 +85,15 @@ extension Game {
         }
         
         let bestScore = moves.max { a, b in comparator(a.score, b.score) }!.score
-        
+                                
         return moves.filter { $0.score == bestScore }.randomElement()!
     }
     
     func computerMove() {
-        moveCounter = 0
-        
         guard let move = bestMove(in: boardState).move else {
             return
         }
-        
-        print(moveCounter)
-        
+                
         boardState = boardState.makeMove(move)!
         boardState.promoting = nil
     }

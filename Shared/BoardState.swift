@@ -600,9 +600,9 @@ struct BoardState: Hashable {
                 score += Float(pieceValues[board[rank][file]]!)
             }
         }
-        
-//        score += positionalScore()
-        
+                
+        score += positionalScore()
+                
         return score
     }
 }

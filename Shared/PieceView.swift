@@ -64,7 +64,7 @@ extension PieceView: View {
                                 if let newBoardState = game.boardState.makeMove(move) {
                                     game.boardState = newBoardState
                                     game.over = newBoardState.winner != nil
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.5 : 5.0)) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.0 : 5.0)) {
                                         if !game.over && game.boardState.currentPlayer == game.computerPlayer {
                                             game.computerMove()
                                         }
