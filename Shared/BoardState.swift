@@ -5,6 +5,8 @@
 //  Created by Jonathan Huston on 4/10/21.
 //
 
+import Dispatch
+
 struct BoardState: Hashable {
     var board: Board = newBoard
     var currentPlayer: Player = .white
@@ -437,22 +439,25 @@ struct BoardState: Hashable {
         return newBoardState
     }
     
-    func validMoves(for player: Player) -> [Square: [Square]] {
-        var moves = [Square: [Square]]()
-        
+    func validMoves(for player: Player) -> [Move] {
+        var moves = [Move]()
+                
         for rank in 0...7 {
             for file in 0...7 {
                 let piece = board[rank][file]
                 if color(of: piece) == player {
                     let from = Square(rank: rank, file: file)
-                    let attacks = allAttacks(from: from).filter { isValidMove(Move(from: from, to: $0, specialPromote: nil), for: piece) != nil }
-                    if !attacks.isEmpty {
-                        moves[from] = attacks
+                    let attacks = allAttacks(from: from)
+                    for to in attacks {
+                        let move = Move(from: from, to: to, specialPromote: nil)
+                        if isValidMove(move, for: piece) != nil {
+                            moves.append(move)
+                        }
                     }
                 }
             }
         }
-        
+
         return moves
     }
     
