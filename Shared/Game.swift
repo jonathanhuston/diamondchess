@@ -38,7 +38,7 @@ extension Game {
     
     private func bestMove(in boardState: BoardState,
                           depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
-        let time = DispatchTime.now()
+//        let time = DispatchTime.now()
 
         var alpha = alpha
         var beta = beta
@@ -55,7 +55,7 @@ extension Game {
 //        }
         
         for move in validMoves {
-            let outcome = boardState.makeMove(move)!
+            let outcome = boardState.isValidMove(move)!.updateBoardState(given: move)
             
             if outcome.winner != nil || depth == 0 {
                 score = scores[outcome] ?? outcome.evaluateBoardState()
@@ -84,7 +84,7 @@ extension Game {
         
         let bestScore = moves.max { a, b in comparator(a.score, b.score) }!.score
         
-        print(DispatchTime.now().distance(to: time))
+//        print(DispatchTime.now().distance(to: time))
 
                                 
         return moves.filter { $0.score == bestScore }.randomElement()!
@@ -94,8 +94,8 @@ extension Game {
         guard let move = bestMove(in: boardState).move else {
             return
         }
-                
-        boardState = boardState.makeMove(move)!
+        
+        boardState = boardState.isValidMove(move)!.updateBoardState(given: move)
         boardState.promoting = nil
     }
 }

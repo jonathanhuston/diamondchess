@@ -408,7 +408,9 @@ struct BoardState: Hashable {
         return piece
     }
     
-    private func isValidMove(_ move: Move, for piece: String) -> BoardState? {
+    func isValidMove(_ move: Move) -> BoardState? {
+        let piece = board[move.from.rank][move.from.file]
+        
         var newBoardState = self
             .removeEnPassantPawn(for: piece, from: move.from, to: move.to)
             .castleRook(for: piece, from: move.from, to: move.to)
@@ -450,7 +452,7 @@ struct BoardState: Hashable {
                     let attacks = allAttacks(from: from)
                     for to in attacks {
                         let move = Move(from: from, to: to, specialPromote: nil)
-                        if isValidMove(move, for: piece) != nil {
+                        if isValidMove(move) != nil {
                             moves.append(move)
                         }
                     }
@@ -496,53 +498,57 @@ struct BoardState: Hashable {
         return newBoardPosition
     }
     
-    func makeMove(_ move: Move) -> BoardState? {
-        let piece = board[move.from.rank][move.from.file]
+    func updateBoardState(given move: Move) -> BoardState {
+        let piece = board[move.to.rank][move.to.file]
+        var newBoardState = self
         
-        if !allAttacks(from: move.from).contains(move.to) {
-            return nil
-        }
-        
-        var newBoardState = isValidMove(move, for: piece)
-        
-        if newBoardState == nil {
-            return nil
-        }
-                
         if piece.contains("King") {
-            newBoardState!.kingSideCastle[currentPlayer] = false
-            newBoardState!.queenSideCastle[currentPlayer] = false
+            newBoardState.kingSideCastle[currentPlayer] = false
+            newBoardState.queenSideCastle[currentPlayer] = false
         }
         
         if piece.contains("Rook") {
             if move.from.file == 7 {
-                newBoardState!.kingSideCastle[currentPlayer] = false
+                newBoardState.kingSideCastle[currentPlayer] = false
             } else if move.from.file == 0 {
-                newBoardState!.queenSideCastle[currentPlayer] = false
+                newBoardState.queenSideCastle[currentPlayer] = false
             }
         }
         
-        newBoardState!.enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
-        newBoardState!.currentPlayer = opponent[currentPlayer]!
+        newBoardState.enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
+        newBoardState.currentPlayer = opponent[currentPlayer]!
         
-        if newBoardState!.insuffientMaterial() {
-            newBoardState!.winner = .draw
-            return newBoardState!.killKing(currentPlayer).killKing(newBoardState!.currentPlayer)
+        if newBoardState.insuffientMaterial() {
+            newBoardState.winner = .draw
+            return newBoardState.killKing(currentPlayer).killKing(newBoardState.currentPlayer)
         }
         
-        if !newBoardState!.validMoves(for: newBoardState!.currentPlayer).isEmpty {
+        if !newBoardState.validMoves(for: newBoardState.currentPlayer).isEmpty {
             return newBoardState
         }
         
-        newBoardState = newBoardState!.killKing(newBoardState!.currentPlayer)
+        newBoardState = newBoardState.killKing(newBoardState.currentPlayer)
                 
-        if !newBoardState!.inCheck(newBoardState!.currentPlayer) {
-            newBoardState!.winner = .draw
-            return newBoardState!.killKing(currentPlayer)
+        if !newBoardState.inCheck(newBoardState.currentPlayer) {
+            newBoardState.winner = .draw
+            return newBoardState.killKing(currentPlayer)
         }
             
-        newBoardState!.winner = currentPlayer
-        return newBoardState!
+        newBoardState.winner = currentPlayer
+        return newBoardState
+    }
+    
+    
+    func humanMove(_ move: Move) -> BoardState? {
+        if !allAttacks(from: move.from).contains(move.to) {
+            return nil
+        }
+        
+        guard let newBoardState = isValidMove(move) else {
+            return nil
+        }
+                
+        return newBoardState.updateBoardState(given: move)
     }
     
     private func doubledPawns(_ player: Player) -> Int {
