@@ -61,10 +61,9 @@ extension PieceView: View {
                                 let toRank = square.rank + (game.flipped ? -rankOffset : rankOffset)
                                 let toFile = square.file + (game.flipped ? -fileOffset : fileOffset)
                                 let move = Move(from: square, to: Square(rank: toRank, file: toFile), specialPromote: nil)
-                                if let newBoardState = game.boardState.humanMove(move) {
+                                if let newBoardState = game.humanMove(move) {
                                     game.boardState = newBoardState
-                                    game.over = newBoardState.winner != nil
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.0 : 5.0)) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.1 : 5.0)) {
                                         if !game.over && game.boardState.currentPlayer == game.computerPlayer {
                                             game.computerMove()
                                         }

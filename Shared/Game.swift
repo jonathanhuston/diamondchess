@@ -47,20 +47,21 @@ extension Game {
         var score: Float
         var moves = [(score: Float, move: Move)]()
         
-        let validMoves = boardState.validMoves(for: player)
+        let validOutcomes = boardState.validOutcomes(for: player)
         
-        for move in validMoves {
-            var outcome = boardState.isValidMove(move)!
-            outcome.updateBoardState(given: move)
+        for outcome in validOutcomes {
+            let move = outcome.move
+            var newBoardState = outcome.newBoardState
+            newBoardState.updateBoardState(given: move)
             
-            if outcome.winner != nil || depth == 0 {
-                score = scores[outcome] ?? outcome.evaluateBoardState()
-                scores[outcome] = score
+            if newBoardState.winner != nil || depth == 0 {
+                score = scores[newBoardState] ?? newBoardState.evaluateBoardState()
+                scores[newBoardState] = score
                 moves.append((score, move))
                 continue
             }
             
-            score = bestMove(in: outcome, depth: depth - 1, alpha, beta).score
+            score = bestMove(in: newBoardState, depth: depth - 1, alpha, beta).score
             
             if player == .white && score > alpha { alpha = score }
             if player == .black && score < beta { beta = score }
@@ -94,10 +95,32 @@ extension Game {
         boardState = boardState.isValidMove(move)!
         boardState.updateBoardState(given: move)
         
+        boardState.promoting = nil
+        
         if boardState.winner != nil {
-            
+            over = true
+            boardState.killKings()
+        }
+    }
+    
+    func humanMove(_ move: Move) -> BoardState? {
+        if !boardState.allAttacks(from: move.from).contains(move.to) {
+            return nil
         }
         
-        boardState.promoting = nil
+        var newBoardState = boardState.isValidMove(move)
+        
+        if newBoardState == nil {
+            return nil
+        }
+                
+        newBoardState!.updateBoardState(given: move)
+        
+        if newBoardState!.winner != nil {
+            over = true
+            newBoardState!.killKings()
+        }
+        
+        return newBoardState
     }
 }
