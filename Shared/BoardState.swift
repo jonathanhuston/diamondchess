@@ -323,6 +323,7 @@ struct BoardState: Hashable {
         return attacks
     }
     
+    // TODO: TIMESINK!!
     private func inCheck(_ player: Player) -> Bool {
         let attacks = allAttacks(for: opponent[player]!, castling: false)
         

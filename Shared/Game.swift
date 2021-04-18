@@ -79,6 +79,10 @@ extension Game {
 //            }
         }
         
+        if moves.isEmpty {
+            return (winningScore[opponent[player]!]!, nil)
+        }
+        
         let bestScore = moves.max { a, b in comparator(a.score, b.score) }!.score
         
         print(DispatchTime.now().distance(to: time))
