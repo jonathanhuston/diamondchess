@@ -432,12 +432,6 @@ struct BoardState: Hashable {
             return nil
         }
         
-        if piece != promote(piece, given: move) {
-            newBoardState.promoting = move.to
-        } else {
-            newBoardState.promoting = nil
-        }
-        
         return newBoardState
     }
     
@@ -463,7 +457,7 @@ struct BoardState: Hashable {
         return moves
     }
     
-    private func insuffientMaterial() -> Bool {
+    private func insufficientMaterial() -> Bool {
         let pieces = self.board.flatMap { $0 }.filter { $0 != "Empty" }
         
         if pieces.count == 4 && pieces.contains("White Bishop") && pieces.contains("Black Bishop") {
@@ -489,53 +483,54 @@ struct BoardState: Hashable {
             || pieces.contains("Black Queen") || pieces.contains("Black Rook") || pieces.contains("Black Pawn"))
     }
     
-    private func killKing(_ player: Player) -> BoardState {
-        var newBoardPosition = self
+    private mutating func killKing(_ player: Player) {
         let square = kingPosition[player]!
         
-        newBoardPosition.board[square.rank][square.file] = "Dead " + newBoardPosition.board[square.rank][square.file]
-        
-        return newBoardPosition
+        board[square.rank][square.file] = "Dead " + board[square.rank][square.file]
     }
     
-    func updateBoardState(given move: Move) -> BoardState {
+    mutating func updateBoardState(given move: Move) {
         let piece = board[move.to.rank][move.to.file]
-        var newBoardState = self
         
         if piece.contains("King") {
-            newBoardState.kingSideCastle[currentPlayer] = false
-            newBoardState.queenSideCastle[currentPlayer] = false
+            kingSideCastle[currentPlayer] = false
+            queenSideCastle[currentPlayer] = false
         }
         
         if piece.contains("Rook") {
             if move.from.file == 7 {
-                newBoardState.kingSideCastle[currentPlayer] = false
+                kingSideCastle[currentPlayer] = false
             } else if move.from.file == 0 {
-                newBoardState.queenSideCastle[currentPlayer] = false
+                queenSideCastle[currentPlayer] = false
             }
         }
         
-        newBoardState.enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
-        newBoardState.currentPlayer = opponent[currentPlayer]!
+        enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
         
-        if newBoardState.insuffientMaterial() {
-            newBoardState.winner = .draw
-            return newBoardState.killKing(currentPlayer).killKing(newBoardState.currentPlayer)
+        promoting = piece != promote(piece, given: move) ? move.to : nil
+        
+        if insufficientMaterial() {
+            winner = .draw
+            killKing(currentPlayer)
+            killKing(opponent[currentPlayer]!)
         }
         
-        if !newBoardState.validMoves(for: newBoardState.currentPlayer).isEmpty {
-            return newBoardState
+        currentPlayer = opponent[currentPlayer]!
+
+        
+        if !validMoves(for: currentPlayer).isEmpty {
+            return
         }
         
-        newBoardState = newBoardState.killKing(newBoardState.currentPlayer)
+        killKing(currentPlayer)
                 
-        if !newBoardState.inCheck(newBoardState.currentPlayer) {
-            newBoardState.winner = .draw
-            return newBoardState.killKing(currentPlayer)
+        if !inCheck(currentPlayer) {
+            winner = .draw
+            killKing(currentPlayer)
+            return
         }
             
-        newBoardState.winner = currentPlayer
-        return newBoardState
+        winner = currentPlayer
     }
     
     
@@ -544,11 +539,15 @@ struct BoardState: Hashable {
             return nil
         }
         
-        guard let newBoardState = isValidMove(move) else {
+        var newBoardState = isValidMove(move)
+        
+        if newBoardState == nil {
             return nil
         }
                 
-        return newBoardState.updateBoardState(given: move)
+        newBoardState!.updateBoardState(given: move)
+        
+        return newBoardState
     }
     
     private func doubledPawns(_ player: Player) -> Int {
