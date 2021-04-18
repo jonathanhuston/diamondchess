@@ -144,7 +144,7 @@ struct BoardState: Hashable {
         if !castling || board[kingRank][4] != king || inCheck(player) {
             return attacks
         }
-        
+                
         if board[kingRank][7] == rook && kingSideCastle[player]! && !overCheck(player, file: 5) {
             var canCastle = true
             for file in 5...6 {
@@ -228,11 +228,7 @@ struct BoardState: Hashable {
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
 
-        attacks = castlingBoardState.allAttacks[opponent[player]!]
-        
-        if attacks == nil {
-            attacks = castlingBoardState.allAttacks(for: opponent[player]!)
-        }
+        attacks = castlingBoardState.allAttacks(for: opponent[player]!)
         
         return attacks!.contains(Square(rank: rank, file: file))
     }
