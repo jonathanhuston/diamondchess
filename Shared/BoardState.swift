@@ -343,7 +343,7 @@ struct BoardState: Hashable {
     }
     
     private func enPassantSquare(for piece: String, from: Square, to: Square) -> Square? {
-        if !piece.contains("Pawn") {
+        if piece.split(separator: " ")[1] != "Pawn" {
             return nil
         }
         
@@ -355,7 +355,7 @@ struct BoardState: Hashable {
     }
     
     private mutating func removeEnPassantPawn(for piece: String, from: Square, to: Square) {
-        if !piece.contains("Pawn") {
+        if piece.split(separator: " ")[1] != "Pawn" {
             return
         }
         
@@ -368,7 +368,7 @@ struct BoardState: Hashable {
     }
     
     private mutating func castleRook(for piece: String, from: Square, to: Square) {
-        if !piece.contains("King") {
+        if piece.split(separator: " ")[1] != "King" {
             return
         }
         
@@ -384,7 +384,7 @@ struct BoardState: Hashable {
     }
     
     private func promote(_ piece: String, given move: Move) -> String {
-        if !piece.contains("Pawn") {
+        if piece.split(separator: " ")[1] != "Pawn" {
             return piece
         }
                 
@@ -407,7 +407,7 @@ struct BoardState: Hashable {
         newBoardState.removeEnPassantPawn(for: piece, from: move.from, to: move.to)
         newBoardState.castleRook(for: piece, from: move.from, to: move.to)
         
-        // TODO: factor out
+        // TODO: factor out?
         if newBoardState.board[move.to.rank][move.to.file] != "Empty" {
             newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[move.to.rank][move.to.file])
         }
@@ -418,7 +418,7 @@ struct BoardState: Hashable {
         
         let player = color(of: piece)
         
-        if piece.contains("King") {
+        if piece.split(separator: " ")[1] == "King" {
             newBoardState.kingPosition[player] = move.to
         }
 
@@ -522,12 +522,12 @@ struct BoardState: Hashable {
     mutating func updateBoardState(given move: Move) {
         let piece = board[move.to.rank][move.to.file]
         
-        if piece.contains("King") {
+        if piece.split(separator: " ")[1] == "King" {
             kingSideCastle[currentPlayer] = false
             queenSideCastle[currentPlayer] = false
         }
         
-        if piece.contains("Rook") {
+        if piece.split(separator: " ")[1] == "Rook" {
             if move.from.file == 7 {
                 kingSideCastle[currentPlayer] = false
             } else if move.from.file == 0 {
