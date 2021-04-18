@@ -13,6 +13,7 @@ struct BoardState: Hashable {
     var enPassantSquare: Square? = nil
     var promoting: Square? = nil
     var winner: Player? = nil
+    var allAttacks = [Player: [Square]]()
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
     var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
@@ -71,68 +72,24 @@ struct BoardState: Hashable {
         var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
-        var toFile = from.file - 1
-        while toFile >= 0 {
-            let toSquare = board[from.rank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: from.rank, file: toFile))
-            } else if player != color(of: board[from.rank][toFile]) {
-                attacks.append(Square(rank: from.rank, file: toFile))
-                break
-            } else {
-                break
+        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
+            var toRank = from.rank + offset.0
+            var toFile = from.file + offset.1
+            while toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
+                let toSquare = board[toRank][toFile]
+                
+                if toSquare == "Empty" {
+                    attacks.append(Square(rank: toRank, file: toFile))
+                } else if player != color(of: board[toRank][toFile]) {
+                    attacks.append(Square(rank: toRank, file: toFile))
+                    break
+                } else {
+                    break
+                }
+                
+                toRank += offset.0
+                toFile += offset.1
             }
-            
-            toFile -= 1
-        }
-        
-        toFile = from.file + 1
-        while toFile <= 7 {
-            let toSquare = board[from.rank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: from.rank, file: toFile))
-            } else if player != color(of: board[from.rank][toFile]) {
-                attacks.append(Square(rank: from.rank, file: toFile))
-                break
-            } else {
-                break
-            }
-            
-            toFile += 1
-        }
-        
-        var toRank = from.rank - 1
-        while toRank >= 0 {
-            let toSquare = board[toRank][from.file]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: from.file))
-            } else if player != color(of: board[toRank][from.file]) {
-                attacks.append(Square(rank: toRank, file: from.file))
-                break
-            } else {
-                break
-            }
-            
-            toRank -= 1
-        }
-        
-        toRank = from.rank + 1
-        while toRank <= 7 {
-            let toSquare = board[toRank][from.file]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: from.file))
-            } else if player != color(of: board[toRank][from.file]) {
-                attacks.append(Square(rank: toRank, file: from.file))
-                break
-            } else {
-                break
-            }
-            
-            toRank += 1
         }
         
         return attacks
@@ -142,76 +99,24 @@ struct BoardState: Hashable {
         var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
-        var toRank = from.rank - 1
-        var toFile = from.file - 1
-        while toRank >= 0 && toFile >= 0 {
-            let toSquare = board[toRank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: board[toRank][toFile]) {
-                attacks.append(Square(rank: toRank, file: toFile))
-                break
-            } else {
-                break
+        for offset in [(-1, -1), (-1, 1), (1, -1), (1, 1)] {
+            var toRank = from.rank + offset.0
+            var toFile = from.file + offset.1
+            while toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
+                let toSquare = board[toRank][toFile]
+                
+                if toSquare == "Empty" {
+                    attacks.append(Square(rank: toRank, file: toFile))
+                } else if player != color(of: board[toRank][toFile]) {
+                    attacks.append(Square(rank: toRank, file: toFile))
+                    break
+                } else {
+                    break
+                }
+                
+                toRank += offset.0
+                toFile += offset.1
             }
-            
-            toRank -= 1
-            toFile -= 1
-        }
-        
-        toRank = from.rank + 1
-        toFile = from.file - 1
-        while toRank <= 7 && toFile >= 0 {
-            let toSquare = board[toRank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: board[toRank][toFile]) {
-                attacks.append(Square(rank: toRank, file: toFile))
-                break
-            } else {
-                break
-            }
-            
-            toRank += 1
-            toFile -= 1
-        }
-        
-        toRank = from.rank + 1
-        toFile = from.file + 1
-        while toRank <= 7 && toFile <= 7 {
-            let toSquare = board[toRank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: board[toRank][toFile]) {
-                attacks.append(Square(rank: toRank, file: toFile))
-                break
-            } else {
-                break
-            }
-            
-            toRank += 1
-            toFile += 1
-        }
-        
-        toRank = from.rank - 1
-        toFile = from.file + 1
-        while toRank >= 0 && toFile <= 7 {
-            let toSquare = board[toRank][toFile]
-            
-            if toSquare == "Empty" {
-                attacks.append(Square(rank: toRank, file: toFile))
-            } else if player != color(of: board[toRank][toFile]) {
-                attacks.append(Square(rank: toRank, file: toFile))
-                break
-            } else {
-                break
-            }
-            
-            toRank -= 1
-            toFile += 1
         }
         
         return attacks
@@ -289,13 +194,13 @@ struct BoardState: Hashable {
         
     }
     
-    private func allAttacks(for player: Player, castling: Bool = true) -> [Square] {
+    private func allAttacks(for player: Player) -> [Square] {
         var attacks = [Square]()
         
         for rank in 0...7 {
             for file in 0...7 {
                 if color(of: board[rank][file]) == player {
-                    attacks += allAttacks(from: Square(rank: rank, file: file), castling: castling)
+                    attacks += allAttacks(from: Square(rank: rank, file: file), castling: false)
                 }
             }
         }
@@ -303,9 +208,8 @@ struct BoardState: Hashable {
         return attacks
     }
     
-    // TODO: TIMESINK!!
     private func inCheck(_ player: Player) -> Bool {
-        let attacks = allAttacks(for: opponent[player]!, castling: false)
+        let attacks = allAttacks[opponent[player]!]!
         
         return attacks.contains(kingPosition[player]!)
     }
@@ -317,7 +221,7 @@ struct BoardState: Hashable {
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
 
-        let attacks = castlingBoardState.allAttacks(for: opponent[player]!, castling: false)
+        let attacks = castlingBoardState.allAttacks[opponent[player]!]!
         
         return attacks.contains(Square(rank: rank, file: file))
     }
@@ -401,6 +305,9 @@ struct BoardState: Hashable {
         if piece.split(separator: " ")[1] == "King" {
             newBoardState.kingPosition[player] = move.to
         }
+        
+        newBoardState.allAttacks[.white] = newBoardState.allAttacks(for: .white)
+        newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .white)
 
         if newBoardState.inCheck(player) {
             return nil
@@ -571,8 +478,8 @@ struct BoardState: Hashable {
         score -= Float(doubledPawns(.white)) * doublePawnValue
         score += Float(doubledPawns(.black)) * doublePawnValue
         
-        let whiteCounts = Dictionary(allAttacks(for: .white).map { ($0, 1) }, uniquingKeysWith: +)
-        let blackCounts = Dictionary(allAttacks(for: .black).map { ($0, 1) }, uniquingKeysWith: +)
+        let whiteCounts = Dictionary(allAttacks[.white]!.map { ($0, 1) }, uniquingKeysWith: +)
+        let blackCounts = Dictionary(allAttacks[.black]!.map { ($0, 1) }, uniquingKeysWith: +)
         
         for rank in [3, 4] {
             for file in [3, 4] {
