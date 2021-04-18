@@ -25,12 +25,12 @@ struct BoardState: Hashable {
         
         let toRank = from.rank + direction
         
-        if 0...7 ~= toRank && board[toRank][from.file] == "Empty" {
+        if toRank >= 0 && toRank <= 7 && board[toRank][from.file] == "Empty" {
             attacks.append(Square(rank: toRank, file: from.file))
         }
         
         for toFile in [from.file - 1, from.file + 1] {
-            if 0...7 ~= toFile {
+            if toFile >= 0 && toFile <= 7 {
                 if color(of: board[toRank][toFile]) == opponent[player] {
                     attacks.append(Square(rank: toRank, file: toFile))
                 } else if let enPassant = enPassantSquare {
@@ -44,7 +44,7 @@ struct BoardState: Hashable {
         if from.rank == (player == .white ? 6 : 1) {
             let twoRank = toRank + direction
             
-            if 0...7 ~= twoRank && board[twoRank][from.file] == "Empty" && board[toRank][from.file] == "Empty" {
+            if twoRank >= 0 && twoRank <= 7 && board[twoRank][from.file] == "Empty" && board[toRank][from.file] == "Empty" {
                 attacks.append(Square(rank: twoRank, file: from.file))
             }
         }
@@ -77,7 +77,7 @@ struct BoardState: Hashable {
         
         for offset in 1...7 {
             let toFile = from.file - offset
-            if !(0...7 ~= toFile) {
+            if toFile < 0 {
                 break
             }
             
@@ -95,7 +95,7 @@ struct BoardState: Hashable {
         
         for offset in 1...7 {
             let toFile = from.file + offset
-            if !(0...7 ~= toFile) {
+            if toFile > 7 {
                 break
             }
             
@@ -113,7 +113,7 @@ struct BoardState: Hashable {
         
         for offset in 1...7 {
             let toRank = from.rank - offset
-            if !(0...7 ~= toRank) {
+            if toRank < 0 {
                 break
             }
             
@@ -131,7 +131,7 @@ struct BoardState: Hashable {
         
         for offset in 1...7 {
             let toRank = from.rank + offset
-            if !(0...7 ~= toRank) {
+            if toRank > 7 {
                 break
             }
             
@@ -157,7 +157,7 @@ struct BoardState: Hashable {
         for offset in 1...7 {
             let toRank = from.rank - offset
             let toFile = from.file - offset
-            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+            if toFile < 0 || toRank < 0 {
                 break
             }
             
@@ -176,7 +176,7 @@ struct BoardState: Hashable {
         for offset in 1...7 {
             let toRank = from.rank - offset
             let toFile = from.file + offset
-            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+            if toFile > 7 || toRank < 0 {
                 break
             }
             
@@ -195,7 +195,7 @@ struct BoardState: Hashable {
         for offset in 1...7 {
             let toRank = from.rank + offset
             let toFile = from.file - offset
-            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+            if toFile < 0 || toRank > 7 {
                 break
             }
             
@@ -214,7 +214,7 @@ struct BoardState: Hashable {
         for offset in 1...7 {
             let toRank = from.rank + offset
             let toFile = from.file + offset
-            if !(0...7 ~= toFile) || !(0...7 ~= toRank) {
+            if toFile > 7 || toRank > 7 {
                 break
             }
             
