@@ -209,21 +209,32 @@ struct BoardState: Hashable {
     }
     
     private func inCheck(_ player: Player) -> Bool {
-        let attacks = allAttacks[opponent[player]!]!
+        var attacks: [Square]?
         
-        return attacks.contains(kingPosition[player]!)
+        attacks = allAttacks[opponent[player]!]
+        
+        if attacks == nil {
+            attacks = allAttacks(for: opponent[player]!)
+        }
+        
+        return attacks!.contains(kingPosition[player]!)
     }
     
     private func overCheck(_ player: Player, file: Int) -> Bool {
         var castlingBoardState = self
+        var attacks: [Square]?
         let rank = (player == .white) ? 7 : 0
         
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
 
-        let attacks = castlingBoardState.allAttacks[opponent[player]!]!
+        attacks = castlingBoardState.allAttacks[opponent[player]!]
         
-        return attacks.contains(Square(rank: rank, file: file))
+        if attacks == nil {
+            attacks = castlingBoardState.allAttacks(for: opponent[player]!)
+        }
+        
+        return attacks!.contains(Square(rank: rank, file: file))
     }
     
     private func enPassantSquare(for piece: String, from: Square, to: Square) -> Square? {
