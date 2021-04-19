@@ -233,44 +233,32 @@ struct BoardState: Hashable {
         return attacks!.contains(Square(rank: rank, file: file))
     }
     
-    private func enPassantSquare(for piece: String, from: Square, to: Square) -> Square? {
-        if piece.split(separator: " ")[1] != "Pawn" {
+    private func enPassantSquare(for move: Move) -> Square? {
+        if abs(move.from.rank - move.to.rank) != 2 {
             return nil
         }
         
-        if abs(from.rank - to.rank) != 2 {
-            return nil
-        }
-        
-        return Square(rank: (from.rank + to.rank) / 2, file: from.file)
+        return Square(rank: (move.from.rank + move.to.rank) / 2, file: move.from.file)
     }
     
-    private mutating func removeEnPassantPawn(for piece: String, from: Square, to: Square) {
-        if piece.split(separator: " ")[1] != "Pawn" {
+    private mutating func removeEnPassantPawn(for move: Move) {
+        if move.from.file == move.to.file || enPassantSquare == nil || enPassantSquare != move.to {
             return
         }
         
-        if from.file == to.file || enPassantSquare == nil || enPassantSquare != to {
-            return
-        }
-        
-        captured[opponent[currentPlayer]!]!.append(board[from.rank][to.file])
-        board[from.rank][to.file] = "Empty"
+        captured[opponent[currentPlayer]!]!.append(board[move.from.rank][move.to.file])
+        board[move.from.rank][move.to.file] = "Empty"
     }
     
-    private mutating func castleRook(for piece: String, from: Square, to: Square) {
-        if piece.split(separator: " ")[1] != "King" {
-            return
-        }
+    private mutating func castleRook(for move: Move) {
+        let rook = (color(of: board[move.from.rank][move.from.file]) == .white) ? "White Rook" : "Black Rook"
         
-        let rook = (color(of: board[from.rank][from.file]) == .white) ? "White Rook" : "Black Rook"
-        
-        if to.file == from.file + 2 {
-            board[from.rank][5] = rook
-            board[from.rank][7] = "Empty"
-        } else if to.file == from.file - 2 {
-            board[from.rank][3] = rook
-            board[from.rank][0] = "Empty"
+        if move.to.file == move.from.file + 2 {
+            board[move.from.rank][5] = rook
+            board[move.from.rank][7] = "Empty"
+        } else if move.to.file == move.from.file - 2 {
+            board[move.from.rank][3] = rook
+            board[move.from.rank][0] = "Empty"
         }
     }
     
@@ -292,27 +280,30 @@ struct BoardState: Hashable {
     
     func isValidMove(_ move: Move) -> BoardState? {
         let piece = board[move.from.rank][move.from.file]
+        let player = color(of: piece)
         
         var newBoardState = self
+        
+        if piece == "White Pawn" || piece == "Black Pawn" {
+            newBoardState.removeEnPassantPawn(for: move)
+        }
             
-        newBoardState.removeEnPassantPawn(for: piece, from: move.from, to: move.to)
-        newBoardState.castleRook(for: piece, from: move.from, to: move.to)
+        if piece == "White King" || piece == "Black King" {
+            newBoardState.kingPosition[player] = move.to
+            newBoardState.castleRook(for: move)
+        }
         
         // TODO: factor out?
-        if newBoardState.board[move.to.rank][move.to.file] != "Empty" {
-            newBoardState.captured[opponent[currentPlayer]!]!.append(newBoardState.board[move.to.rank][move.to.file])
+        let capturedPiece = newBoardState.board[move.to.rank][move.to.file]
+        if capturedPiece != "Empty" {
+            newBoardState.captured[opponent[currentPlayer]!]!.append(capturedPiece)
         }
         
         newBoardState.board[move.from.rank][move.from.file] = "Empty"
-        newBoardState.board[move.to.rank][move.to.file] = promote(piece, given: move)
-        newBoardState.promoting = piece != promote(piece, given: move) ? move.to : nil
-        
-        let player = color(of: piece)
-        
-        if piece.split(separator: " ")[1] == "King" {
-            newBoardState.kingPosition[player] = move.to
-        }
-        
+        let promotedPiece = promote(piece, given: move)
+        newBoardState.board[move.to.rank][move.to.file] = promotedPiece
+        newBoardState.promoting = piece != promotedPiece ? move.to : nil
+                
         newBoardState.allAttacks[.white] = newBoardState.allAttacks(for: .white)
         newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .white)
 
@@ -328,12 +319,11 @@ struct BoardState: Hashable {
                 
         for rank in 0...7 {
             for file in 0...7 {
-                let piece = board[rank][file]
-                if color(of: piece) == player {
+                if color(of: board[rank][file]) == player {
                     let from = Square(rank: rank, file: file)
                     let attacks = allAttacks(from: from)
                     for to in attacks {
-                        let move = Move(from: from, to: to, specialPromote: nil)
+                        let move = Move(from: from, to: to)
                         if let newBoardState = isValidMove(move) {
                             outcomes.append((move, newBoardState))
                         }
@@ -348,12 +338,11 @@ struct BoardState: Hashable {
     private func canMove(_ player: Player) -> Bool {
         for rank in 0...7 {
             for file in 0...7 {
-                let piece = board[rank][file]
-                if color(of: piece) == player {
+                if color(of: board[rank][file]) == player {
                     let from = Square(rank: rank, file: file)
                     let attacks = allAttacks(from: from)
                     for to in attacks {
-                        let move = Move(from: from, to: to, specialPromote: nil)
+                        let move = Move(from: from, to: to)
                         if isValidMove(move) != nil {
                             return true
                         }
@@ -416,20 +405,22 @@ struct BoardState: Hashable {
     mutating func updateBoardState(given move: Move) {
         let piece = board[move.to.rank][move.to.file]
         
-        if piece.split(separator: " ")[1] == "King" {
+        if piece == "White King" || piece == "Black King" {
             kingSideCastle[currentPlayer] = false
             queenSideCastle[currentPlayer] = false
         }
         
-        if piece.split(separator: " ")[1] == "Rook" {
-            if move.from.file == 7 {
-                kingSideCastle[currentPlayer] = false
-            } else if move.from.file == 0 {
-                queenSideCastle[currentPlayer] = false
-            }
+        if piece == "White Rook" && move.from.file == 7 {
+            kingSideCastle[currentPlayer] = false
+        }
+            
+        if piece == "Black Rook" && move.from.file == 0 {
+            queenSideCastle[currentPlayer] = false
         }
         
-        enPassantSquare = enPassantSquare(for: piece, from: move.from, to: move.to)
+        if piece == "White Pawn" || piece == "Black Pawn" {
+            enPassantSquare = enPassantSquare(for: move)
+        }
                 
         if insufficientMaterial() {
             winner = .draw
@@ -492,6 +483,12 @@ struct BoardState: Hashable {
             for file in [3, 4] {
                 let square = Square(rank: rank, file: file)
                 score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * centerControlValue / 4
+                if color(of: board[rank][file]) == .white {
+                    score += 1
+                }
+                if color(of: board[rank][file]) == .black {
+                    score -= 1
+                }
             }
         }
               

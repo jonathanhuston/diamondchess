@@ -79,6 +79,8 @@ extension Game {
 //            }
         }
         
+        print(moves)
+        
         if moves.isEmpty {
             return (winningScore[opponent[player]!]!, nil)
         }

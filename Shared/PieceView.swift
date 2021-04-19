@@ -60,7 +60,7 @@ extension PieceView: View {
                                 let fileOffset = Int((offset.x / squareSize).rounded())
                                 let toRank = square.rank + (game.flipped ? -rankOffset : rankOffset)
                                 let toFile = square.file + (game.flipped ? -fileOffset : fileOffset)
-                                let move = Move(from: square, to: Square(rank: toRank, file: toFile), specialPromote: nil)
+                                let move = Move(from: square, to: Square(rank: toRank, file: toFile))
                                 if let newBoardState = game.humanMove(move) {
                                     game.boardState = newBoardState
                                     DispatchQueue.main.asyncAfter(deadline: .now() + (newBoardState.promoting == nil ? 0.1 : 5.0)) {
