@@ -420,6 +420,8 @@ struct BoardState: Hashable {
         
         if piece == "White Pawn" || piece == "Black Pawn" {
             enPassantSquare = enPassantSquare(for: move)
+        } else {
+            enPassantSquare = nil
         }
                 
         if insufficientMaterial() {
@@ -495,6 +497,7 @@ struct BoardState: Hashable {
         return score
     }
 
+    // TODO: discourage king move before castling
     func evaluateBoardState() -> Float {
         var score: Float = 0
         

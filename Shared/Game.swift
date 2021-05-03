@@ -37,15 +37,16 @@ extension Game {
     }
     
     // FIX: promotion
+    // TODO: choose random move if best scores the same
     private func alphabeta(in boardState: BoardState,
-                          depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> Float {
+                           depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
 //        let time = DispatchTime.now()
                 
         if depth == 0 || boardState.winner != nil {
             let score = scores[boardState] ?? boardState.evaluateBoardState()
             scores[boardState] = score
 //            print(DispatchTime.now().distance(to: time))
-            return score
+            return (score, nil)
         }
         
         var alpha = alpha
@@ -53,14 +54,18 @@ extension Game {
         let player = boardState.currentPlayer
         let comparator: (Float, Float) -> Bool = player == .white ? (>) : (<)
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
+        var bestMove: Move? = nil
                 
         for outcome in boardState.validOutcomes(for: player) {
             var newBoardState = outcome.newBoardState
             newBoardState.updateBoardState(given: outcome.move)
             
-            let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta)
+            let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
 
-            if comparator(score, bestScore) { bestScore = score }
+            if comparator(score, bestScore) {
+                bestScore = score
+                bestMove = outcome.move
+            }
             
             if player == .white && bestScore > alpha { alpha = bestScore }
             if player == .black && bestScore < beta { beta = bestScore }
@@ -72,33 +77,11 @@ extension Game {
         
 //        print(DispatchTime.now().distance(to: time))
 
-        return bestScore
-    }
-    
-    // TODO: choose random move if best scores the same
-    private func bestMove(in boardState: BoardState) -> Move? {
-        let player = boardState.currentPlayer
-        let comparator: (Float, Float) -> Bool = player == .white ? (>) : (<)
-        var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
-        var bestMove: Move? = nil
-
-        for outcome in boardState.validOutcomes(for: player) {
-            var newBoardState = outcome.newBoardState
-            newBoardState.updateBoardState(given: outcome.move)
-            
-            let score = alphabeta(in: newBoardState)
-            
-            if comparator(score, bestScore) {
-                bestScore = score
-                bestMove = outcome.move
-            }
-        }
-        
-        return bestMove
+        return (bestScore, bestMove)
     }
     
     func computerMove() {
-        guard let move = bestMove(in: boardState) else {
+        guard let move = alphabeta(in: boardState).move else {
             return
         }
         
