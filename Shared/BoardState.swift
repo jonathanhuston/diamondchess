@@ -305,7 +305,7 @@ struct BoardState: Hashable {
         newBoardState.promoting = piece != promotedPiece ? move.to : nil
                 
         newBoardState.allAttacks[.white] = newBoardState.allAttacks(for: .white)
-        newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .white)
+        newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .black)
 
         if newBoardState.inCheck(player) {
             return nil
