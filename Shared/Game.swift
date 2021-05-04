@@ -18,6 +18,7 @@ class Game: ObservableObject {
     @Published var dragging = false
     
     var scores = [BoardState: Float]()
+    var nextMoves = [BoardState: [(move: Move, newBoardState: BoardState)]]()
 }
 
 extension Game {
@@ -40,12 +41,10 @@ extension Game {
     // TODO: choose random move if best scores the same
     private func alphabeta(in boardState: BoardState,
                            depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
-//        let time = DispatchTime.now()
                 
         if depth == 0 || boardState.winner != nil {
             let score = scores[boardState] ?? boardState.evaluateBoardState()
             scores[boardState] = score
-//            print(DispatchTime.now().distance(to: time))
             return (score, nil)
         }
         
@@ -55,8 +54,11 @@ extension Game {
         let comparator: (Float, Float) -> Bool = player == .white ? (>) : (<)
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
         var bestMove: Move? = nil
-                
-        for outcome in boardState.validOutcomes(for: player) {
+        
+        let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
+        nextMoves[boardState] = outcomes
+                        
+        for outcome in outcomes {
             var newBoardState = outcome.newBoardState
             newBoardState.updateBoardState(given: outcome.move)
             
@@ -75,15 +77,19 @@ extension Game {
             }
         }
         
-//        print(DispatchTime.now().distance(to: time))
 
         return (bestScore, bestMove)
     }
     
     func computerMove() {
+        let time = DispatchTime.now()
+
         guard let move = alphabeta(in: boardState).move else {
             return
         }
+        
+        print(DispatchTime.now().distance(to: time))
+
         
         boardState = boardState.isValidMove(move)!
         boardState.updateBoardState(given: move)
