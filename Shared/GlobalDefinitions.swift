@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+let maxDepth = 3
+
 enum Player: CaseIterable {
     case white
     case black
@@ -66,12 +68,6 @@ func color(of piece: String) -> Player {
 }
 
 let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .draw: 0]
-
-let maxDepth = 3
-
-let inCheckValue: Float = 0.2
-let doublePawnValue: Float = 0.5
-let centerControlValue: Float = 0.5
 
 let squareSize: CGFloat = 110
 

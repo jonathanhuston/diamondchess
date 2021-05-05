@@ -535,34 +535,38 @@ struct BoardState: Hashable {
     }
     
     private func positionalScore() -> Float {
+        let inCheckValue: Float = 0.2
+        let doublePawnValue: Float = 0.5
+        let centerControlValue: Float = 0.5
+        let attackValue: Float = 0.05
+        
         var score: Float = 0.0
         
         if inCheck[.white]! {
             score -= inCheckValue
-        }
-        
-        if inCheck[.black]! {
+        } else if inCheck[.black]! {
             score += inCheckValue
         }
         
-        score -= Float(doubledPawns(.white)) * doublePawnValue
-        score += Float(doubledPawns(.black)) * doublePawnValue
+        score += Float((doubledPawns(.black) - doubledPawns(.white))) * doublePawnValue
         
-        let whiteCounts = Dictionary(allAttacks[.white]!.map { ($0, 1) }, uniquingKeysWith: +)
-        let blackCounts = Dictionary(allAttacks[.black]!.map { ($0, 1) }, uniquingKeysWith: +)
-        
+//        let whiteCounts = Dictionary(allAttacks[.white]!.map { ($0, 1) }, uniquingKeysWith: +)
+//        let blackCounts = Dictionary(allAttacks[.black]!.map { ($0, 1) }, uniquingKeysWith: +)
+
         for rank in [3, 4] {
             for file in [3, 4] {
-                let square = Square(rank: rank, file: file)
-                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * centerControlValue / 4
-                if color(of: board[rank][file]) == .white {
-                    score += 1
-                }
-                if color(of: board[rank][file]) == .black {
-                    score -= 1
+//                let square = Square(rank: rank, file: file)
+//                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * centerControlValue / 4
+                let color = color(of: board[rank][file])
+                if color == .white {
+                    score += centerControlValue
+                } else if color == .black {
+                    score -= centerControlValue
                 }
             }
         }
+        
+        score += Float((allAttacks[.white]!.count - allAttacks[.black]!.count)) * attackValue
               
         return score
     }
