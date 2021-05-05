@@ -67,13 +67,11 @@ extension Game {
         
         boardState.currentPlayer = opponent[player]!
         
-//        if let nextMoves = nextMoves[boardState] {
-//            if !nextMoves.isEmpty {
-//                return
-//            }
-//        } else
-        
-        if boardState.canMove(boardState.currentPlayer) {
+        if let nextMoves = nextMoves[boardState] {
+            if !nextMoves.isEmpty {
+                return
+            }
+        } else if boardState.canMove(boardState.currentPlayer) {
             return
         }
                 

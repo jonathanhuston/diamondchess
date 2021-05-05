@@ -307,7 +307,6 @@ struct BoardState: Hashable {
     
     func isValidMove(_ move: Move) -> BoardState? {
         let piece = board[move.from.rank][move.from.file]
-        let player = color(of: piece)
         
         var newBoardState = self
         
@@ -316,7 +315,7 @@ struct BoardState: Hashable {
         }
             
         if piece == "White King" || piece == "Black King" {
-            newBoardState.kingPosition[player] = move.to
+            newBoardState.kingPosition[currentPlayer] = move.to
             newBoardState.castleRook(for: move)
         }
         
@@ -334,13 +333,13 @@ struct BoardState: Hashable {
         newBoardState.allAttacks[.white] = newBoardState.allAttacks(for: .white)
         newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .black)
         
-        newBoardState.inCheck[player] = newBoardState.inCheck(player)
+        newBoardState.inCheck[currentPlayer] = newBoardState.inCheck(currentPlayer)
 
-        if newBoardState.inCheck[player]! {
+        if newBoardState.inCheck[currentPlayer]! {
             return nil
         }
         
-        newBoardState.inCheck[opponent[player]!] = newBoardState.inCheck(opponent[player]!)
+        newBoardState.inCheck[opponent[currentPlayer]!] = newBoardState.inCheck(opponent[currentPlayer]!)
         
         return newBoardState
     }
