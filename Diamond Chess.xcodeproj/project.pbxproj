@@ -11,6 +11,7 @@
 		15087BAD2620510900668781 /* SquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BAB2620510900668781 /* SquareView.swift */; };
 		15087BB32620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
 		15087BB42620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
+		155FC3322643499A00AD1F78 /* GameCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155FC3312643499A00AD1F78 /* GameCommands.swift */; };
 		1565C9CF2621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
 		1565C9D02621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
 		15A17EB42627586300FBBD15 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A17EB32627586300FBBD15 /* AppCommands.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		15087BAB2620510900668781 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
 		15087BB22620526C00668781 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		155FC3312643499A00AD1F78 /* GameCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommands.swift; sourceTree = "<group>"; };
 		1565C9CE2621963F001A1D9A /* BoardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardState.swift; sourceTree = "<group>"; };
 		15A17EB32627586300FBBD15 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		15A26D46261D9B4100A46B50 /* GlobalDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDefinitions.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				15A17EB32627586300FBBD15 /* AppCommands.swift */,
+				155FC3312643499A00AD1F78 /* GameCommands.swift */,
 				15F35A24261C800E0098B143 /* Info.plist */,
 				15F35A25261C800E0098B143 /* macOS.entitlements */,
 			);
@@ -250,6 +253,7 @@
 				15E5630A2620A7CF00DD5B05 /* PiecesView.swift in Sources */,
 				1565C9D02621963F001A1D9A /* BoardState.swift in Sources */,
 				15E563112620C22000DD5B05 /* Game.swift in Sources */,
+				155FC3322643499A00AD1F78 /* GameCommands.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

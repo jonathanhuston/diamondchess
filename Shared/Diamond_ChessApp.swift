@@ -17,7 +17,12 @@ struct Diamond_ChessApp: App {
                 .environmentObject(game)
         }
         .commands {
-            AppCommands(game: game)
+            AppCommands()
+            
+            CommandMenu("Game") {
+                GameCommands()
+                    .environmentObject(game)
+            }
         }
     }
 }
