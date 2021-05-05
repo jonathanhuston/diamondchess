@@ -14,6 +14,7 @@ struct BoardState: Hashable {
     var promoting: Square? = nil
     var winner: Player? = nil
     var allAttacks = [Player: [Square]]()
+    var inCheck: [Player: Bool] = [.white: false, .black: false]
     var kingPosition: [Player: Square] = [.white: Square(rank: 7, file: 4), .black: Square(rank: 0, file: 4)]
     var kingSideCastle: [Player: Bool] = [.white: true, .black: true]
     var queenSideCastle: [Player: Bool] = [.white: true, .black: true]
@@ -140,8 +141,8 @@ struct BoardState: Hashable {
                 attacks.append(Square(rank: toRank, file: toFile))
             }
         }
-        
-        if !castling || board[kingRank][4] != king || inCheck(player) {
+                
+        if !castling || board[kingRank][4] != king || inCheck[player]! {
             return attacks
         }
                 
@@ -208,29 +209,94 @@ struct BoardState: Hashable {
         return attacks
     }
     
-    private func inCheck(_ player: Player) -> Bool {
-        var attacks: [Square]?
-        
-        attacks = allAttacks[opponent[player]!]
-        
-        if attacks == nil {
-            attacks = allAttacks(for: opponent[player]!)
+    private func underAttack(square: Square, by player: Player) -> Bool {
+        let king = (player == .white) ? "White King" : "Black King"
+        let queen = (player == .white) ? "White Queen" : "Black Queen"
+        let bishop = (player == .white) ? "White Bishop" : "Black Bishop"
+        let knight = (player == .white) ? "White Knight" : "Black Knight"
+        let rook = (player == .white) ? "White Rook" : "Black Rook"
+        let pawn = (player == .white) ? "White Pawn" : "Black Pawn"
+        let pawnOffsets = (player == .white) ? [(1, -1), (1, 1)] : [(-1, -1), (-1, 1)]
+       
+        for offset in pawnOffsets {
+            let rank = square.rank + offset.0
+            let file = square.file + offset.1
+            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == pawn {
+                return true
+            }
         }
         
-        return attacks!.contains(kingPosition[player]!)
+        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
+            var rank = square.rank + offset.0
+            var file = square.file + offset.1
+            direction: while rank >= 0 && rank <= 7 && file >= 0 && file <= 7 {
+                let attacker = board[rank][file]
+                
+                switch attacker {
+                case rook, queen:
+                    return true
+                case "Empty":
+                    rank += offset.0
+                    file += offset.1
+                default:
+                    break direction
+                }
+            }
+        }
+        
+        for offset in [(-1, -1), (-1, 1), (1, -1), (1, 1)] {
+            var rank = square.rank + offset.0
+            var file = square.file + offset.1
+            direction: while rank >= 0 && rank <= 7 && file >= 0 && file <= 7 {
+                let attacker = board[rank][file]
+                
+                switch attacker {
+                case bishop, queen:
+                    return true
+                case "Empty":
+                    rank += offset.0
+                    file += offset.1
+                default:
+                    break direction
+                }
+            }
+        }
+        
+        for offset in [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)] {
+            let rank = square.rank + offset.0
+            let file = square.file + offset.1
+            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == knight {
+                return true
+            }
+        }
+        
+        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)] {
+            let rank = square.rank + offset.0
+            let file = square.file + offset.1
+            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == king {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    private func inCheck(_ player: Player) -> Bool {
+        guard let attacks = allAttacks[opponent[player]!] else {
+            return underAttack(square: kingPosition[player]!, by: opponent[player]!)
+        }
+
+        return attacks.contains(kingPosition[player]!)
     }
     
     private func overCheck(_ player: Player, file: Int) -> Bool {
         var castlingBoardState = self
-        var attacks: [Square]?
         let rank = (player == .white) ? 7 : 0
         
         castlingBoardState.board[rank][file] = board[rank][4]
         castlingBoardState.board[rank][4] = "Empty"
-
-        attacks = castlingBoardState.allAttacks(for: opponent[player]!)
         
-        return attacks!.contains(Square(rank: rank, file: file))
+        return underAttack(square: Square(rank: rank, file: file), by: opponent[player]!)
     }
     
     private func enPassantSquare(for move: Move) -> Square? {
@@ -306,10 +372,14 @@ struct BoardState: Hashable {
                 
         newBoardState.allAttacks[.white] = newBoardState.allAttacks(for: .white)
         newBoardState.allAttacks[.black] = newBoardState.allAttacks(for: .black)
+        
+        newBoardState.inCheck[player] = newBoardState.inCheck(player)
 
-        if newBoardState.inCheck(player) {
+        if newBoardState.inCheck[player]! {
             return nil
         }
+        
+        newBoardState.inCheck[opponent[player]!] = newBoardState.inCheck(opponent[player]!)
         
         return newBoardState
     }
@@ -435,7 +505,7 @@ struct BoardState: Hashable {
             return
         }
                 
-        if !inCheck(currentPlayer) {
+        if !inCheck[currentPlayer]! {
             winner = .draw
             return
         }
@@ -467,11 +537,11 @@ struct BoardState: Hashable {
     private func positionalScore() -> Float {
         var score: Float = 0.0
         
-        if inCheck(.white) {
+        if inCheck[.white]! {
             score -= inCheckValue
         }
         
-        if inCheck(.black) {
+        if inCheck[.black]! {
             score += inCheckValue
         }
         
