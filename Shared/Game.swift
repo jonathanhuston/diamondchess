@@ -127,13 +127,13 @@ extension Game {
     }
     
     func computerMove() {
-        let time = DispatchTime.now()
+//        let time = DispatchTime.now()
 
         guard let move = alphabeta(in: boardState, depth: depth).move else {
             return
         }
         
-        print(DispatchTime.now().distance(to: time))
+//        print(DispatchTime.now().distance(to: time))
 
         
         boardState = boardState.isValidMove(move)!

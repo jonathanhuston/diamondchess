@@ -12,9 +12,26 @@ struct AppCommands {
 }
 
 // FIX: update menu items
+// FIX: Help menu
 extension AppCommands: Commands {
     
     @CommandsBuilder var body: some Commands {
+        CommandGroup(replacing: .appInfo) {
+            Button("About Diamond Chess") {
+                NSApplication.shared.orderFrontStandardAboutPanel(
+                    options: [
+                        NSApplication.AboutPanelOptionKey.credits: NSAttributedString(
+                            string: "Pieces designed by Ella Huston",
+                            attributes: [
+                                NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                            ]
+                        ),
+                        NSApplication.AboutPanelOptionKey(rawValue: "Copyright"): "© 2021 Jonathan Huston"
+                    ]
+                )
+            }
+        }
+        
         CommandMenu("Game") {
             Button("White vs. Computer") {
                 game.computerPlayer = .black
@@ -45,7 +62,6 @@ extension AppCommands: Commands {
                 if game.depth > 1 {
                     game.depth -= 1
                 }
-                print(game.depth)
             }
             .keyboardShortcut("-")
             
@@ -53,7 +69,6 @@ extension AppCommands: Commands {
                 if game.depth < maxDepth {
                     game.depth += 1
                 }
-                print(game.depth)
             }
             .keyboardShortcut("+")
         }
