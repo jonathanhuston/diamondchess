@@ -42,16 +42,16 @@ extension Game {
         let player = boardState.currentPlayer
         
         if piece == "White King" || piece == "Black King" {
-            boardState.kingSideCastle[player] = false
-            boardState.queenSideCastle[player] = false
+            boardState.canCastleKingSide[player] = false
+            boardState.canCastleQueenSide[player] = false
         }
         
         if piece == "White Rook" && move.from.file == 7 {
-            boardState.kingSideCastle[player] = false
+            boardState.canCastleKingSide[player] = false
         }
             
         if piece == "Black Rook" && move.from.file == 0 {
-            boardState.queenSideCastle[player] = false
+            boardState.canCastleQueenSide[player] = false
         }
         
         if piece == "White Pawn" || piece == "Black Pawn" {
