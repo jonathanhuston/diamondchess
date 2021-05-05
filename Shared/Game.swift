@@ -16,6 +16,7 @@ class Game: ObservableObject {
     @Published var flipped = false
     @Published var touched: Square? = nil
     @Published var dragging = false
+    @Published var depth = maxDepth
     
     var scores = [BoardState: Float]()
     var nextMoves = [BoardState: [(move: Move, newBoardState: BoardState)]]()
@@ -85,7 +86,7 @@ extension Game {
     
     // FIX: promotion
     private func alphabeta(in boardState: BoardState,
-                           depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
+                           depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
                 
         if depth == 0 || boardState.winner != nil {
             let score = scores[boardState] ?? boardState.evaluateBoardState()
@@ -128,7 +129,7 @@ extension Game {
     func computerMove() {
         let time = DispatchTime.now()
 
-        guard let move = alphabeta(in: boardState).move else {
+        guard let move = alphabeta(in: boardState, depth: depth).move else {
             return
         }
         

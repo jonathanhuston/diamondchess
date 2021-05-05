@@ -11,6 +11,7 @@ struct AppCommands {
     @ObservedObject var game: Game
 }
 
+// FIX: update menu items
 extension AppCommands: Commands {
     
     @CommandsBuilder var body: some Commands {
@@ -38,6 +39,23 @@ extension AppCommands: Commands {
             }
             .keyboardShortcut("F", modifiers: [.shift, .command])
             
+            Divider()
+            
+            Button("Make computer play worse") {
+                if game.depth > 1 {
+                    game.depth -= 1
+                }
+                print(game.depth)
+            }
+            .keyboardShortcut("-")
+            
+            Button("Make computer play better") {
+                if game.depth < maxDepth {
+                    game.depth += 1
+                }
+                print(game.depth)
+            }
+            .keyboardShortcut("+")
         }
     }
 }

@@ -324,7 +324,6 @@ struct BoardState: Hashable {
             }
         }
         
-        // TODO: factor out?
         let capturedPiece = newBoardState.board[move.to.rank][move.to.file]
         if capturedPiece != "Empty" {
             newBoardState.captured[opponent[currentPlayer]!]!.append(capturedPiece)
