@@ -38,7 +38,6 @@ extension Game {
     }
     
     // FIX: promotion
-    // TODO: choose random move if best scores the same
     private func alphabeta(in boardState: BoardState,
                            depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
                 
@@ -77,7 +76,6 @@ extension Game {
             }
         }
         
-
         return (bestScore, bestMove)
     }
     

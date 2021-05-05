@@ -209,6 +209,40 @@ struct BoardState: Hashable {
         return attacks
     }
     
+    private func shortRangeAttack(on square: Square, with piece: String, given offsets: [(Int, Int)]) -> Bool {
+        for offset in offsets {
+            let rank = square.rank + offset.0
+            let file = square.file + offset.1
+            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == piece {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    private func longRangeAttack(on square: Square, with piece: String, or queen: String, given offsets: [(Int, Int)]) -> Bool {
+        for offset in offsets {
+            var rank = square.rank + offset.0
+            var file = square.file + offset.1
+            direction: while rank >= 0 && rank <= 7 && file >= 0 && file <= 7 {
+                let attacker = board[rank][file]
+                
+                switch attacker {
+                case piece, queen:
+                    return true
+                case "Empty":
+                    rank += offset.0
+                    file += offset.1
+                default:
+                    break direction
+                }
+            }
+        }
+        
+        return false
+    }
+    
     private func underAttack(square: Square, by player: Player) -> Bool {
         let king = (player == .white) ? "White King" : "Black King"
         let queen = (player == .white) ? "White Queen" : "Black Queen"
@@ -216,69 +250,14 @@ struct BoardState: Hashable {
         let knight = (player == .white) ? "White Knight" : "Black Knight"
         let rook = (player == .white) ? "White Rook" : "Black Rook"
         let pawn = (player == .white) ? "White Pawn" : "Black Pawn"
+        
         let pawnOffsets = (player == .white) ? [(1, -1), (1, 1)] : [(-1, -1), (-1, 1)]
-       
-        for offset in pawnOffsets {
-            let rank = square.rank + offset.0
-            let file = square.file + offset.1
-            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == pawn {
-                return true
-            }
-        }
         
-        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
-            var rank = square.rank + offset.0
-            var file = square.file + offset.1
-            direction: while rank >= 0 && rank <= 7 && file >= 0 && file <= 7 {
-                let attacker = board[rank][file]
-                
-                switch attacker {
-                case rook, queen:
-                    return true
-                case "Empty":
-                    rank += offset.0
-                    file += offset.1
-                default:
-                    break direction
-                }
-            }
-        }
-        
-        for offset in [(-1, -1), (-1, 1), (1, -1), (1, 1)] {
-            var rank = square.rank + offset.0
-            var file = square.file + offset.1
-            direction: while rank >= 0 && rank <= 7 && file >= 0 && file <= 7 {
-                let attacker = board[rank][file]
-                
-                switch attacker {
-                case bishop, queen:
-                    return true
-                case "Empty":
-                    rank += offset.0
-                    file += offset.1
-                default:
-                    break direction
-                }
-            }
-        }
-        
-        for offset in [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)] {
-            let rank = square.rank + offset.0
-            let file = square.file + offset.1
-            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == knight {
-                return true
-            }
-        }
-        
-        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)] {
-            let rank = square.rank + offset.0
-            let file = square.file + offset.1
-            if rank >= 0 && rank <= 7 && file >= 0 && file <= 7 && board[rank][file] == king {
-                return true
-            }
-        }
-        
-        return false
+        return shortRangeAttack(on: square, with: pawn, given: pawnOffsets) ||
+            longRangeAttack(on: square, with: rook, or: queen, given: [(-1, 0), (1, 0), (0, -1), (0, 1)]) ||
+            longRangeAttack(on: square, with: bishop, or: queen, given: [(-1, -1), (-1, 1), (1, -1), (1, 1)]) ||
+            shortRangeAttack(on: square, with: knight, given: [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]) ||
+            shortRangeAttack(on: square, with: king, given: [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)])
     }
     
     private func inCheck(_ player: Player) -> Bool {
@@ -513,6 +492,16 @@ struct BoardState: Hashable {
         winner = opponent[currentPlayer]!
     }
     
+    private func inCheckScore() -> Float {
+        if inCheck[.white]! {
+            return -inCheckValue
+        } else if inCheck[.black]! {
+            return inCheckValue
+        }
+        
+        return 0
+    }
+    
     private func doubledPawns(_ player: Player) -> Int {
         let pawn = player == .white ? "White Pawn" : "Black Pawn"
         var counter = 0
@@ -534,21 +523,8 @@ struct BoardState: Hashable {
         return counter
     }
     
-    private func positionalScore() -> Float {
-        let inCheckValue: Float = 0.2
-        let doublePawnValue: Float = 0.5
-        let centerControlValue: Float = 0.5
-        let attackValue: Float = 0.05
-        
+    private func centerControlScore() -> Float {
         var score: Float = 0.0
-        
-        if inCheck[.white]! {
-            score -= inCheckValue
-        } else if inCheck[.black]! {
-            score += inCheckValue
-        }
-        
-        score += Float((doubledPawns(.black) - doubledPawns(.white))) * doublePawnValue
         
 //        let whiteCounts = Dictionary(allAttacks[.white]!.map { ($0, 1) }, uniquingKeysWith: +)
 //        let blackCounts = Dictionary(allAttacks[.black]!.map { ($0, 1) }, uniquingKeysWith: +)
@@ -566,9 +542,15 @@ struct BoardState: Hashable {
             }
         }
         
-        score += Float((allAttacks[.white]!.count - allAttacks[.black]!.count)) * attackValue
-              
         return score
+    }
+    
+    private func positionalScore() -> Float {
+        return
+            inCheckScore() +
+            Float((doubledPawns(.black) - doubledPawns(.white))) * doublePawnValue +
+            centerControlScore() +
+            Float((allAttacks[.white]!.count - allAttacks[.black]!.count)) * attackValue
     }
 
     // TODO: discourage king move before castling
@@ -590,5 +572,3 @@ struct BoardState: Hashable {
         return score
     }
 }
-
-
