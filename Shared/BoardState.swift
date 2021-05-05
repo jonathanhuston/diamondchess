@@ -69,11 +69,11 @@ struct BoardState: Hashable {
         return attacks
     }
     
-    private func rookAttacks(from: Square) -> [Square] {
+    private func straightAttacks(from: Square, given offsets: [(Int, Int)]) -> [Square] {
         var attacks = [Square]()
         let player = color(of: board[from.rank][from.file])
         
-        for offset in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
+        for offset in offsets {
             var toRank = from.rank + offset.0
             var toFile = from.file + offset.1
             while toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
@@ -96,35 +96,16 @@ struct BoardState: Hashable {
         return attacks
     }
     
-    private func bishopAttacks(from: Square) -> [Square] {
-        var attacks = [Square]()
-        let player = color(of: board[from.rank][from.file])
-        
-        for offset in [(-1, -1), (-1, 1), (1, -1), (1, 1)] {
-            var toRank = from.rank + offset.0
-            var toFile = from.file + offset.1
-            while toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
-                let toSquare = board[toRank][toFile]
-                
-                if toSquare == "Empty" {
-                    attacks.append(Square(rank: toRank, file: toFile))
-                } else if player != color(of: board[toRank][toFile]) {
-                    attacks.append(Square(rank: toRank, file: toFile))
-                    break
-                } else {
-                    break
-                }
-                
-                toRank += offset.0
-                toFile += offset.1
-            }
-        }
-        
-        return attacks
+    private func rookAttacks(from square: Square) -> [Square] {
+        straightAttacks(from: square, given: [(-1, 0), (1, 0), (0, -1), (0, 1)])
     }
     
-    private func queenAttacks(from: Square) -> [Square] {
-        return rookAttacks(from: from) + bishopAttacks(from: from)
+    private func bishopAttacks(from square: Square) -> [Square] {
+        straightAttacks(from: square, given: [(-1, -1), (-1, 1), (1, -1), (1, 1)])
+    }
+    
+    private func queenAttacks(from square: Square) -> [Square] {
+        rookAttacks(from: square) + bishopAttacks(from: square)
     }
     
     private func kingAttacks(from: Square, castling: Bool) -> [Square] {
@@ -253,7 +234,8 @@ struct BoardState: Hashable {
         
         let pawnOffsets = (player == .white) ? [(1, -1), (1, 1)] : [(-1, -1), (-1, 1)]
         
-        return shortRangeAttack(on: square, with: pawn, given: pawnOffsets) ||
+        return
+            shortRangeAttack(on: square, with: pawn, given: pawnOffsets) ||
             longRangeAttack(on: square, with: rook, or: queen, given: [(-1, 0), (1, 0), (0, -1), (0, 1)]) ||
             longRangeAttack(on: square, with: bishop, or: queen, given: [(-1, -1), (-1, 1), (1, -1), (1, 1)]) ||
             shortRangeAttack(on: square, with: knight, given: [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]) ||
@@ -278,7 +260,7 @@ struct BoardState: Hashable {
         return underAttack(square: Square(rank: rank, file: file), by: opponent[player]!)
     }
     
-    private func enPassantSquare(for move: Move) -> Square? {
+    func enPassantSquare(for move: Move) -> Square? {
         if abs(move.from.rank - move.to.rank) != 2 {
             return nil
         }
@@ -384,7 +366,7 @@ struct BoardState: Hashable {
         return outcomes
     }
     
-    private func canMove(_ player: Player) -> Bool {
+    func canMove(_ player: Player) -> Bool {
         for rank in 0...7 {
             for file in 0...7 {
                 if color(of: board[rank][file]) == player {
@@ -403,7 +385,7 @@ struct BoardState: Hashable {
         return false
     }
     
-    private func insufficientMaterial() -> Bool {
+    func insufficientMaterial() -> Bool {
         let pieces = self.board.flatMap { $0 }.filter { $0 != "Empty" }
         
         if pieces.count > 4 {
@@ -449,47 +431,6 @@ struct BoardState: Hashable {
             killKing(.white)
             killKing(.black)
         }
-    }
-    
-    mutating func updateBoardState(given move: Move) {
-        let piece = board[move.to.rank][move.to.file]
-        
-        if piece == "White King" || piece == "Black King" {
-            kingSideCastle[currentPlayer] = false
-            queenSideCastle[currentPlayer] = false
-        }
-        
-        if piece == "White Rook" && move.from.file == 7 {
-            kingSideCastle[currentPlayer] = false
-        }
-            
-        if piece == "Black Rook" && move.from.file == 0 {
-            queenSideCastle[currentPlayer] = false
-        }
-        
-        if piece == "White Pawn" || piece == "Black Pawn" {
-            enPassantSquare = enPassantSquare(for: move)
-        } else {
-            enPassantSquare = nil
-        }
-                
-        if insufficientMaterial() {
-            winner = .draw
-            return
-        }
-        
-        currentPlayer = opponent[currentPlayer]!
-                        
-        if canMove(currentPlayer) {
-            return
-        }
-                
-        if !inCheck[currentPlayer]! {
-            winner = .draw
-            return
-        }
-            
-        winner = opponent[currentPlayer]!
     }
     
     private func inCheckScore() -> Float {
@@ -572,3 +513,4 @@ struct BoardState: Hashable {
         return score
     }
 }
+

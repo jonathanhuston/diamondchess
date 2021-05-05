@@ -37,6 +37,54 @@ extension Game {
         }
     }
     
+    private func update(_ boardState: inout BoardState, with move: Move) {
+        let piece = boardState.board[move.to.rank][move.to.file]
+        let player = boardState.currentPlayer
+        
+        if piece == "White King" || piece == "Black King" {
+            boardState.kingSideCastle[player] = false
+            boardState.queenSideCastle[player] = false
+        }
+        
+        if piece == "White Rook" && move.from.file == 7 {
+            boardState.kingSideCastle[player] = false
+        }
+            
+        if piece == "Black Rook" && move.from.file == 0 {
+            boardState.queenSideCastle[player] = false
+        }
+        
+        if piece == "White Pawn" || piece == "Black Pawn" {
+            boardState.enPassantSquare = boardState.enPassantSquare(for: move)
+        } else {
+            boardState.enPassantSquare = nil
+        }
+                
+        if boardState.insufficientMaterial() {
+            boardState.winner = .draw
+            return
+        }
+        
+        boardState.currentPlayer = opponent[player]!
+        
+//        if let nextMoves = nextMoves[boardState] {
+//            if !nextMoves.isEmpty {
+//                return
+//            }
+//        } else
+        
+        if boardState.canMove(boardState.currentPlayer) {
+            return
+        }
+                
+        if !boardState.inCheck[boardState.currentPlayer]! {
+            boardState.winner = .draw
+            return
+        }
+            
+        boardState.winner = player
+    }
+    
     // FIX: promotion
     private func alphabeta(in boardState: BoardState,
                            depth: Int = maxDepth, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
@@ -59,7 +107,7 @@ extension Game {
                         
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState
-            newBoardState.updateBoardState(given: outcome.move)
+            update(&newBoardState, with: outcome.move)
             
             let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
 
@@ -90,7 +138,7 @@ extension Game {
 
         
         boardState = boardState.isValidMove(move)!
-        boardState.updateBoardState(given: move)
+        update(&boardState, with: move)
         
         boardState.promoting = nil
         
@@ -111,7 +159,7 @@ extension Game {
             return nil
         }
                 
-        newBoardState!.updateBoardState(given: move)
+        update(&newBoardState!, with: move)
         
         if newBoardState!.winner != nil {
             over = true
