@@ -35,7 +35,6 @@ struct Square: Equatable, Hashable {
 struct Move: Hashable {
     var from: Square
     var to: Square
-    var specialPromote: String? = nil
 }
 
 typealias Board = [[String]]

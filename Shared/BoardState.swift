@@ -278,6 +278,22 @@ struct BoardState: Hashable {
         board[move.from.rank][move.to.file] = "Empty"
     }
     
+    private func promote(_ piece: String, given move: Move) -> String {
+        if piece != "White Pawn" && piece != "Black Pawn" {
+            return piece
+        }
+                
+        if move.to.rank == 0 {
+            return "White Queen"
+        }
+        
+        if move.to.rank == 7 {
+            return "Black Queen"
+        }
+        
+        return piece
+    }
+    
     private mutating func castle(for move: Move) {
         let rook = currentPlayer == .white ? "White Rook" : "Black Rook"
         
@@ -290,22 +306,6 @@ struct BoardState: Hashable {
         } else {
             failedToCastle[currentPlayer] = true
         }
-    }
-    
-    private func promote(_ piece: String, given move: Move) -> String {
-        if piece.split(separator: " ")[1] != "Pawn" {
-            return piece
-        }
-                
-        if move.to.rank == 0 {
-            return move.specialPromote ?? "White Queen"
-        }
-        
-        if move.to.rank == 7 {
-            return move.specialPromote ?? "Black Queen"
-        }
-        
-        return piece
     }
     
     func isValidMove(_ move: Move) -> BoardState? {
@@ -330,6 +330,7 @@ struct BoardState: Hashable {
         }
         
         newBoardState.board[move.from.rank][move.from.file] = "Empty"
+        
         let promotedPiece = promote(piece, given: move)
         newBoardState.board[move.to.rank][move.to.file] = promotedPiece
         newBoardState.promoting = piece != promotedPiece ? move.to : nil
@@ -360,6 +361,17 @@ struct BoardState: Hashable {
                         let move = Move(from: from, to: to)
                         if let newBoardState = isValidMove(move) {
                             outcomes.append((move, newBoardState))
+                            if let promoting = newBoardState.promoting {
+                                var piece = newBoardState.board[promoting.rank][promoting.file]
+                                for _ in 1...3 {
+                                    var promotingBoardState = newBoardState
+                                    piece = nextPromotionPiece(piece)
+                                    promotingBoardState.board[promoting.rank][promoting.file] = piece
+                                    promotingBoardState.allAttacks[player] = promotingBoardState.allAttacks(for: player)
+                                    promotingBoardState.inCheck[opponent[player]!] = newBoardState.inCheck(opponent[player]!)
+                                    outcomes.append((move, promotingBoardState))
+                                }
+                            }
                         }
                     }
                 }
