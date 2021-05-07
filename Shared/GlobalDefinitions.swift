@@ -74,22 +74,22 @@ func color(of piece: String) -> Player {
 
 let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .draw: 0]
 
-let squareSize: CGFloat = 110
+let squareSize: CGFloat = 88
 
 func pieceWidth(_ piece: String) -> CGFloat {
     if piece.contains("Dead") {
-        return 105
+        return 84
     }
     
-    return piece.contains("Pawn") ? 50 : 80
+    return piece.contains("Pawn") ? 40 : 64
 }
 
 func pieceHeight(_ piece: String) -> CGFloat {
     if piece.contains("Dead") {
-        return 80
+        return 64
     }
     
-    return piece.contains("Pawn") ? 80 : 105
+    return piece.contains("Pawn") ? 64 : 84
 }
 
 func getX(_ file: Int) -> CGFloat {

@@ -84,7 +84,6 @@ extension Game {
         boardState.winner = player
     }
     
-    // FIX: promotion
     private func alphabeta(in boardState: BoardState,
                            depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
                 
