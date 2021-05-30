@@ -420,9 +420,7 @@ struct BoardState: Hashable {
                     }
                 }
             }
-            if wbColor == bbColor {
-                return true
-            }
+            return wbColor == bbColor
         }
         
         return !(pieces.count > 3

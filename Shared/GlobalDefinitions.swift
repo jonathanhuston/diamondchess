@@ -48,6 +48,15 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
                        ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
                        ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
+//let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "White Queen", "White King", "Empty", "Empty", "Empty"]]
+
 let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
                    "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
                    "Empty": 0]
