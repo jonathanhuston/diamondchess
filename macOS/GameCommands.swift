@@ -18,11 +18,13 @@ extension GameCommands: View {
             game.launch = true
         }
         .keyboardShortcut("W", modifiers: [.shift, .command])
+        
         Button("Computer vs. Black") {
             game.computerPlayer = .white
             game.launch = true
         }
         .keyboardShortcut("B", modifiers: [.shift, .command])
+        
         Button("Human vs. Human") {
             game.computerPlayer = nil
             game.launch = true
@@ -37,6 +39,9 @@ extension GameCommands: View {
         .keyboardShortcut("F", modifiers: [.shift, .command])
         
         Divider()
+        
+        Text("Computer strength: \(game.depth) / 3")
+            .foregroundColor(.gray)
             
         Button("Make computer play worse") {
             game.depth -= 1

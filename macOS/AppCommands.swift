@@ -13,9 +13,7 @@ struct AppCommands {
     private let baseURL = "http://diamondchess.club/"
     
     private var legalDocs = ["Privacy"]
-    
-    private let nsView = NSView()
-    
+        
     func webpage(_ menuItem: String) -> String {
         baseURL + menuItem.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)! + ".html"
     }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let maxDepth = 3
+let maxDepth = 2
 
 let inCheckValue: Float = 0.2
 let failedToCastleValue: Float = 0.5
