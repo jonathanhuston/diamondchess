@@ -16,5 +16,6 @@ extension SquareView: View {
         Image(square.rank % 2 == square.file % 2 ? "White Empty" : "Black Empty")
             .resizable()
             .frame(width: squareSize, height: squareSize)
+            .opacity(0.5)
     }
 }

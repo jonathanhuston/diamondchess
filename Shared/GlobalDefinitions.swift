@@ -87,7 +87,7 @@ let squareSize: CGFloat = 88
 
 func pieceWidth(_ piece: String) -> CGFloat {
     if piece.contains("Dead") {
-        return 84
+        return 80
     }
     
     return piece.contains("Pawn") ? 40 : 64
@@ -98,7 +98,7 @@ func pieceHeight(_ piece: String) -> CGFloat {
         return 64
     }
     
-    return piece.contains("Pawn") ? 64 : 84
+    return piece.contains("Pawn") ? 64 : 80
 }
 
 func getX(_ file: Int) -> CGFloat {
