@@ -21,8 +21,8 @@ extension CapturedView: View {
             ForEach(0..<game.boardState.captured[player]!.count, id:\.self) { index in
                 Image(game.boardState.captured[player]![index])
                     .resizable()
-                    .frame(width: pieceWidth(game.boardState.captured[player]![index]) / 1.5,
-                           height: pieceHeight(game.boardState.captured[player]![index]) / 1.5)
+                    .frame(width: pieceWidth(game.boardState.captured[player]![index]) / 1.75,
+                           height: pieceHeight(game.boardState.captured[player]![index]) / 1.75)
             }
         }
     }
