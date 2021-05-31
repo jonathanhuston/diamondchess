@@ -8,7 +8,7 @@ Use it if you want to play a quick game against the computer or another human wi
 
 Written in Swift by Jonathan Huston, pieces designed by Ella Huston.
 
-![](https://diamondchess.s3.eu-central-1.amazonaws.com/Game1.png)
+![](https://diamondchess.s3.eu-central-1.amazonaws.com/Board2.png)
 
 Here are the simple Game menu items and keyboard shortcuts:
 
