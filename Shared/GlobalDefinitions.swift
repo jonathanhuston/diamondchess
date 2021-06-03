@@ -9,10 +9,10 @@ import SwiftUI
 
 let maxDepth = 2
 
-let inCheckValue: Float = 0.2
+let inCheckValue: Float = 0.125
 let failedToCastleValue: Float = 0.5
-let centerControlValue: Float = 0.5
-let doublePawnValue: Float = 0.5
+let centerControlValue: Float = 0.125
+let doublePawnValue: Float = 0.25
 let attackValue: Float = 0.05
 
 enum Player: CaseIterable {
