@@ -101,6 +101,14 @@ extension Game {
         var bestMove: Move? = nil
         
         let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
+        
+        //  Default to first move if forced mate
+        if outcomes.count > 0 {
+            bestMove = outcomes[0].move
+        } else {
+            print("ERROR: No moves found")
+        }
+        
         nextMoves[boardState] = outcomes
                         
         for outcome in outcomes {
@@ -129,6 +137,7 @@ extension Game {
 //        let time = DispatchTime.now()
 
         guard let move = alphabeta(in: boardState, depth: depth).move else {
+            print("ERROR: Can't generate computer move")
             return
         }
         
