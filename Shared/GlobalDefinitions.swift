@@ -19,7 +19,7 @@ let inCheckValue: Float = 0.125
 let failedToCastleValue: Float = 0.25
 let centerControlValue: Float = 0.0625
 let doublePawnValue: Float = 0.25
-let attackValue: Float = 0.0625
+let attackValue: Float = 0.03125
 
 
 //  Board and piece definitions
