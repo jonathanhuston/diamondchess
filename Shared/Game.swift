@@ -125,9 +125,9 @@ extension Game {
             }
         }
         
-//        print("Best score at \(depth):\t\(bestScore)")
+        print("Best score at \(depth):\t\(bestScore)")
 //        print("Best move:\(String(describing: bestMove))")
-//        print()
+        print()
         
         return (bestScore, bestMove)
     }
@@ -155,7 +155,7 @@ extension Game {
     }
     
     func humanMove(_ move: Move) -> BoardState? {
-        if !boardState.allAttacks(from: move.from).contains(move.to) {
+        if !boardState.allAttacksAndDefenses(from: move.from).attacks.contains(move.to) {
             return nil
         }
         
