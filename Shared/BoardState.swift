@@ -502,26 +502,38 @@ struct BoardState: Hashable {
         return score
     }
     
-    private func attackScore() -> Float {
-        var score = 0
+    private func attackScore(for player: Player) -> Float {
+        var score: Float = 0
+        let opponent = opponent[player]!
         
-        for square in allAttacks[.white]! {
+        for square in allAttacks[player]! {
             let piece = board[square.rank][square.file]
-            if color(of: piece) == .black {
-                score -= pieceValues[piece]!
+            if color(of: piece) == opponent {
+                let pieceValue = Float(pieceValues[piece]!)
+                let factor = allAttacks[opponent]!.contains(square) ? defendedAttackValue : undefendedAttackValue
+                print(allAttacks[opponent]!)
+                print("\(piece) with factor \(factor)")
+                score -= pieceValue * factor
             }
         }
         
-        for square in allAttacks[.black]! {
-            let piece = board[square.rank][square.file]
-            if color(of: piece) == .white {
-                score -= pieceValues[piece]!
+        return score
+    }
+    
+    private func materialScore () -> Float {
+        var materialScore: Float = 0
+        
+        if winner != nil {
+            return winningScore[winner!]!
+        }
+        
+        for rank in 0...7 {
+            for file in 0...7 {
+                materialScore += Float(pieceValues[board[rank][file]]!)
             }
         }
         
-        return Float(score)
-        
-//        return Float((allAttacks[.white]!.count - allAttacks[.black]!.count))
+        return materialScore
     }
     
     private func positionalScore() -> Float {
@@ -530,7 +542,7 @@ struct BoardState: Hashable {
         let inCheckScore = inCheckScore()
         let doublePawnScore = (doubledPawns(.black) - doubledPawns(.white)) * doublePawnValue
         let centerControlScore = centerControlScore()
-        let attackScore = attackScore() * attackValue
+        let attackScore = attackScore(for: .white) + attackScore(for: .black)
         
 //        print("castleScore:\t\t\(castleScore)")
 //        print("failedToCastleScore:\t\(failedToCastleScore)")
@@ -543,18 +555,7 @@ struct BoardState: Hashable {
     }
 
     func evaluateBoardState() -> Float {
-        var materialScore: Float = 0
-        
-        if winner != nil {
-            return winningScore[winner!]!
-        }
-        
-        for rank in 0...7 {
-            for file in 0...7 {
-                materialScore += Float(pieceValues[board[rank][file]]!)
-            }
-        }
-                
+        let materialScore = materialScore()
         let positionalScore = positionalScore()
         let score = materialScore + positionalScore
         
