@@ -7,13 +7,22 @@
 
 import SwiftUI
 
+//  Search depth and weights
+
 let maxDepth = 2
 
+let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
+                   "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
+                   "Empty": 0]
+
 let inCheckValue: Float = 0.125
-let failedToCastleValue: Float = 0.5
-let centerControlValue: Float = 0.125
+let failedToCastleValue: Float = 0.25
+let centerControlValue: Float = 0.0625
 let doublePawnValue: Float = 0.25
-let attackValue: Float = 0.05
+let attackValue: Float = 0.03125
+
+
+//  Board and piece definitions
 
 enum Player: CaseIterable {
     case white
@@ -57,10 +66,6 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
 //                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
 //                       ["Empty", "Empty", "Empty", "White Queen", "White King", "Empty", "Empty", "Empty"]]
 
-let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
-                   "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
-                   "Empty": 0]
-
 private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
                                "Black Queen", "Black Knight", "Black Rook", "Black Bishop", "Black Queen"]
 
@@ -81,8 +86,13 @@ func color(of piece: String) -> Player {
     }
 }
 
+
+//  Helper for minimax evaluation
+
 let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .draw: 0]
 
+
+//  Visual layout
 let squareSize: CGFloat = 88
 
 func pieceWidth(_ piece: String) -> CGFloat {

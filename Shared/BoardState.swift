@@ -520,8 +520,13 @@ struct BoardState: Hashable {
                 score += Float(pieceValues[board[rank][file]]!)
             }
         }
-                
-        score += positionalScore()
+        
+        let positionalScore = positionalScore()
+        if positionalScore >= 1 || positionalScore <= -1 {
+            print("Positional score: \(positionalScore)")
+        }
+        
+        score += positionalScore
                 
         return score
     }
