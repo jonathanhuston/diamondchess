@@ -19,6 +19,7 @@ struct BoardState: Hashable {
     var canCastleKingSide: [Player: Bool] = [.white: true, .black: true]
     var canCastleQueenSide: [Player: Bool] = [.white: true, .black: true]
     var castled: [Player: Float] = [.white: 0, .black: 0]
+    var failedToCastle: [Player: Float] = [.white: 0, .black: 0]
     var captured: [Player: [String]] = [.white: [], .black: []]
 
     private func pawnAttacks(from: Square) -> [Square] {
@@ -305,6 +306,8 @@ struct BoardState: Hashable {
             board[move.from.rank][3] = rook
             board[move.from.rank][0] = "Empty"
             castled[currentPlayer] = castleValue
+        } else {
+            failedToCastle[currentPlayer] = failedToCastleValue
         }
     }
     
@@ -523,18 +526,20 @@ struct BoardState: Hashable {
     
     private func positionalScore() -> Float {
         let castleScore = castled[.white]! - castled[.black]!
+        let failedToCastleScore = failedToCastle[.black]! - failedToCastle[.white]!
         let inCheckScore = inCheckScore()
         let doublePawnScore = (doubledPawns(.black) - doubledPawns(.white)) * doublePawnValue
         let centerControlScore = centerControlScore()
         let attackScore = attackScore() * attackValue
         
-        print("castleScore:\t\t\(castleScore)")
-        print("inCheckScore:\t\t\(inCheckScore)")
-        print("doublePawnScore:\t\(doublePawnScore)")
-        print("centerControlScore:\t\(centerControlScore)")
-        print("attackScore:\t\t\(attackScore)")
+//        print("castleScore:\t\t\(castleScore)")
+//        print("failedToCastleScore:\t\(failedToCastleScore)")
+//        print("inCheckScore:\t\t\(inCheckScore)")
+//        print("doublePawnScore:\t\(doublePawnScore)")
+//        print("centerControlScore:\t\(centerControlScore)")
+//        print("attackScore:\t\t\(attackScore)")
         
-        return castleScore + inCheckScore + doublePawnScore + centerControlScore + attackScore
+        return castleScore + failedToCastleScore + inCheckScore + doublePawnScore + centerControlScore + attackScore
     }
 
     func evaluateBoardState() -> Float {
@@ -549,17 +554,14 @@ struct BoardState: Hashable {
                 materialScore += Float(pieceValues[board[rank][file]]!)
             }
         }
-        
-        print("Material score:\t\t\(materialScore)")
-        
+                
         let positionalScore = positionalScore()
-
-        print("Positional score:\t\(positionalScore)")
-        
         let score = materialScore + positionalScore
         
-        print("Total score:\t\t\(score)")
-        print()
+//        print("positionalScore:\t\(positionalScore)")
+//        print("materialScore:\t\t\(materialScore)")
+//        print("Total score:\t\t\(score)")
+//        print()
                         
         return score
     }

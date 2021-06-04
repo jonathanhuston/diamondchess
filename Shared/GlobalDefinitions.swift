@@ -9,17 +9,18 @@ import SwiftUI
 
 //  Search depth and weights
 
-let maxDepth = 1
+let maxDepth = 3
 
 let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
                    "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
                    "Empty": 0]
 
 let inCheckValue: Float = 0.125
-let castleValue: Float = 0.5
+let castleValue: Float = 0.125
+let failedToCastleValue: Float = 0.5
 let centerControlValue: Float = 0.125
 let doublePawnValue: Float = 0.25
-let attackValue: Float = 0.125
+let attackValue: Float = 0.0625
 
 
 //  Board and piece definitions

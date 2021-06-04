@@ -104,11 +104,7 @@ extension Game {
         nextMoves[boardState] = outcomes
         
         //  Default to first move if forced mate
-        if outcomes.count > 0 {
-            bestMove = outcomes[0].move
-        } else {
-            print("ERROR: No moves found")
-        }
+        bestMove = outcomes[0].move
                                 
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState
@@ -129,9 +125,9 @@ extension Game {
             }
         }
         
-        if depth == maxDepth {
-            print("Best score:\t\t\t\(bestScore)")
-        }
+//        print("Best score at \(depth):\t\(bestScore)")
+//        print("Best move:\(String(describing: bestMove))")
+//        print()
         
         return (bestScore, bestMove)
     }
@@ -140,7 +136,7 @@ extension Game {
 //        let time = DispatchTime.now()
 
         guard let move = alphabeta(in: boardState, depth: depth).move else {
-            print("ERROR: Can't generate computer move")
+            // print("ERROR: Can't generate computer move")
             return
         }
         
