@@ -101,6 +101,7 @@ extension Game {
         var bestMove: Move? = nil
         
         let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
+        nextMoves[boardState] = outcomes
         
         //  Default to first move if forced mate
         if outcomes.count > 0 {
@@ -108,9 +109,7 @@ extension Game {
         } else {
             print("ERROR: No moves found")
         }
-        
-        nextMoves[boardState] = outcomes
-                        
+                                
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState
             update(&newBoardState, with: outcome.move)
