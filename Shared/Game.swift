@@ -129,6 +129,10 @@ extension Game {
             }
         }
         
+        if depth == maxDepth {
+            print("Best score:\t\t\t\(bestScore)")
+        }
+        
         return (bestScore, bestMove)
     }
     
