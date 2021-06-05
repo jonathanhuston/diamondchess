@@ -19,6 +19,7 @@ let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
+let endgamePieces = 8
 
 //  Board and piece definitions
 
@@ -63,23 +64,23 @@ struct Move: Hashable {
 
 typealias Board = [[String]]
 
-let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
-                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
-                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
+//let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
+//                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
+//                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
-//let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "White Queen", "White King", "Empty", "Empty", "Empty"]]
+let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "White Pawn", "Empty", "Empty"],
+                       ["Empty", "Black Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Black Pawn", "Empty", "Empty", "Empty", "White Rook", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "White Queen", "White King", "Empty", "Empty", "Empty"]]
 
 private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
                                "Black Queen", "Black Knight", "Black Rook", "Black Bishop", "Black Queen"]

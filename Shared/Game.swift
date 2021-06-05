@@ -86,7 +86,7 @@ extension Game {
     
     private func alphabeta(in boardState: BoardState,
                            depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
-                
+        if depth >= 3 { print(depth) }
         if depth == 0 || boardState.winner != nil {
             let score = scores[boardState] ?? boardState.evaluateBoardState()
             scores[boardState] = score
@@ -144,8 +144,8 @@ extension Game {
     
     func computerMove() {
         let time = DispatchTime.now()
-
-        guard let move = alphabeta(in: boardState, depth: depth).move else {
+                
+        guard let move = alphabeta(in: boardState, depth: boardState.piecesRemaining > endgamePieces ? depth : depth + 1).move else {
             // print("ERROR: Can't generate computer move")
             return
         }
