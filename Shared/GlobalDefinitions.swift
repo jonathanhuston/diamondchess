@@ -19,7 +19,7 @@ let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
-let endgamePieces = 8
+let endgamePieces = 10
 
 //  Board and piece definitions
 
@@ -75,8 +75,8 @@ typealias Board = [[String]]
 
 let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "White Pawn", "Empty", "Empty"],
-                       ["Empty", "Black Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Black Rook", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Black Pawn"],
+                       ["White Pawn", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Black Pawn", "Empty", "Empty", "Empty", "White Rook", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],

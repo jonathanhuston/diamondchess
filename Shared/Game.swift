@@ -86,7 +86,7 @@ extension Game {
     
     private func alphabeta(in boardState: BoardState,
                            depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
-        if depth >= 3 { print(depth) }
+
         if depth == 0 || boardState.winner != nil {
             let score = scores[boardState] ?? boardState.evaluateBoardState()
             scores[boardState] = score
