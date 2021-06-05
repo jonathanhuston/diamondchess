@@ -11,10 +11,10 @@ import SwiftUI
 
 let maxDepth = 3
 
-let inCheckValue: Float = 0.125
+let inCheckValue: Float = 0.25
 let castleValue: Float = 0.125
 let failedToCastleValue: Float = 0.375
-let centerControlValue: Float = 0.25
+let centerControlValue: Float = 0.125
 let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25

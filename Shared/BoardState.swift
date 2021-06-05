@@ -514,10 +514,10 @@ struct BoardState: Hashable {
 
         for rank in [3, 4] {
             for file in [3, 4] {
-                let color = color[board[rank][file]]
-                if color == .white {
+                let piece = board[rank][file]
+                if piece == "White Pawn" {
                     score += centerControlValue
-                } else if color == .black {
+                } else if piece == "Black Pawn" {
                     score -= centerControlValue
                 }
             }
@@ -535,9 +535,6 @@ struct BoardState: Hashable {
             if color[piece] == opponent {
                 let pieceValue = pieceValues[piece]!
                 let factor = allDefenses[opponent]!.contains(square) ? defendedAttackValue : undefendedAttackValue
-                
-//                print(allDefenses[opponent]!)
-//                print("\(piece) with factor \(factor)")
                 
                 score -= pieceValue * factor
             }

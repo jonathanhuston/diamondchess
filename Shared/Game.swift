@@ -112,22 +112,21 @@ extension Game {
             let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
             
             if player == .white {
-
                 if score > bestScore {
                     bestScore = score
                     bestMove = outcome.move
                 }
-
-                if bestScore > alpha { alpha = bestScore }
-
+                if bestScore > alpha {
+                    alpha = bestScore
+                }
             } else {
-
                 if score < bestScore {
                     bestScore = score
                     bestMove = outcome.move
                 }
-
-                if bestScore < beta { beta = bestScore }
+                if bestScore < beta {
+                    beta = bestScore
+                }
             }
             
             if alpha >= beta {
@@ -143,14 +142,14 @@ extension Game {
     }
     
     func computerMove() {
-        let time = DispatchTime.now()
+//        let time = DispatchTime.now()
                 
         guard let move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move else {
             // print("ERROR: Can't generate computer move")
             return
         }
         
-        print(DispatchTime.now().distance(to: time))
+//        print(DispatchTime.now().distance(to: time))
 
         
         boardState = boardState.isValidMove(move)!

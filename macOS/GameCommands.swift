@@ -40,7 +40,7 @@ extension GameCommands: View {
         
         Divider()
         
-        Text("Computer strength: \(game.depth) / 3")
+        Text("Computer strength: \(game.depth) / 4")
             .foregroundColor(.gray)
             
         Button("Make computer play worse") {
@@ -53,6 +53,6 @@ extension GameCommands: View {
             game.depth += 1
         }
         .keyboardShortcut("+")
-        .disabled(game.depth >= 3 || game.computerPlayer == nil)
+        .disabled(game.depth >= 4 || game.computerPlayer == nil)
     }
 }
