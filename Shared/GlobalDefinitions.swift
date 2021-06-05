@@ -23,10 +23,10 @@ let endgamePieces = 8
 
 //  Board and piece definitions
 
-enum Player: CaseIterable {
-    case white
-    case black
-    case empty
+enum Player: String, CaseIterable {
+    case white = "White"
+    case black = "Black"
+    case empty = "Empty"
 }
 
 let pieceValues: [String: Float] =
@@ -93,6 +93,8 @@ func nextPromotionPiece(_ piece: String) -> String {
 
 
 //  Visual layout
+let strenghts = [1: "Terrible", 2: "Novice", 3: "Meh", 4: "Decent"]
+
 let squareSize: CGFloat = 88
 
 func pieceWidth(_ piece: String) -> CGFloat {

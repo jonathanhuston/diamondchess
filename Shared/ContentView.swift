@@ -9,6 +9,18 @@ import SwiftUI
 
 struct ContentView {
     @EnvironmentObject var game: Game
+    
+    private func navigationText() -> String {
+        var text = ""
+        
+        text += "\(game.boardState.currentPlayer.rawValue)'s turn"
+        
+        if game.computerPlayer != nil {
+            text += "  –  \(strenghts[game.depth]!)\t\t"
+        }
+        
+        return text
+    }
 }
 
 extension ContentView: View {
@@ -39,5 +51,6 @@ extension ContentView: View {
         .onChange(of: game.flipNow) { _ in
             game.flipped = !game.flipped
         }
+        .navigationTitle(navigationText())
     }
 }

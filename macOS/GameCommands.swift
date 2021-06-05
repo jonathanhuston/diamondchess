@@ -40,25 +40,25 @@ extension GameCommands: View {
         
         Divider()
             
-        Button("Terrible") {
+        Button(strenghts[1]!) {
             game.depth = 1
         }
         .keyboardShortcut("1")
         .disabled(game.depth == 1 || game.computerPlayer == nil)
-        
-        Button("Novice") {
+
+        Button(strenghts[2]!) {
             game.depth = 2
         }
         .keyboardShortcut("2")
         .disabled(game.depth == 2 || game.computerPlayer == nil)
-        
-        Button("Meh") {
+
+        Button(strenghts[3]!) {
             game.depth = 3
         }
         .keyboardShortcut("3")
         .disabled(game.depth == 3 || game.computerPlayer == nil)
-        
-        Button("Decent") {
+
+        Button(strenghts[4]!) {
             game.depth = 4
         }
         .keyboardShortcut("4")
