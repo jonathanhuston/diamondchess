@@ -19,7 +19,7 @@ let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
-let kingDegreesOfFreedomValue: Float = 1
+let kingDegreesOfFreedomValue: Float = 0.25
 
 let endgamePieces = 8
 

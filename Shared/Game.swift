@@ -87,7 +87,7 @@ extension Game {
     }
     
     private func alphabeta(in boardState: BoardState,
-                           currentDepth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
+                           depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
         
         var alpha = alpha
         var beta = beta
@@ -103,15 +103,13 @@ extension Game {
             var newBoardState = outcome.newBoardState
             update(&newBoardState, with: outcome.move)
             
-            if currentDepth == 0 || newBoardState.winner != nil {
+            if depth == 0 || newBoardState.winner != nil {
                 score = scores[newBoardState] ?? newBoardState.evaluateBoardState()
                 scores[newBoardState] = score
             } else {
-                score = alphabeta(in: newBoardState, currentDepth: currentDepth - 1, alpha, beta).score
+                score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
             }
-            
-            score /= Float(depth - currentDepth + 1)
-            
+                        
             if player == .white {
                 if score > bestScore {
                     bestScore = score
@@ -144,14 +142,34 @@ extension Game {
         return (bestScore, bestMove)
     }
     
+    private func suddenDeath(in boardState: BoardState) -> Move? {
+        let player = boardState.currentPlayer
+        
+        let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
+        nextMoves[boardState] = outcomes
+                                
+        for outcome in outcomes {
+            var newBoardState = outcome.newBoardState
+            update(&newBoardState, with: outcome.move)
+            
+            if newBoardState.winner == player {
+                return outcome.move
+            }
+        }
+                
+        return nil
+    }
+    
     func computerMove() {
         let move: Move
 //        let time = DispatchTime.now()
         
         if let opening = openings[moves], depth > 1 {
             move = opening.unstamma
+        } else if let suddenDeath = suddenDeath(in: boardState) {
+            move = suddenDeath
         } else {
-            move = alphabeta(in: boardState, currentDepth: boardState.endgame ? depth + 1 : depth).move!
+            move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move!
         }
         
 //        print(DispatchTime.now().distance(to: time))

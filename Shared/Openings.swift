@@ -6,7 +6,7 @@
 //
 
 let openings =
-    [["xxxxx"]: "e2e4",
+    [[]: "e2e4",
      ["e2e4", "e7e5"]: "g1f3",
      ["e2e4", "e7e5", "g1f3", "b8c6"]: "f1c4",  // Italian Game
 
