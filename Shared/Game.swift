@@ -145,7 +145,7 @@ extension Game {
     func computerMove() {
         let time = DispatchTime.now()
                 
-        guard let move = alphabeta(in: boardState, depth: boardState.piecesRemaining > endgamePieces ? depth : depth + 1).move else {
+        guard let move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move else {
             // print("ERROR: Can't generate computer move")
             return
         }

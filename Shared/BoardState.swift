@@ -23,8 +23,8 @@ struct BoardState: Hashable {
     var failedToCastle: [Player: Float] = [.white: 0, .black: 0]
     var captured: [Player: [String]] = [.white: [], .black: []]
     
-    var piecesRemaining: Int {
-        32 - captured[.white]!.count - captured[.black]!.count
+    var endgame: Bool {
+        32 - captured[.white]!.count - captured[.black]!.count <= endgamePieces
     }
 
     private func pawnAttacksAndDefenses(from: Square) -> (attacks: [Square], defenses: [Square]) {
