@@ -19,6 +19,8 @@ let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
+let kingDegreesOfFreedomValue: Float = 1
+
 let endgamePieces = 8
 
 //  Board and piece definitions
@@ -28,6 +30,10 @@ enum Player: String, CaseIterable {
     case black = "Black"
     case empty = "Empty"
 }
+
+let opponent: [Player: Player] = [.white: .black, .black: .white, .empty: .empty]
+
+let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .empty: 0]
 
 let pieceValues: [String: Float] =
     ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
@@ -44,9 +50,10 @@ let kind: [String: String] =
      "Black King": "King", "Black Queen": "Queen", "Black Bishop": "Bishop", "Black Knight": "Knight", "Black Rook": "Rook", "Black Pawn": "Pawn",
      "Empty": "Empty"]
 
-let opponent: [Player: Player] = [.white: .black, .black: .white, .empty: .empty]
+let promotion: [String: String] =
+    ["White Queen": "White Knight", "White Knight": "White Rook", "White Rook": "White Bishop", "White Bishop": "White Queen",
+     "Black Queen": "Black Knight", "Black Knight": "Black Rook", "Black Rook": "Black Bishop", "Black Bishop": "Black Queen"]
 
-let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .empty: 0]
 
 struct Square: Equatable, Hashable {
     var rank: Int
@@ -76,36 +83,27 @@ extension String {
 
 typealias Board = [[String]]
 
-let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
-                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
-                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
+//let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
+//                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
+//                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
-//let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "White Bishop", "White King", "Empty", "Empty", "Empty"]]
-
-private let promotionPieces = ["White Queen", "White Knight", "White Rook", "White Bishop", "White Queen",
-                               "Black Queen", "Black Knight", "Black Rook", "Black Bishop", "Black Queen"]
-
-func nextPromotionPiece(_ piece: String) -> String {
-    let index = promotionPieces.firstIndex(of: piece)!
-    
-    return promotionPieces[index + 1]
-}
+let newBoard: Board = [["Empty", "Empty", "Empty", "Black Queen", "Black King", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "White Bishop", "White King", "Empty", "Empty", "Empty"]]
 
 
 //  Visual layout
-let strenghts = [1: "Terrible", 2: "Novice", 3: "Passable", 4: "Creative"]
+let strengths = [1: "Terrible", 2: "Novice", 3: "Passable", 4: "Creative"]
 
 let squareSize: CGFloat = 88
 

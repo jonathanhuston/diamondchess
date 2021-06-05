@@ -16,7 +16,7 @@ struct ContentView {
         text += "\(game.boardState.currentPlayer.rawValue)'s turn"
         
         if game.computerPlayer != nil {
-            text += "  –  \(strenghts[game.depth]!)\t\t"
+            text += "  –  \(strengths[game.depth]!)\t\t"
         }
         
         return text

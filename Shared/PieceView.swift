@@ -32,7 +32,7 @@ extension PieceView: View {
         
         if game.boardState.promoting == square && !game.over {
             Button(action: {
-                game.boardState.board[square.rank][square.file] = nextPromotionPiece(piece)
+                game.boardState.board[square.rank][square.file] = promotion[piece]!
             }) {
                 Image(piece)
                     .resizable()

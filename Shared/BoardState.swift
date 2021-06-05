@@ -24,7 +24,8 @@ struct BoardState: Hashable {
     var captured: [Player: [String]] = [.white: [], .black: []]
     
     var endgame: Bool {
-        32 - captured[.white]!.count - captured[.black]!.count <= endgamePieces
+        // FIX:
+        8 - captured[.white]!.count - captured[.black]!.count <= endgamePieces
     }
 
     private func pawnAttacksAndDefenses(from: Square) -> (attacks: [Square], defenses: [Square]) {
@@ -397,7 +398,7 @@ struct BoardState: Hashable {
                                 var piece = newBoardState.board[promoting.rank][promoting.file]
                                 for _ in 1...3 {
                                     var promotingBoardState = newBoardState
-                                    piece = nextPromotionPiece(piece)
+                                    piece = promotion[piece]!
                                     promotingBoardState.board[promoting.rank][promoting.file] = piece
                                     promotingBoardState.allAttacks[player] = promotingBoardState.allAttacksAndDefenses(for: player).attacks
                                     promotingBoardState.inCheck[opponent[player]!] = newBoardState.inCheck(opponent[player]!)
@@ -543,6 +544,16 @@ struct BoardState: Hashable {
         return score
     }
     
+    private func kingDegreesOfFreedom() -> Float {
+        let whiteKingFreedom = kingAttacksAndDefenses(from: kingPosition[.white]!, castling: true).attacks.count
+        let blackKingFreedom = kingAttacksAndDefenses(from: kingPosition[.black]!, castling: true).attacks.count
+        
+        print(whiteKingFreedom)
+        print(blackKingFreedom)
+
+        return Float(whiteKingFreedom - blackKingFreedom)
+    }
+    
     private func materialScore () -> Float {
         var materialScore: Float = 0
         
@@ -560,6 +571,10 @@ struct BoardState: Hashable {
     }
     
     private func positionalScore() -> Float {
+        if endgame {
+            return kingDegreesOfFreedom() * kingDegreesOfFreedomValue
+        }
+        
         let castleScore = castled[.white]! - castled[.black]!
         let failedToCastleScore = failedToCastle[.black]! - failedToCastle[.white]!
         let inCheckScore = inCheckScore()
@@ -582,7 +597,7 @@ struct BoardState: Hashable {
         let positionalScore = positionalScore()
         let score = materialScore + positionalScore
         
-//        print("positionalScore:\t\(positionalScore)")
+        print("positionalScore:\t\(positionalScore)")
 //        print("materialScore:\t\t\(materialScore)")
 //        print("Total score:\t\t\(score)")
 //        print()
