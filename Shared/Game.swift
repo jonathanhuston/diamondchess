@@ -147,13 +147,13 @@ extension Game {
         let move: Move
 //        let time = DispatchTime.now()
         
-        if let opening = openings[moves] {
+        if let opening = openings[moves], depth > 1 {
             move = opening.unstamma
         } else {
             move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move!
         }
         
-        print(move)
+//        print(DispatchTime.now().distance(to: time))
         
         boardState = boardState.isValidMove(move)!
         update(&boardState, with: move)
