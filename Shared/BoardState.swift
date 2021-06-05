@@ -543,7 +543,7 @@ struct BoardState: Hashable {
         return score
     }
     
-    private func degreesOfFreedom(for player: Player) -> Float {
+    private func kingDegreesOfFreedom(for player: Player) -> Float {
         var degrees: Float = 0
         let square = kingPosition[player]!
         
@@ -561,16 +561,6 @@ struct BoardState: Hashable {
         }
         
         return degrees
-    }
-    
-    private func kingDegreesOfFreedom() -> Float {
-        let whiteKingFreedom = degreesOfFreedom(for: .white)
-        let blackKingFreedom = degreesOfFreedom(for: .black)
-        
-//        print(whiteKingFreedom)
-//        print(blackKingFreedom)
-
-        return Float(whiteKingFreedom - blackKingFreedom)
     }
     
     private func materialScore () -> Float {
@@ -591,7 +581,7 @@ struct BoardState: Hashable {
     
     private func positionalScore() -> Float {
         if endgame {
-            return kingDegreesOfFreedom() * kingDegreesOfFreedomValue
+            return (kingDegreesOfFreedom(for: .white) - kingDegreesOfFreedom(for: .black)) * kingDegreesOfFreedomValue
         }
         
         let castleScore = castled[.white]! - castled[.black]!
@@ -628,4 +618,3 @@ struct BoardState: Hashable {
         return score
     }
 }
-
