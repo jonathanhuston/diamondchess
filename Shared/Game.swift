@@ -87,31 +87,30 @@ extension Game {
     }
     
     private func alphabeta(in boardState: BoardState,
-                           depth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
-
-        if depth == 0 || boardState.winner != nil {
-            let score = scores[boardState] ?? boardState.evaluateBoardState()
-            scores[boardState] = score
-            return (score, nil)
-        }
+                           currentDepth: Int, _ alpha: Float = winningScore[.black]!, _ beta: Float = winningScore[.white]!) -> (score: Float, move: Move?) {
         
         var alpha = alpha
         var beta = beta
         let player = boardState.currentPlayer
+        var score: Float
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
         var bestMove: Move? = nil
         
         let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
         nextMoves[boardState] = outcomes
-        
-        //  Default to first move if forced mate
-        bestMove = outcomes[0].move
                                 
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState
             update(&newBoardState, with: outcome.move)
             
-            let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
+            if currentDepth == 0 || newBoardState.winner != nil {
+                score = scores[newBoardState] ?? newBoardState.evaluateBoardState()
+                scores[newBoardState] = score
+            } else {
+                score = alphabeta(in: newBoardState, currentDepth: currentDepth - 1, alpha, beta).score
+            }
+            
+            score /= Float(depth - currentDepth + 1)
             
             if player == .white {
                 if score > bestScore {
@@ -137,9 +136,11 @@ extension Game {
         }
         
 //        print("Best score at \(depth):\t\(bestScore)")
-//        print("Best move:\(String(describing: bestMove))")
+//        if let bestMove = bestMove {
+//            print("Best move:\(bestMove.stamma)")
+//        }
 //        print()
-        
+                
         return (bestScore, bestMove)
     }
     
@@ -150,7 +151,7 @@ extension Game {
         if let opening = openings[moves], depth > 1 {
             move = opening.unstamma
         } else {
-            move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move!
+            move = alphabeta(in: boardState, currentDepth: boardState.endgame ? depth + 1 : depth).move!
         }
         
 //        print(DispatchTime.now().distance(to: time))

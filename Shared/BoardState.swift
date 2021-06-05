@@ -24,8 +24,7 @@ struct BoardState: Hashable {
     var captured: [Player: [String]] = [.white: [], .black: []]
     
     var endgame: Bool {
-        // FIX:
-        8 - captured[.white]!.count - captured[.black]!.count <= endgamePieces
+        32 - captured[.white]!.count - captured[.black]!.count <= endgamePieces
     }
 
     private func pawnAttacksAndDefenses(from: Square) -> (attacks: [Square], defenses: [Square]) {
@@ -544,12 +543,32 @@ struct BoardState: Hashable {
         return score
     }
     
-    private func kingDegreesOfFreedom() -> Float {
-        let whiteKingFreedom = kingAttacksAndDefenses(from: kingPosition[.white]!, castling: true).attacks.count
-        let blackKingFreedom = kingAttacksAndDefenses(from: kingPosition[.black]!, castling: true).attacks.count
+    private func degreesOfFreedom(for player: Player) -> Float {
+        var degrees: Float = 0
+        let square = kingPosition[player]!
         
-        print(whiteKingFreedom)
-        print(blackKingFreedom)
+        for rankOffset in -7...7 {
+            let rank = square.rank + rankOffset
+            if rank < 0 || rank > 7 { continue }
+            for fileOffset in -7...7 {
+                let file = square.file + fileOffset
+                if file < 0 || file > 7 { continue }
+                if board[rank][file] != "Empty" || underAttack(square: Square(rank: rank, file: file), by: opponent[player]!) {
+                    continue
+                }
+                degrees += 1
+            }
+        }
+        
+        return degrees
+    }
+    
+    private func kingDegreesOfFreedom() -> Float {
+        let whiteKingFreedom = degreesOfFreedom(for: .white)
+        let blackKingFreedom = degreesOfFreedom(for: .black)
+        
+//        print(whiteKingFreedom)
+//        print(blackKingFreedom)
 
         return Float(whiteKingFreedom - blackKingFreedom)
     }
@@ -593,11 +612,15 @@ struct BoardState: Hashable {
     }
 
     func evaluateBoardState() -> Float {
+        if winner != nil {
+            return winningScore[winner!]!
+        }
+        
         let materialScore = materialScore()
         let positionalScore = positionalScore()
         let score = materialScore + positionalScore
         
-        print("positionalScore:\t\(positionalScore)")
+//        print("positionalScore:\t\(positionalScore)")
 //        print("materialScore:\t\t\(materialScore)")
 //        print("Total score:\t\t\(score)")
 //        print()
