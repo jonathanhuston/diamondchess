@@ -39,20 +39,29 @@ extension GameCommands: View {
         .keyboardShortcut("F", modifiers: [.shift, .command])
         
         Divider()
-        
-        Text("Computer strength: \(game.depth) / 4")
-            .foregroundColor(.gray)
             
-        Button("Make computer play worse") {
-            game.depth -= 1
+        Button("Terrible") {
+            game.depth = 1
         }
-        .keyboardShortcut("-")
-        .disabled(game.depth <= 1 || game.computerPlayer == nil)
+        .keyboardShortcut("1")
+        .disabled(game.depth == 1 || game.computerPlayer == nil)
         
-        Button("Make computer play better") {
-            game.depth += 1
+        Button("Novice") {
+            game.depth = 2
         }
-        .keyboardShortcut("+")
-        .disabled(game.depth >= 4 || game.computerPlayer == nil)
+        .keyboardShortcut("2")
+        .disabled(game.depth == 2 || game.computerPlayer == nil)
+        
+        Button("Meh") {
+            game.depth = 3
+        }
+        .keyboardShortcut("3")
+        .disabled(game.depth == 3 || game.computerPlayer == nil)
+        
+        Button("Decent") {
+            game.depth = 4
+        }
+        .keyboardShortcut("4")
+        .disabled(game.depth == 4 || game.computerPlayer == nil)
     }
 }
