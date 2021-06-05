@@ -62,7 +62,7 @@ extension Game {
         }
                 
         if boardState.insufficientMaterial() {
-            boardState.winner = .draw
+            boardState.winner = .empty
             return
         }
         
@@ -77,7 +77,7 @@ extension Game {
         }
                 
         if !boardState.inCheck[boardState.currentPlayer]! {
-            boardState.winner = .draw
+            boardState.winner = .empty
             return
         }
             
@@ -96,7 +96,6 @@ extension Game {
         var alpha = alpha
         var beta = beta
         let player = boardState.currentPlayer
-        let comparator: (Float, Float) -> Bool = player == .white ? (>) : (<)
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
         var bestMove: Move? = nil
         
@@ -111,36 +110,47 @@ extension Game {
             update(&newBoardState, with: outcome.move)
             
             let score = alphabeta(in: newBoardState, depth: depth - 1, alpha, beta).score
-
-            if comparator(score, bestScore) {
-                bestScore = score
-                bestMove = outcome.move
-            }
             
-            if player == .white && bestScore > alpha { alpha = bestScore }
-            if player == .black && bestScore < beta { beta = bestScore }
+            if player == .white {
+
+                if score > bestScore {
+                    bestScore = score
+                    bestMove = outcome.move
+                }
+
+                if bestScore > alpha { alpha = bestScore }
+
+            } else {
+
+                if score < bestScore {
+                    bestScore = score
+                    bestMove = outcome.move
+                }
+
+                if bestScore < beta { beta = bestScore }
+            }
             
             if alpha >= beta {
                 break
             }
         }
         
-        print("Best score at \(depth):\t\(bestScore)")
+//        print("Best score at \(depth):\t\(bestScore)")
 //        print("Best move:\(String(describing: bestMove))")
-        print()
+//        print()
         
         return (bestScore, bestMove)
     }
     
     func computerMove() {
-//        let time = DispatchTime.now()
+        let time = DispatchTime.now()
 
         guard let move = alphabeta(in: boardState, depth: depth).move else {
             // print("ERROR: Can't generate computer move")
             return
         }
         
-//        print(DispatchTime.now().distance(to: time))
+        print(DispatchTime.now().distance(to: time))
 
         
         boardState = boardState.isValidMove(move)!

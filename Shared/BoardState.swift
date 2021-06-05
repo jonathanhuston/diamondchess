@@ -26,7 +26,7 @@ struct BoardState: Hashable {
     private func pawnAttacksAndDefenses(from: Square) -> (attacks: [Square], defenses: [Square]) {
         var attacks = [Square]()
         var defenses = [Square]()
-        let player = color(of: board[from.rank][from.file])
+        let player = color[board[from.rank][from.file]]!
         let direction = player == .white ? -1 : 1
         
         let toRank = from.rank + direction
@@ -37,7 +37,7 @@ struct BoardState: Hashable {
         
         for toFile in [from.file - 1, from.file + 1] {
             if toFile >= 0 && toFile <= 7 {
-                let color = color(of: board[toRank][toFile])
+                let color = color[board[toRank][toFile]]
                 let square = Square(rank: toRank, file: toFile)
                 if color == player {
                     defenses.append(square)
@@ -65,13 +65,13 @@ struct BoardState: Hashable {
     private func knightAttacksAndDefenses(from: Square) -> (attacks: [Square], defenses: [Square]) {
         var attacks = [Square]()
         var defenses = [Square]()
-        let player = color(of: board[from.rank][from.file])
+        let player = color[board[from.rank][from.file]]
         
         for offset in [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)] {
             let toRank = from.rank + offset.0
             let toFile = from.file + offset.1
             if toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
-                let color = color(of: board[toRank][toFile])
+                let color = color[board[toRank][toFile]]
                 let square = Square(rank: toRank, file: toFile)
                 if color == player {
                     defenses.append(square)
@@ -87,7 +87,7 @@ struct BoardState: Hashable {
     private func straightAttacksAndDefenses(from: Square, given offsets: [(Int, Int)]) -> (attacks: [Square], defenses: [Square]) {
         var attacks = [Square]()
         var defenses = [Square]()
-        let player = color(of: board[from.rank][from.file])
+        let player = color[board[from.rank][from.file]]
         
         for offset in offsets {
             var toRank = from.rank + offset.0
@@ -97,7 +97,7 @@ struct BoardState: Hashable {
                 
                 if toSquare == "Empty" {
                     attacks.append(Square(rank: toRank, file: toFile))
-                } else if player != color(of: board[toRank][toFile]) {
+                } else if player != color[board[toRank][toFile]] {
                     attacks.append(Square(rank: toRank, file: toFile))
                     break
                 } else {
@@ -129,7 +129,7 @@ struct BoardState: Hashable {
     private func kingAttacksAndDefenses(from: Square, castling: Bool) -> (attacks: [Square], defenses: [Square]) {
         var attacks = [Square]()
         var defenses = [Square]()
-        let player = color(of: board[from.rank][from.file])
+        let player = color[board[from.rank][from.file]]!
         let kingRank = (player == .white) ? 7 : 0
         let king = (player == .white) ? "White King" : "Black King"
         let rook = (player == .white) ? "White Rook" : "Black Rook"
@@ -138,7 +138,7 @@ struct BoardState: Hashable {
             let toRank = from.rank + offset.0
             let toFile = from.file + offset.1
             if toRank >= 0 && toRank <= 7 && toFile >= 0 && toFile <= 7 {
-                let color = color(of: board[toRank][toFile])
+                let color = color[board[toRank][toFile]]
                 let square = Square(rank: toRank, file: toFile)
                 if color == player {
                     defenses.append(square)
@@ -180,9 +180,8 @@ struct BoardState: Hashable {
     }
     
     func allAttacksAndDefenses(from: Square, castling: Bool = true) -> (attacks: [Square], defenses: [Square]) {
-        let piece = board[from.rank][from.file]
         
-        switch piece.split(separator: " ")[1] {
+        switch kind[board[from.rank][from.file]] {
         case "Pawn":
             return pawnAttacksAndDefenses(from: from)
         case "Knight":
@@ -207,7 +206,7 @@ struct BoardState: Hashable {
         
         for rank in 0...7 {
             for file in 0...7 {
-                if color(of: board[rank][file]) == player {
+                if color[board[rank][file]] == player {
                     let attacksAndDefenses = allAttacksAndDefenses(from: Square(rank: rank, file: file), castling: false)
                     attacks += attacksAndDefenses.attacks
                     defenses += attacksAndDefenses.defenses
@@ -383,7 +382,7 @@ struct BoardState: Hashable {
                 
         for rank in 0...7 {
             for file in 0...7 {
-                if color(of: board[rank][file]) == player {
+                if color[board[rank][file]] == player {
                     let from = Square(rank: rank, file: file)
                     let attacks = allAttacksAndDefenses(from: from).attacks
                     for to in attacks {
@@ -413,7 +412,7 @@ struct BoardState: Hashable {
     func canMove(_ player: Player) -> Bool {
         for rank in 0...7 {
             for file in 0...7 {
-                if color(of: board[rank][file]) == player {
+                if color[board[rank][file]] == player {
                     let from = Square(rank: rank, file: file)
                     let attacks = allAttacksAndDefenses(from: from).attacks
                     for to in attacks {
@@ -469,7 +468,7 @@ struct BoardState: Hashable {
             killKing(.white)
         case .white:
             killKing(.black)
-        case .draw:
+        case .empty:
             killKing(.white)
             killKing(.black)
         }
@@ -508,15 +507,10 @@ struct BoardState: Hashable {
     
     private func centerControlScore() -> Float {
         var score: Float = 0.0
-        
-//        let whiteCounts = Dictionary(allAttacks[.white]!.map { ($0, 1) }, uniquingKeysWith: +)
-//        let blackCounts = Dictionary(allAttacks[.black]!.map { ($0, 1) }, uniquingKeysWith: +)
 
         for rank in [3, 4] {
             for file in [3, 4] {
-//                let square = Square(rank: rank, file: file)
-//                score += Float((whiteCounts[square] ?? 0) - (blackCounts[square] ?? 0)) * centerControlValue / 4
-                let color = color(of: board[rank][file])
+                let color = color[board[rank][file]]
                 if color == .white {
                     score += centerControlValue
                 } else if color == .black {
@@ -534,8 +528,8 @@ struct BoardState: Hashable {
         
         for square in allAttacks[player]! {
             let piece = board[square.rank][square.file]
-            if color(of: piece) == opponent {
-                let pieceValue = Float(pieceValues[piece]!)
+            if color[piece] == opponent {
+                let pieceValue = pieceValues[piece]!
                 let factor = allDefenses[opponent]!.contains(square) ? defendedAttackValue : undefendedAttackValue
                 
 //                print(allDefenses[opponent]!)
@@ -557,7 +551,7 @@ struct BoardState: Hashable {
         
         for rank in 0...7 {
             for file in 0...7 {
-                materialScore += Float(pieceValues[board[rank][file]]!)
+                materialScore += pieceValues[board[rank][file]]!
             }
         }
         
@@ -572,12 +566,12 @@ struct BoardState: Hashable {
         let centerControlScore = centerControlScore()
         let attackScore = attackScore(for: .white) + attackScore(for: .black)
         
-        print("castleScore:\t\t\(castleScore)")
-        print("failedToCastleScore:\(failedToCastleScore)")
-        print("inCheckScore:\t\t\(inCheckScore)")
-        print("doublePawnScore:\t\(doublePawnScore)")
-        print("centerControlScore:\t\(centerControlScore)")
-        print("attackScore:\t\t\(attackScore)")
+//        print("castleScore:\t\t\(castleScore)")
+//        print("failedToCastleScore:\(failedToCastleScore)")
+//        print("inCheckScore:\t\t\(inCheckScore)")
+//        print("doublePawnScore:\t\(doublePawnScore)")
+//        print("centerControlScore:\t\(centerControlScore)")
+//        print("attackScore:\t\t\(attackScore)")
         
         return castleScore + failedToCastleScore + inCheckScore + doublePawnScore + centerControlScore + attackScore
     }
@@ -587,10 +581,10 @@ struct BoardState: Hashable {
         let positionalScore = positionalScore()
         let score = materialScore + positionalScore
         
-        print("positionalScore:\t\(positionalScore)")
-        print("materialScore:\t\t\(materialScore)")
-        print("Total score:\t\t\(score)")
-        print()
+//        print("positionalScore:\t\(positionalScore)")
+//        print("materialScore:\t\t\(materialScore)")
+//        print("Total score:\t\t\(score)")
+//        print()
                         
         return score
     }

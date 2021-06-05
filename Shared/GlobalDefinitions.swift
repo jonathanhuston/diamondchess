@@ -9,11 +9,7 @@ import SwiftUI
 
 //  Search depth and weights
 
-let maxDepth = 2
-
-let pieceValues = ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
-                   "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
-                   "Empty": 0]
+let maxDepth = 3
 
 let inCheckValue: Float = 0.125
 let castleValue: Float = 0.125
@@ -29,10 +25,27 @@ let undefendedAttackValue: Float = 0.25
 enum Player: CaseIterable {
     case white
     case black
-    case draw
+    case empty
 }
 
-let opponent: [Player: Player] = [.white: .black, .black: .white]
+let pieceValues: [String: Float] =
+    ["White King": 0, "White Queen": 9, "White Bishop": 3, "White Knight": 3, "White Rook": 5, "White Pawn": 1,
+     "Black King": 0, "Black Queen": -9, "Black Bishop": -3, "Black Knight": -3, "Black Rook": -5, "Black Pawn": -1,
+     "Empty": 0]
+
+let color: [String: Player] =
+    ["White King": .white, "White Queen": .white, "White Bishop": .white, "White Knight": .white, "White Rook": .white, "White Pawn": .white,
+     "Black King": .black, "Black Queen": .black, "Black Bishop": .black, "Black Knight": .black, "Black Rook": .black, "Black Pawn": .black,
+     "Empty": .empty]
+
+let kind: [String: String] =
+    ["White King": "King", "White Queen": "Queen", "White Bishop": "Bishop", "White Knight": "Knight", "White Rook": "Rook", "White Pawn": "Pawn",
+     "Black King": "King", "Black Queen": "Queen", "Black Bishop": "Bishop", "Black Knight": "Knight", "Black Rook": "Rook", "Black Pawn": "Pawn",
+     "Empty": "Empty"]
+
+let opponent: [Player: Player] = [.white: .black, .black: .white, .empty: .empty]
+
+let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .empty: 0]
 
 struct Square: Equatable, Hashable {
     var rank: Int
@@ -76,22 +89,6 @@ func nextPromotionPiece(_ piece: String) -> String {
     
     return promotionPieces[index + 1]
 }
-
-func color(of piece: String) -> Player {
-    switch piece.split(separator: " ")[0] {
-    case "White":
-        return .white
-    case "Black":
-        return .black
-    default:
-        return .draw
-    }
-}
-
-
-//  Helper for minimax evaluation
-
-let winningScore: [Player: Float] = [.white: Float(Int.max), .black: Float(Int.min), .draw: 0]
 
 
 //  Visual layout
