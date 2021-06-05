@@ -17,7 +17,7 @@ let failedToCastleValue: Float = 0.5
 let centerControlValue: Float = 0.125
 let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
-let undefendedAttackValue: Float = 0.375
+let undefendedAttackValue: Float = 0.25
 
 let endgamePieces = 8
 
