@@ -11,13 +11,13 @@ import SwiftUI
 
 let maxDepth = 3
 
-let inCheckValue: Float = 0.25
-let castleValue: Float = 0.125
-let failedToCastleValue: Float = 0.375
+let inCheckValue: Float = 0.125
+let castleValue: Float = 0.25
+let failedToCastleValue: Float = 0.5
 let centerControlValue: Float = 0.125
 let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
-let undefendedAttackValue: Float = 0.25
+let undefendedAttackValue: Float = 0.375
 
 let endgamePieces = 8
 
@@ -60,6 +60,18 @@ struct Square: Equatable, Hashable {
 struct Move: Hashable {
     var from: Square
     var to: Square
+    
+    var stamma: String {
+        String(UnicodeScalar(from.file + 97)!) + String(8 - from.rank) + String(UnicodeScalar(to.file + 97)!) + String(8 - to.rank)
+    }
+}
+
+extension String {
+    var unstamma: Move {
+        let moveChars = Array(self)
+        return Move(from: Square(rank: 8 - Int(String(moveChars[1]))!, file: Int(moveChars[0].asciiValue! - 97)),
+                    to:   Square(rank: 8 - Int(String(moveChars[3]))!, file: Int(moveChars[2].asciiValue! - 97)))
+    }
 }
 
 typealias Board = [[String]]
@@ -93,7 +105,7 @@ func nextPromotionPiece(_ piece: String) -> String {
 
 
 //  Visual layout
-let strenghts = [1: "Terrible", 2: "Novice", 3: "Meh", 4: "Decent"]
+let strenghts = [1: "Terrible", 2: "Novice", 3: "Passable", 4: "Creative"]
 
 let squareSize: CGFloat = 88
 

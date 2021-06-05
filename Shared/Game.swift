@@ -18,6 +18,7 @@ class Game: ObservableObject {
     @Published var dragging = false
     @Published var depth = maxDepth
     
+    var moves = [String]()
     var scores = [BoardState: Float]()
     var nextMoves = [BoardState: [(move: Move, newBoardState: BoardState)]]()
 }
@@ -30,6 +31,7 @@ extension Game {
         flipped = computerPlayer == .white
         touched = nil
         dragging = false
+        moves = []
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if self.boardState.currentPlayer == self.computerPlayer {
@@ -142,18 +144,20 @@ extension Game {
     }
     
     func computerMove() {
+        let move: Move
 //        let time = DispatchTime.now()
-                
-        guard let move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move else {
-            // print("ERROR: Can't generate computer move")
-            return
+        
+        if let opening = openings[moves] {
+            move = opening.unstamma
+        } else {
+            move = alphabeta(in: boardState, depth: boardState.endgame ? depth + 1 : depth).move!
         }
         
-//        print(DispatchTime.now().distance(to: time))
-
+        print(move)
         
         boardState = boardState.isValidMove(move)!
         update(&boardState, with: move)
+        moves.append(move.stamma)
         
         boardState.promoting = nil
         
@@ -175,6 +179,7 @@ extension Game {
         }
                 
         update(&newBoardState!, with: move)
+        moves.append(move.stamma)
         
         if newBoardState!.winner != nil {
             over = true
