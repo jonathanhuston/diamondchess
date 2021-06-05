@@ -12,7 +12,7 @@ Written in Swift by Jonathan Huston, pieces designed by Ella Huston.
 
 Here are the simple Game menu items and keyboard shortcuts:
 
-<img src="https://diamondchess.s3.eu-central-1.amazonaws.com/GameMenu.png" style="zoom:50%;" />
+![](https://diamondchess.s3.eu-central-1.amazonaws.com/GameMenu.png)
 
 Choose whether to play white against the computer, black against the computer, or against another human. 
 
