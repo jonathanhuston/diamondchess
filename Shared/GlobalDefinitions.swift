@@ -9,17 +9,19 @@ import SwiftUI
 
 //  Search depth and weights
 
-let maxDepth = 4
+let maxDepth = 3
 
 let inCheckValue: Float = 0.125
-let castleValue: Float = 0.25
+let castledValue: Float = 0.25
 let failedToCastleValue: Float = 0.5
 let centerControlValue: Float = 0.125
 let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
-let kingDegreesOfFreedomValue: Float = 0.25
+let endgameinCheckValue: Float = 0.125
+let degreesOfFreedomValue: Float = 0.0625
+let kingDistanceValue: Float = 0.125
 
 let endgamePieces = 8
 
