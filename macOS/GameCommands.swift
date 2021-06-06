@@ -41,27 +41,27 @@ extension GameCommands: View {
         Divider()
             
         Button(strengths[1]!) {
-            game.depth = 1
+            game.strength = 1
         }
         .keyboardShortcut("1")
-        .disabled(game.depth == 1 || game.computerPlayer == nil)
+        .disabled(game.strength == 1 || game.computerPlayer == nil)
 
         Button(strengths[2]!) {
-            game.depth = 2
+            game.strength = 2
         }
         .keyboardShortcut("2")
-        .disabled(game.depth == 2 || game.computerPlayer == nil)
+        .disabled(game.strength == 2 || game.computerPlayer == nil)
 
         Button(strengths[3]!) {
-            game.depth = 3
+            game.strength = 3
         }
         .keyboardShortcut("3")
-        .disabled(game.depth == 3 || game.computerPlayer == nil)
+        .disabled(game.strength == 3 || game.computerPlayer == nil)
 
         Button(strengths[4]!) {
-            game.depth = 4
+            game.strength = 4
         }
         .keyboardShortcut("4")
-        .disabled(game.depth == 4 || game.computerPlayer == nil)
+        .disabled(game.strength == 4 || game.computerPlayer == nil)
     }
 }
