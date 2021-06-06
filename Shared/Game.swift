@@ -94,16 +94,11 @@ extension Game {
         var alpha = alpha
         var beta = beta
         let player = boardState.currentPlayer
-        var outcomes: [(move: Move, newBoardState: BoardState)]
         var score: Float
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
         
-        if let visited = nextMoves[boardState] {
-            outcomes = visited.shuffled()
-        } else {
-            outcomes = boardState.validOutcomes(for: player)
-            nextMoves[boardState] = outcomes
-        }
+        let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
+        nextMoves[boardState] = outcomes
         
         var bestMove = outcomes[0].move
                        
@@ -154,7 +149,7 @@ extension Game {
         let player = boardState.currentPlayer
         
         let outcomes = nextMoves[boardState] ?? boardState.validOutcomes(for: player)
-        nextMoves[boardState] = outcomes
+        nextMoves[boardState] = outcomes.shuffled()
                                 
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState

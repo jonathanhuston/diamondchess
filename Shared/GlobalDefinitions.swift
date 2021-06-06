@@ -106,7 +106,7 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
 
 
 //  Visual layout
-let strengths = [1: "Terrible", 2: "Novice", 3: "Passable", 4: "Creative"]
+let strengths = [1: "Terrible", 2: "Novice", 3: "Decent", 4: "Creative"]
 
 let squareSize: CGFloat = 88
 

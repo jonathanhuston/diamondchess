@@ -18,7 +18,7 @@ Choose whether to play white against the computer, black against the computer, o
 
 Flip the board if it's upside down from your perspective. 
 
-The computer's playing strength can be Terrible, Novice, Passable, or Creative.
+The computer's playing strength can be Terrible, Novice, Decent, or Creative.
 
 If you're promoting a pawn, you have a few seconds to click through the possible pieces (queen, knight, rook, bishop).
 
