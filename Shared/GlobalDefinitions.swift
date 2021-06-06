@@ -86,23 +86,23 @@ extension String {
 
 typealias Board = [[String]]
 
-//let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
-//                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-//                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
-//                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
+let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Queen", "Black King", "Black Bishop", "Black Knight", "Black Rook"],
+                       ["Black Pawn", "Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
+                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
-let newBoard: Board = [["Empty", "Empty", "Empty", "Empty", "Black King", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "White King", "White Queen", "Empty", "Empty", "Empty"]]
+//let newBoard: Board = [["Empty", "Empty", "Empty", "Black King", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "White Queen", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "White King", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+//                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"]]
 
 
 //  Visual layout

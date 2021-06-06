@@ -95,7 +95,6 @@ extension Game {
         var outcomes: [(move: Move, newBoardState: BoardState)]
         var score: Float
         var bestScore = player == .white ? winningScore[.black]! : winningScore[.white]!
-        var bestMove: Move? = nil
         
         if let visited = nextMoves[boardState] {
             outcomes = visited.shuffled()
@@ -103,6 +102,8 @@ extension Game {
             outcomes = boardState.validOutcomes(for: player)
             nextMoves[boardState] = outcomes
         }
+        
+        var bestMove = outcomes[0].move
                        
         for outcome in outcomes {
             var newBoardState = outcome.newBoardState
@@ -137,7 +138,7 @@ extension Game {
                 break
             }
         }
-        
+                
 //        print("Best score at \(depth):\t\(bestScore)")
 //        if let bestMove = bestMove {
 //            print("Best move:\(bestMove.stamma)")
