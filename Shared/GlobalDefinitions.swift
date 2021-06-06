@@ -19,9 +19,10 @@ let doublePawnValue: Float = 0.25
 let defendedAttackValue: Float = 0.0625
 let undefendedAttackValue: Float = 0.25
 
-let endgameinCheckValue: Float = 0.125
-let degreesOfFreedomValue: Float = 0.0625
-let kingDistanceValue: Float = 0.125
+let endgameInCheckValue: Float = 0.0625
+let degreesOfFreedomValue: Float = 0.03125
+let kingDistanceValue: Float = 0.0625
+let pawnDistanceValue: Float = 0.0625
 
 let endgamePieces = 8
 
@@ -94,14 +95,14 @@ typealias Board = [[String]]
 //                       ["White Pawn", "White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"],
 //                       ["White Rook", "White Knight", "White Bishop", "White Queen", "White King", "White Bishop", "White Knight", "White Rook"]]
 
-let newBoard: Board = [["Empty", "Empty", "Empty", "Black Bishop", "Black King", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "White King", "Empty"],
+let newBoard: Board = [["Empty", "Empty", "Empty", "Empty", "Black King", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
                        ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
-                       ["Empty", "Empty", "Empty", "Black Bishop", "Empty", "Empty", "Empty", "Empty"]]
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
+                       ["Empty", "Empty", "Empty", "White King", "White Queen", "Empty", "Empty", "Empty"]]
 
 
 //  Visual layout

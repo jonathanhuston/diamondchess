@@ -32,7 +32,7 @@ struct BoardState: Hashable {
         var attacks = [Square]()
         var defenses = [Square]()
         let player = color[board[from.rank][from.file]]!
-        let direction = player == .white ? -1 : 1
+        let direction = (player == .white) ? -1 : 1
         
         let toRank = from.rank + direction
         
@@ -326,7 +326,7 @@ struct BoardState: Hashable {
     }
     
     private mutating func castle(for move: Move) {
-        let rook = currentPlayer == .white ? "White Rook" : "Black Rook"
+        let rook = (currentPlayer == .white) ? "White Rook" : "Black Rook"
         
         if move.to.file == move.from.file + 2 {
             board[move.from.rank][5] = rook
@@ -490,7 +490,7 @@ struct BoardState: Hashable {
     }
     
     private func doubledPawns(_ player: Player) -> Float {
-        let pawn = player == .white ? "White Pawn" : "Black Pawn"
+        let pawn = (player == .white) ? "White Pawn" : "Black Pawn"
         var counter = 0
         
         for file in 0...7 {
@@ -555,6 +555,23 @@ struct BoardState: Hashable {
         return Float(sqrt(pow(Double(whiteKingPosition.rank - blackKingPosition.rank), 2) + pow(Double(whiteKingPosition.file - blackKingPosition.file), 2)))
     }
     
+    private func pawnDistance(_ player: Player) -> Float {
+        var pawnDistance = 0
+        let pawn = (player == .white) ? "White Pawn" : "Black Pawn"
+        let promotionRank = (player == .white) ? 0 : 7
+        
+        for rank in 0...7 {
+            for file in 0...7 {
+                if board[rank][file] == pawn {
+                    pawnDistance += abs(rank - promotionRank)
+                }
+            }
+        }
+        
+        return Float(pawnDistance)
+        
+    }
+    
     private func materialScore () -> Float {
         var materialScore: Float = 0
         
@@ -574,17 +591,18 @@ struct BoardState: Hashable {
     private func positionalScore() -> Float {
         if endgame {
             let kingDistanceScore = kingDistance() * kingDistanceValue
-            let inCheckScore = inCheckScore() * endgameinCheckValue
+            let pawnDistanceScore = (pawnDistance(.black) - pawnDistance(.white)) * pawnDistanceValue
+            let inCheckScore = inCheckScore() * endgameInCheckValue
             
-            print("inCheckScore:\t\t\(inCheckScore)")
-            print("kingDistanceScore:\t\(kingDistanceScore)")
-            print("Opponent degrees:\t\(degreesOfFreedom(for: opponent[currentPlayer]!) * degreesOfFreedomValue)")
-            print("Player degrees:\t\t\(degreesOfFreedom(for: currentPlayer) * degreesOfFreedomValue)")
+//            print("inCheckScore:\t\t\(inCheckScore)")
+//            print("kingDistanceScore:\t\(kingDistanceScore)")
+//            print("Opponent degrees:\t\(degreesOfFreedom(for: opponent[currentPlayer]!) * degreesOfFreedomValue)")
+//            print("Player degrees:\t\t\(degreesOfFreedom(for: currentPlayer) * degreesOfFreedomValue)")
 
-            if captured[opponent[currentPlayer]!]!.count > captured[currentPlayer]!.count {
-                return inCheckScore - kingDistanceScore - degreesOfFreedom(for: opponent[currentPlayer]!) * degreesOfFreedomValue
+            if captured[opponent[currentPlayer]!]!.count <= captured[currentPlayer]!.count {
+                return inCheckScore + pawnDistanceScore - kingDistanceScore - degreesOfFreedom(for: opponent[currentPlayer]!) * degreesOfFreedomValue
             } else {
-                return inCheckScore + kingDistanceScore + degreesOfFreedom(for: currentPlayer) * degreesOfFreedomValue
+                return inCheckScore + pawnDistanceScore + kingDistanceScore + degreesOfFreedom(for: currentPlayer) * degreesOfFreedomValue
             }
         }
         
@@ -614,10 +632,10 @@ struct BoardState: Hashable {
         let positionalScore = positionalScore()
         let score = materialScore + positionalScore
         
-        print("positionalScore:\t\(positionalScore)")
-        print("materialScore:\t\t\(materialScore)")
-        print("Total score:\t\t\(score)")
-        print()
+//        print("positionalScore:\t\(positionalScore)")
+//        print("materialScore:\t\t\(materialScore)")
+//        print("Total score:\t\t\(score)")
+//        print()
                         
         return score
     }
