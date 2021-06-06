@@ -20,6 +20,8 @@ Flip the board if it's upside down from your perspective.
 
 The computer's playing strength can be Terrible, Novice, Passable, or Creative.
 
+If you're promoting a pawn, you have a few seconds to click through the possible pieces (queen, knight, rook, bishop).
+
 That's it! Have fun!
 
 If you're just learning chess, <a href="https://lichess.org">lichess.org</a> is a good place to start. 
