@@ -9,7 +9,7 @@ import SwiftUI
 
 //  Search depth and weights
 
-let maxDepth = 3
+let maxDepth = 2
 
 let inCheckValue: Float = 0.125
 let castledValue: Float = 0.25
@@ -106,7 +106,7 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
 
 
 //  Visual layout
-let strengths = [1: "Terrible", 2: "Novice", 3: "Decent", 4: "Creative"]
+let strengths = [1: "Terrible", 2: "Novice", 3: "Decent"]
 
 let squareSize: CGFloat = 88
 

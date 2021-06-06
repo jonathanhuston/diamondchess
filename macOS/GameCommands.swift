@@ -57,11 +57,5 @@ extension GameCommands: View {
         }
         .keyboardShortcut("3")
         .disabled(game.strength == 3 || game.computerPlayer == nil)
-
-        Button(strengths[4]!) {
-            game.strength = 4
-        }
-        .keyboardShortcut("4")
-        .disabled(game.strength == 4 || game.computerPlayer == nil)
     }
 }
