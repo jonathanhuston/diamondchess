@@ -4,7 +4,7 @@ Welcome to Diamond Chess!
 
 Diamond Chess is a simple chess program with a no-nonsense interface and homemade pieces.
 
-Use it if you want to play a quick game against the computer or another human without a lot of fuss or overhead.
+Use it to play a quick game against the computer or another human without a lot of fuss or overhead.
 
 Written in Swift by Jonathan Huston, pieces designed by Ella Huston.
 
@@ -18,7 +18,7 @@ Choose whether to play white against the computer, black against the computer, o
 
 Flip the board if it's upside down from your perspective. 
 
-The computer's playing strength can be Terrible, Novice, or Decent.
+The computer's playing strengths are Terrible, Novice, and Decent.
 
 If you're promoting a pawn, you have a few seconds to click through the possible pieces (queen, knight, rook, bishop).
 
