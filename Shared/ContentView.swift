@@ -72,5 +72,6 @@ extension ContentView: View {
             game.flipped = !game.flipped
         }
         .navigationTitle(navigationText())
+        .background(Color.black)
     }
 }
