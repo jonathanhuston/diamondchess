@@ -17,7 +17,6 @@ struct Device {
     }
     
     static let scaling = min(width(), height()) / 750
-    
     static func isPortrait() -> Bool {
         height() > width()
     }

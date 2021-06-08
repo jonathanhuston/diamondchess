@@ -127,9 +127,9 @@ func pieceHeight(_ piece: String) -> CGFloat {
 }
 
 func getX(_ file: Int) -> CGFloat {
-    squareSize * (CGFloat(file) + 0.5) * Device.scaling
+    squareSize * (CGFloat(file) + 0.5)
 }
 
 func getY(_ rank: Int) -> CGFloat {
-    squareSize * (CGFloat(rank) + 0.5) * Device.scaling
+    squareSize * (CGFloat(rank) + 0.5)
 }
