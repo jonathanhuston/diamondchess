@@ -4,7 +4,7 @@ Diamond Chess is a simple chess program with a no-nonsense interface and homemad
 
 Written in Swift by Jonathan Huston, pieces designed by Ella Huston.
 
-
+<a href="https://apps.apple.com/app/id1566324182">iOS and macOS app</a>
 
 
 
