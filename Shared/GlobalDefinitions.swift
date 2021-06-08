@@ -108,28 +108,28 @@ let newBoard: Board = [["Black Rook", "Black Knight", "Black Bishop", "Black Que
 //  Visual layout
 let strengths = [1: "Terrible", 2: "Novice", 3: "Decent"]
 
-let squareSize: CGFloat = 88
+let squareSize: CGFloat = 88 * Device.scaling
 
 func pieceWidth(_ piece: String) -> CGFloat {
     if piece.contains("Dead") {
-        return 80
+        return 80 * Device.scaling
     }
     
-    return piece.contains("Pawn") ? 40 : 64
+    return (piece.contains("Pawn") ? 40 : 64) * Device.scaling
 }
 
 func pieceHeight(_ piece: String) -> CGFloat {
     if piece.contains("Dead") {
-        return 64
+        return 64 * Device.scaling
     }
     
-    return piece.contains("Pawn") ? 64 : 80
+    return (piece.contains("Pawn") ? 64 : 80) * Device.scaling
 }
 
 func getX(_ file: Int) -> CGFloat {
-    squareSize * (CGFloat(file) + 0.5)
+    squareSize * (CGFloat(file) + 0.5) * Device.scaling
 }
 
 func getY(_ rank: Int) -> CGFloat {
-    squareSize * (CGFloat(rank) + 0.5)
+    squareSize * (CGFloat(rank) + 0.5) * Device.scaling
 }

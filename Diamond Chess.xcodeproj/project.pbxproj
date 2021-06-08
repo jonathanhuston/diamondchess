@@ -11,7 +11,13 @@
 		15087BAD2620510900668781 /* SquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BAB2620510900668781 /* SquareView.swift */; };
 		15087BB32620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
 		15087BB42620526C00668781 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15087BB22620526C00668781 /* BoardView.swift */; };
+		15262255266FAF8A00DAB591 /* NavigationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A14261C800D0098B143 /* NavigationText.swift */; };
+		15262257266FAFBC00DAB591 /* Diamond_ChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15262256266FAFBC00DAB591 /* Diamond_ChessApp.swift */; };
+		15262259266FBA7A00DAB591 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15262258266FBA7A00DAB591 /* ContentView.swift */; };
+		1526225B266FBAB800DAB591 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1526225A266FBAB800DAB591 /* ContentView.swift */; };
 		155FC3322643499A00AD1F78 /* GameCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155FC3312643499A00AD1F78 /* GameCommands.swift */; };
+		1560C1C0266FC6B70000ECE8 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1560C1BF266FC6B70000ECE8 /* Device.swift */; };
+		1560C1C2266FC6CB0000ECE8 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1560C1C1266FC6CB0000ECE8 /* Device.swift */; };
 		1565C9CF2621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
 		1565C9D02621963F001A1D9A /* BoardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565C9CE2621963F001A1D9A /* BoardState.swift */; };
 		1578EDEB266BBD6F00057927 /* Openings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1578EDEA266BBD6F00057927 /* Openings.swift */; };
@@ -25,10 +31,8 @@
 		15E563112620C22000DD5B05 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E5630F2620C22000DD5B05 /* Game.swift */; };
 		15E7BCED261DC0B600AB495F /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E7BCEC261DC0B600AB495F /* PieceView.swift */; };
 		15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E7BCEC261DC0B600AB495F /* PieceView.swift */; };
-		15F35A26261C800E0098B143 /* Diamond_ChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */; };
 		15F35A27261C800E0098B143 /* Diamond_ChessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */; };
-		15F35A28261C800E0098B143 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A14261C800D0098B143 /* ContentView.swift */; };
-		15F35A29261C800E0098B143 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A14261C800D0098B143 /* ContentView.swift */; };
+		15F35A29261C800E0098B143 /* NavigationText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F35A14261C800D0098B143 /* NavigationText.swift */; };
 		15F35A2A261C800E0098B143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15F35A15261C800E0098B143 /* Assets.xcassets */; };
 		15F35A2B261C800E0098B143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15F35A15261C800E0098B143 /* Assets.xcassets */; };
 		333B780D262656AB0009E230 /* CapturedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333B780C262656AB0009E230 /* CapturedView.swift */; };
@@ -38,7 +42,12 @@
 /* Begin PBXFileReference section */
 		15087BAB2620510900668781 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
 		15087BB22620526C00668781 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		15262256266FAFBC00DAB591 /* Diamond_ChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond_ChessApp.swift; sourceTree = "<group>"; };
+		15262258266FBA7A00DAB591 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1526225A266FBAB800DAB591 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		155FC3312643499A00AD1F78 /* GameCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommands.swift; sourceTree = "<group>"; };
+		1560C1BF266FC6B70000ECE8 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		1560C1C1266FC6CB0000ECE8 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		1565C9CE2621963F001A1D9A /* BoardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardState.swift; sourceTree = "<group>"; };
 		1578EDEA266BBD6F00057927 /* Openings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Openings.swift; sourceTree = "<group>"; };
 		15A17EB32627586300FBBD15 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
@@ -47,7 +56,7 @@
 		15E5630F2620C22000DD5B05 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		15E7BCEC261DC0B600AB495F /* PieceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceView.swift; sourceTree = "<group>"; };
 		15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond_ChessApp.swift; sourceTree = "<group>"; };
-		15F35A14261C800D0098B143 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		15F35A14261C800D0098B143 /* NavigationText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationText.swift; sourceTree = "<group>"; };
 		15F35A15261C800E0098B143 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15F35A1A261C800E0098B143 /* Diamond Chess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Diamond Chess.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		15F35A1D261C800E0098B143 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,8 +98,7 @@
 		15F35A12261C800D0098B143 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */,
-				15F35A14261C800D0098B143 /* ContentView.swift */,
+				15F35A14261C800D0098B143 /* NavigationText.swift */,
 				15087BB22620526C00668781 /* BoardView.swift */,
 				15087BAB2620510900668781 /* SquareView.swift */,
 				15E563082620A7CF00DD5B05 /* PiecesView.swift */,
@@ -116,6 +124,9 @@
 		15F35A1C261C800E0098B143 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				15262256266FAFBC00DAB591 /* Diamond_ChessApp.swift */,
+				15262258266FBA7A00DAB591 /* ContentView.swift */,
+				1560C1BF266FC6B70000ECE8 /* Device.swift */,
 				15F35A1D261C800E0098B143 /* Info.plist */,
 			);
 			path = iOS;
@@ -124,8 +135,11 @@
 		15F35A23261C800E0098B143 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				15F35A13261C800D0098B143 /* Diamond_ChessApp.swift */,
 				15A17EB32627586300FBBD15 /* AppCommands.swift */,
 				155FC3312643499A00AD1F78 /* GameCommands.swift */,
+				1526225A266FBAB800DAB591 /* ContentView.swift */,
+				1560C1C1266FC6CB0000ECE8 /* Device.swift */,
 				15F35A24261C800E0098B143 /* Info.plist */,
 				15F35A25261C800E0098B143 /* macOS.entitlements */,
 			);
@@ -229,14 +243,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15F35A28261C800E0098B143 /* ContentView.swift in Sources */,
+				1560C1C0266FC6B70000ECE8 /* Device.swift in Sources */,
 				15087BAC2620510900668781 /* SquareView.swift in Sources */,
+				15262255266FAF8A00DAB591 /* NavigationText.swift in Sources */,
 				15087BB32620526C00668781 /* BoardView.swift in Sources */,
 				15E7BCED261DC0B600AB495F /* PieceView.swift in Sources */,
 				333B780D262656AB0009E230 /* CapturedView.swift in Sources */,
 				15A26D47261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
-				15F35A26261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
+				15262257266FAFBC00DAB591 /* Diamond_ChessApp.swift in Sources */,
 				15E563092620A7CF00DD5B05 /* PiecesView.swift in Sources */,
+				15262259266FBA7A00DAB591 /* ContentView.swift in Sources */,
 				1565C9CF2621963F001A1D9A /* BoardState.swift in Sources */,
 				1578EDEB266BBD6F00057927 /* Openings.swift in Sources */,
 				15E563102620C22000DD5B05 /* Game.swift in Sources */,
@@ -247,14 +263,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15F35A29261C800E0098B143 /* ContentView.swift in Sources */,
+				15F35A29261C800E0098B143 /* NavigationText.swift in Sources */,
 				15087BAD2620510900668781 /* SquareView.swift in Sources */,
 				15087BB42620526C00668781 /* BoardView.swift in Sources */,
 				15E7BCEE261DC0B600AB495F /* PieceView.swift in Sources */,
+				1526225B266FBAB800DAB591 /* ContentView.swift in Sources */,
 				15A17EB42627586300FBBD15 /* AppCommands.swift in Sources */,
 				333B780E262656AB0009E230 /* CapturedView.swift in Sources */,
 				15A26D48261D9B4100A46B50 /* GlobalDefinitions.swift in Sources */,
 				15F35A27261C800E0098B143 /* Diamond_ChessApp.swift in Sources */,
+				1560C1C2266FC6CB0000ECE8 /* Device.swift in Sources */,
 				15E5630A2620A7CF00DD5B05 /* PiecesView.swift in Sources */,
 				1565C9D02621963F001A1D9A /* BoardState.swift in Sources */,
 				1578EDEC266BBD6F00057927 /* Openings.swift in Sources */,
@@ -431,7 +449,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 9P8C6ZACEU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -441,6 +459,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jonathanhuston.Diamond-Chess";
 				PRODUCT_NAME = "Diamond Chess";
 				SDKROOT = macosx;
@@ -457,7 +476,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 9P8C6ZACEU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -467,6 +486,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jonathanhuston.Diamond-Chess";
 				PRODUCT_NAME = "Diamond Chess";
 				SDKROOT = macosx;
