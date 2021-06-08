@@ -39,7 +39,7 @@ extension SettingsView: View {
                     game.launch = true
                 }
                 
-                Text("PLAYING STRENGTH:")
+                Text("BOARD ORIENTATION:")
                     .foregroundColor(.white)
                     .padding(.top)
                                 
