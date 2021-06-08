@@ -16,7 +16,7 @@ struct Device {
         UIScreen.main.bounds.size.width
     }
     
-    static let scaling = min(width(), height()) / 750
+    static let scaling = min(width(), height()) / 900
     static func isPortrait() -> Bool {
         height() > width()
     }
